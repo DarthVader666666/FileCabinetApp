@@ -122,7 +122,7 @@ namespace FileCabinetApp
             Console.Write("Gender (M/F): ");
             var gender = (char)Console.Read();
 
-            if (gender != 'M' || gender != 'm' || gender != 'F' || gender != 'f')
+            if (!(gender == 'M' || gender == 'm' || gender == 'F' || gender == 'f'))
             {
                 throw new ArgumentException("Invalid gender");
             }
