@@ -19,6 +19,7 @@ namespace FileCabinetApp
             new Tuple<string, Action<string>>("help", PrintHelp),
             new Tuple<string, Action<string>>("exit", Exit),
             new Tuple<string, Action<string>>("create", Create),
+            new Tuple<string, Action<string>>("list", List),
         };
 
         private static string[][] helpMessages = new string[][]
@@ -118,6 +119,17 @@ namespace FileCabinetApp
             var recordId = Program.fileCabinetService.CreateRecord(firstName, lastName, dateOfBirth);
 
             Console.Write($"Record #{recordId} is created.");
+        }
+
+        private static void List(string parameters)
+        {
+            var recordList = Program.fileCabinetService.GetRecords();
+
+            foreach (FileCabinetRecord fcr in recordList)
+            {
+                Console.WriteLine($"#{fcr.Id}, {fcr.FirstName}, {fcr.LastName}, {fcr.DateOfBirth.Year}-" +
+                    $"{fcr.DateOfBirth.Month}-{fcr.DateOfBirth.Day}");
+            }
         }
     }
 }

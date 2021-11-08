@@ -24,7 +24,7 @@ public class FileCabinetService
     public FileCabinetRecord[] GetRecords()
     {
         // TODO: добавьте реализацию метода
-        return Array.Empty<FileCabinetRecord>();
+        return list.ToArray();
     }
 
     public int GetStat()
