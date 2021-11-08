@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 
 namespace FileCabinetApp
 {
@@ -9,6 +10,7 @@ namespace FileCabinetApp
         private const int CommandHelpIndex = 0;
         private const int DescriptionHelpIndex = 1;
         private const int ExplanationHelpIndex = 2;
+        private static FileCabinetService fileCabinetService = new FileCabinetService();
 
         private static bool isRunning = true;
 
@@ -16,6 +18,8 @@ namespace FileCabinetApp
         {
             new Tuple<string, Action<string>>("help", PrintHelp),
             new Tuple<string, Action<string>>("exit", Exit),
+            new Tuple<string, Action<string>>("create", Create),
+            new Tuple<string, Action<string>>("list", List),
         };
 
         private static string[][] helpMessages = new string[][]
@@ -95,6 +99,48 @@ namespace FileCabinetApp
         {
             Console.WriteLine("Exiting an application...");
             isRunning = false;
+        }
+
+        private static void Stat(string parameters)
+        {
+            var recordsCount = Program.fileCabinetService.GetStat();
+            Console.WriteLine($"{recordsCount} record(s).");
+        }
+
+        private static void Create(string parameters)
+        {
+            Console.Write("First name: ");
+            var firstName = Console.ReadLine();
+            Console.Write("Last name: ");
+            var lastName = Console.ReadLine();
+            Console.Write("Date of birth: ");
+            var dateOfBirth = DateTime.Parse(Console.ReadLine(), CultureInfo.InvariantCulture);
+            Console.Write("Job experience (yrs): ");
+            var jobExperience = short.Parse(Console.ReadLine(), CultureInfo.InvariantCulture);
+            Console.Write("Monthly pay ($): ");
+            var monthlyPay = decimal.Parse(Console.ReadLine(), CultureInfo.InvariantCulture);
+            Console.Write("Gender (M/F): ");
+            var gender = (char)Console.Read();
+
+            if (gender != 'M' || gender != 'm' || gender != 'F' || gender != 'f')
+            {
+                throw new ArgumentException("Invalid gender");
+            }
+
+            var recordId = Program.fileCabinetService.CreateRecord(firstName, lastName, dateOfBirth, jobExperience, monthlyPay, gender);
+
+            Console.Write($"Record #{recordId} is created.");
+        }
+
+        private static void List(string parameters)
+        {
+            var recordList = Program.fileCabinetService.GetRecords();
+
+            foreach (FileCabinetRecord fcr in recordList)
+            {
+                Console.WriteLine($"#{fcr.Id}, {fcr.FirstName}, {fcr.LastName}, {fcr.DateOfBirth.Year}-" +
+                    $"{fcr.DateOfBirth.Month}-{fcr.DateOfBirth.Day}, {fcr.JobExperience}, {fcr.MonthlyPay}, {fcr.Gender}");
+            }
         }
     }
 }
