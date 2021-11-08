@@ -115,8 +115,19 @@ namespace FileCabinetApp
             var lastName = Console.ReadLine();
             Console.Write("Date of birth: ");
             var dateOfBirth = DateTime.Parse(Console.ReadLine(), CultureInfo.InvariantCulture);
+            Console.Write("Job experience (yrs): ");
+            var jobExperience = short.Parse(Console.ReadLine(), CultureInfo.InvariantCulture);
+            Console.Write("Monthly pay ($): ");
+            var monthlyPay = decimal.Parse(Console.ReadLine(), CultureInfo.InvariantCulture);
+            Console.Write("Gender (M/F): ");
+            var gender = (char)Console.Read();
 
-            var recordId = Program.fileCabinetService.CreateRecord(firstName, lastName, dateOfBirth);
+            if (gender != 'M' || gender != 'm' || gender != 'F' || gender != 'f')
+            {
+                throw new ArgumentException("Invalid gender");
+            }
+
+            var recordId = Program.fileCabinetService.CreateRecord(firstName, lastName, dateOfBirth, jobExperience, monthlyPay, gender);
 
             Console.Write($"Record #{recordId} is created.");
         }
@@ -128,7 +139,7 @@ namespace FileCabinetApp
             foreach (FileCabinetRecord fcr in recordList)
             {
                 Console.WriteLine($"#{fcr.Id}, {fcr.FirstName}, {fcr.LastName}, {fcr.DateOfBirth.Year}-" +
-                    $"{fcr.DateOfBirth.Month}-{fcr.DateOfBirth.Day}");
+                    $"{fcr.DateOfBirth.Month}-{fcr.DateOfBirth.Day}, {fcr.JobExperience}, {fcr.MonthlyPay}, {fcr.Gender}");
             }
         }
     }

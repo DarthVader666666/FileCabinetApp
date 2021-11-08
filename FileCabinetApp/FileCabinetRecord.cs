@@ -9,4 +9,10 @@ public class FileCabinetRecord
     public string LastName { get; set; }
 
     public DateTime DateOfBirth { get; set; }
+
+    public short JobExperience { get; set; }
+
+    public decimal MonthlyPay { get; set; }
+
+    public char Gender { get; set; }
 }
