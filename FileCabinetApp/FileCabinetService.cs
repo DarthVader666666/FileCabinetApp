@@ -42,7 +42,7 @@ public class FileCabinetService
             throw new ArgumentException("jobExperience is invalid");
         }
 
-        if (monthlyPay < 0)
+        if (monthlyPay < 100)
         {
             throw new ArgumentException("mothlyPay is invalid");
         }

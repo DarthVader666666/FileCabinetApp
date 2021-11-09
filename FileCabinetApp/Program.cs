@@ -109,18 +109,68 @@ namespace FileCabinetApp
 
         private static void Create(string parameters)
         {
-            Console.Write("First name: ");
-            var firstName = Console.ReadLine();
-            Console.Write("Last name: ");
-            var lastName = Console.ReadLine();
-            Console.Write("Date of birth: ");
-            var dateOfBirth = DateTime.Parse(Console.ReadLine(), CultureInfo.InvariantCulture);
-            Console.Write("Job experience (yrs): ");
-            var jobExperience = short.Parse(Console.ReadLine(), CultureInfo.InvariantCulture);
-            Console.Write("Monthly pay ($): ");
-            var monthlyPay = decimal.Parse(Console.ReadLine(), CultureInfo.InvariantCulture);
-            Console.Write("Gender (M/F): ");
-            var gender = (char)Console.Read();
+            bool running = false;
+            string firstName;
+            string lastName;
+            DateTime dateOfBirth;
+            short jobExperience;
+            decimal monthlyPay;
+            char gender;
+
+            do
+            {
+                running = false;
+                Console.Write("First name: ");
+                firstName = Console.ReadLine();
+
+                if (!char.IsUpper(firstName[0]))
+                {
+                    Console.WriteLine("First Name should start with upper letter");
+                    running = true;
+                }
+
+                Console.Write("Last name: ");
+                lastName = Console.ReadLine();
+
+                if (!char.IsUpper(firstName[0]))
+                {
+                    Console.WriteLine("Last Name should start with upper letter");
+                    running = true;
+                }
+
+                Console.Write("Date of birth: ");
+
+                if (!DateTime.TryParse(Console.ReadLine(), out dateOfBirth))
+                {
+                    Console.WriteLine("DateOfBirth format must be day/month/year");
+                    running = true;
+                }
+
+                Console.Write("Job experience (yrs): ");
+
+                if (!short.TryParse(Console.ReadLine(), out jobExperience))
+                {
+                    Console.WriteLine("jobExperience gets wrong number format");
+                    running = true;
+                }
+
+                Console.Write("Monthly pay ($): ");
+
+                if (!decimal.TryParse(Console.ReadLine(), out monthlyPay))
+                {
+                    Console.WriteLine("monthlyPay gets wrong number format");
+                    running = true;
+                }
+
+                Console.Write("Gender (M/F): ");
+
+                if (!char.TryParse(Console.ReadLine(), out gender))
+                {
+                    Console.WriteLine("gender gets wrong symbol");
+                    running = true;
+                }
+            }
+            while (running);
 
             var recordId = Program.fileCabinetService.CreateRecord(firstName, lastName, dateOfBirth, jobExperience, monthlyPay, gender);
 
