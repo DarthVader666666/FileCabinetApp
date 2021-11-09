@@ -37,12 +37,12 @@ public class FileCabinetService
             throw new ArgumentException("dateOfBirth is invalid");
         }
 
-        if (jobExperience < 3)
+        if (jobExperience < 0)
         {
             throw new ArgumentException("jobExperience is invalid");
         }
 
-        if (monthlyPay < 100)
+        if (monthlyPay < 0)
         {
             throw new ArgumentException("mothlyPay is invalid");
         }
@@ -60,7 +60,7 @@ public class FileCabinetService
             DateOfBirth = dateOfBirth,
             JobExperience = jobExperience,
             MonthlyPay = monthlyPay,
-            Gender = gender,
+            Gender = char.ToUpper(gender, System.Globalization.CultureInfo.InvariantCulture),
         };
 
         this.list.Add(record);
@@ -79,4 +79,20 @@ public class FileCabinetService
         // TODO: добавьте реализацию метода
         return this.list.Count;
     }
-}
+
+    public void EditRecord(int id, string firstName, string lastName, DateTime dateOfBirth, short jobExperience, decimal monthlyPay, char gender)
+    {
+        if (id > this.GetStat() && id < this.GetStat())
+        {
+            throw new ArgumentException("No such record");
+        }
+
+        this.list[id - 1].Id = id;
+        this.list[id - 1].FirstName = firstName;
+        this.list[id - 1].LastName = lastName;
+        this.list[id - 1].DateOfBirth = dateOfBirth;
+        this.list[id - 1].JobExperience = jobExperience;
+        this.list[id - 1].MonthlyPay = monthlyPay;
+        this.list[id - 1].Gender = char.ToUpper(gender, System.Globalization.CultureInfo.InvariantCulture);
+    }
+ }
