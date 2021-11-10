@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 
 namespace FileCabinetApp
@@ -21,6 +22,7 @@ namespace FileCabinetApp
             new Tuple<string, Action<string>>("create", Create),
             new Tuple<string, Action<string>>("list", List),
             new Tuple<string, Action<string>>("edit", Edit),
+            new Tuple<string, Action<string>>("find", Find),
         };
 
         private static string[][] helpMessages = new string[][]
@@ -133,7 +135,7 @@ namespace FileCabinetApp
                 Console.Write("Last name: ");
                 lastName = Console.ReadLine();
 
-                if (!char.IsUpper(firstName[0]))
+                if (!char.IsUpper(lastName[0]))
                 {
                     Console.WriteLine("Last Name should start with upper letter");
                     running = true;
@@ -223,7 +225,7 @@ namespace FileCabinetApp
                 Console.Write("Last name: ");
                 lastName = Console.ReadLine();
 
-                if (!char.IsUpper(firstName[0]))
+                if (!char.IsUpper(lastName[0]))
                 {
                     Console.WriteLine("Last Name should start with upper letter");
                     running = true;
@@ -266,6 +268,27 @@ namespace FileCabinetApp
             Program.fileCabinetService.EditRecord(recordNumber, firstName, lastName, dateOfBirth, jobExperience, monthlyPay, gender);
 
             Console.WriteLine($"Record #{recordNumber} is updated.");
+        }
+
+        private static void Find(string parameters)
+        {
+            string[] searchArgs = parameters.Split(' ');
+            FileCabinetRecord[] fcrArray;
+            searchArgs[0] = searchArgs[0].ToUpperInvariant();
+
+            fcrArray = searchArgs[0] switch
+            {
+                "FIRSTNAME" => Program.fileCabinetService.FindByFirstName(searchArgs[1][1..^1]),
+                "LASTNAME" => Program.fileCabinetService.FindByLastName(searchArgs[1][1..^1]),
+                "DATEOFBIRTH" => Program.fileCabinetService.FindByDateOfBirth(searchArgs[1][1..^1]),
+                _ => throw new ArgumentException("No such record"),
+            };
+
+            foreach (FileCabinetRecord fcr in fcrArray)
+            {
+                Console.WriteLine($"#{fcr.Id}, {fcr.FirstName}, {fcr.LastName}, {fcr.DateOfBirth.Year}-" +
+                    $"{fcr.DateOfBirth.Month}-{fcr.DateOfBirth.Day}, {fcr.JobExperience}, {fcr.MonthlyPay}, {fcr.Gender}");
+            }
         }
     }
 }
