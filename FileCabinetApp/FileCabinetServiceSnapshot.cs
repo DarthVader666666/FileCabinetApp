@@ -29,20 +29,20 @@ namespace FileCabinetApp
         /// <summary>
         /// Calls for stream write method.
         /// </summary>
-        /// <param name="stream">StreamWriter instance opened to write to.</param>
-        public void SaveToCsv(StreamWriter stream)
+        /// <param name="streamWriter">StreamWriter instance opened to write to.</param>
+        public void SaveToCsv(StreamWriter streamWriter)
         {
-            FileCabinetRecordCsvWriter csvWriter = new FileCabinetRecordCsvWriter(stream);
+            FileCabinetRecordCsvWriter csvWriter = new FileCabinetRecordCsvWriter(streamWriter);
             csvWriter.Write(this.records);
         }
 
         /// <summary>
         /// Calls for xml write method.
         /// </summary>
-        /// <param name="stream">XmlWriter instance opened to write to.</param>
-        public void SaveToXml(XmlWriter stream)
+        /// <param name="streamWriter">StreamWriter instance opened to write to.</param>
+        public void SaveToXml(StreamWriter streamWriter)
         {
-            FileCabinetRecordXmlWriter xmlWriter = new FileCabinetRecordXmlWriter(stream);
+            FileCabinetRecordXmlWriter xmlWriter = new FileCabinetRecordXmlWriter(XmlWriter.Create(streamWriter));
             xmlWriter.Write(this.records);
         }
     }

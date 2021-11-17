@@ -249,7 +249,14 @@ namespace FileCabinetApp
                 Console.WriteLine($"File exists - rewrite {exportParams[1]}? [Y/n]");
                 do
                 {
-                    unswer = char.ToUpper(char.Parse(Console.ReadLine()), CultureInfo.InvariantCulture);
+                    try
+                    {
+                        unswer = char.ToUpper(char.Parse(Console.ReadLine()), CultureInfo.InvariantCulture);
+                    }
+                    catch (FormatException)
+                    {
+                        unswer = ' ';
+                    }
 
                     if (!(unswer == 'Y' || unswer == 'N'))
                     {
@@ -281,11 +288,13 @@ namespace FileCabinetApp
         {
             FileStream file;
             FileCabinetServiceSnapshot snapshot;
+            StreamWriter streamWriter;
 
             try
             {
                 file = new FileStream(path, FileMode.Open);
                 file.Dispose();
+                file.Close();
             }
             catch (UnauthorizedAccessException)
             {
@@ -297,16 +306,16 @@ namespace FileCabinetApp
             {
                 case "CSV":
                     snapshot = fileCabinetService.MakeSnapshot();
-                    StreamWriter stream = new StreamWriter(path);
-                    snapshot.SaveToCsv(stream);
-                    stream.Close();
+                    streamWriter = new StreamWriter(path);
+                    snapshot.SaveToCsv(streamWriter);
+                    streamWriter.Close();
                     Console.WriteLine($"All records are exported to file {path}");
                     break;
                 case "XML":
-                    XmlWriter xmlWriter = XmlWriter.Create(path);
                     snapshot = fileCabinetService.MakeSnapshot();
-                    snapshot.SaveToXml(xmlWriter);
-                    xmlWriter.Close();
+                    streamWriter = new StreamWriter(path);
+                    snapshot.SaveToXml(streamWriter);
+                    streamWriter.Close();
                     Console.WriteLine($"All records are exported to file {path}");
                     break;
                 default: Console.WriteLine("Unsupported file format"); break;

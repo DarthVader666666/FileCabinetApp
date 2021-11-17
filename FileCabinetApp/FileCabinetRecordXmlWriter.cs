@@ -47,6 +47,9 @@ namespace FileCabinetApp
             }
 
             this.xmlWriter.WriteEndElement();
+
+            this.xmlWriter.Flush();
+            this.xmlWriter.Close();
         }
     }
 }

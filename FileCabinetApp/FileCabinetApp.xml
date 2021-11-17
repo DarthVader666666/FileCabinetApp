@@ -317,13 +317,13 @@
             <summary>
             Calls for stream write method.
             </summary>
-            <param name="stream">StreamWriter instance opened to write to.</param>
+            <param name="streamWriter">StreamWriter instance opened to write to.</param>
         </member>
-        <member name="M:FileCabinetApp.FileCabinetServiceSnapshot.SaveToXml(System.Xml.XmlWriter)">
+        <member name="M:FileCabinetApp.FileCabinetServiceSnapshot.SaveToXml(System.IO.StreamWriter)">
             <summary>
             Calls for xml write method.
             </summary>
-            <param name="stream">XmlWriter instance opened to write to.</param>
+            <param name="streamWriter">StreamWriter instance opened to write to.</param>
         </member>
         <member name="T:FileCabinetApp.IFileCabinetService">
             <summary>
