@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.Globalization;
+using System.IO;
+using System.Xml;
 
 namespace FileCabinetApp
 {
@@ -24,6 +26,7 @@ namespace FileCabinetApp
             new Tuple<string, Action<string>>("list", List),
             new Tuple<string, Action<string>>("edit", Edit),
             new Tuple<string, Action<string>>("find", Find),
+            new Tuple<string, Action<string>>("export", Export),
         };
 
         private static readonly string[][] HelpMessages = new string[][]
@@ -227,6 +230,86 @@ namespace FileCabinetApp
                 Console.WriteLine($"#{record.Id}, {record.FirstName}, {record.LastName}, " +
                     $"{record.DateOfBirth.Year}-{record.DateOfBirth.Month}-{record.DateOfBirth.Day}, " +
                     $"{record.JobExperience}, {record.MonthlyPay}, {record.Gender}");
+            }
+        }
+
+        private static void Export(string parameters)
+        {
+            if (parameters is null)
+            {
+                throw new ArgumentException("Parameters argument is null");
+            }
+
+            string[] exportParams = parameters.Split(' ');
+            char unswer = ' ';
+            bool run;
+
+            if (File.Exists(exportParams[1]))
+            {
+                Console.WriteLine($"File exists - rewrite {exportParams[1]}? [Y/n]");
+                do
+                {
+                    unswer = char.ToUpper(char.Parse(Console.ReadLine()), CultureInfo.InvariantCulture);
+
+                    if (!(unswer == 'Y' || unswer == 'N'))
+                    {
+                        Console.WriteLine("Type Y or N");
+                        run = true;
+                    }
+                    else
+                    {
+                        run = false;
+                    }
+                }
+                while (run);
+            }
+            else
+            {
+                StreamWriter stream = new StreamWriter(exportParams[1]);
+                stream.Close();
+            }
+
+            switch (unswer)
+            {
+                case 'Y': ExportToFile(exportParams[0], exportParams[1]); break;
+                case 'N': break;
+                default: ExportToFile(exportParams[0], exportParams[1]); break;
+            }
+        }
+
+        private static void ExportToFile(string format, string path)
+        {
+            FileStream file;
+            FileCabinetServiceSnapshot snapshot;
+
+            try
+            {
+                file = new FileStream(path, FileMode.Open);
+                file.Dispose();
+            }
+            catch (UnauthorizedAccessException)
+            {
+                Console.WriteLine($"Export failed: can't open file {path}");
+                return;
+            }
+
+            switch (format.ToUpper(CultureInfo.InvariantCulture))
+            {
+                case "CSV":
+                    snapshot = fileCabinetService.MakeSnapshot();
+                    StreamWriter stream = new StreamWriter(path);
+                    snapshot.SaveToCsv(stream);
+                    stream.Close();
+                    Console.WriteLine($"All records are exported to file {path}");
+                    break;
+                case "XML":
+                    XmlWriter xmlWriter = XmlWriter.Create(path);
+                    snapshot = fileCabinetService.MakeSnapshot();
+                    snapshot.SaveToXml(xmlWriter);
+                    xmlWriter.Close();
+                    Console.WriteLine($"All records are exported to file {path}");
+                    break;
+                default: Console.WriteLine("Unsupported file format"); break;
             }
         }
 

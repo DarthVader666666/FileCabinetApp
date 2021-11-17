@@ -198,6 +198,46 @@
             </summary>
             <value>Person's gender.</value>
         </member>
+        <member name="M:FileCabinetApp.FileCabinetRecord.ToString">
+            <summary>
+            Overrides an Object ToString Converter.
+            </summary>
+            <returns>line of properties in string representation.</returns>
+        </member>
+        <member name="T:FileCabinetApp.FileCabinetRecordCsvWriter">
+            <summary>
+            From stream to csv file writer.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetRecordCsvWriter.#ctor(System.IO.TextWriter)">
+            <summary>
+            Initializes a new instance of the <see cref="T:FileCabinetApp.FileCabinetRecordCsvWriter"/> class.
+            </summary>
+            <param name="textWriter">Initializes field csvWriter.</param>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetRecordCsvWriter.Write(FileCabinetApp.FileCabinetRecord[])">
+            <summary>
+            Serializes all records into TextWriter Stream and writes them into csv file.
+            </summary>
+            <param name="records">File Cabinet records.</param>
+        </member>
+        <member name="T:FileCabinetApp.FileCabinetRecordXmlWriter">
+            <summary>
+            From stream to csv file writer.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetRecordXmlWriter.#ctor(System.Xml.XmlWriter)">
+            <summary>
+            Initializes a new instance of the <see cref="T:FileCabinetApp.FileCabinetRecordXmlWriter"/> class.
+            </summary>
+            <param name="writer">Initializes field xmlWriter.</param>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetRecordXmlWriter.Write(FileCabinetApp.FileCabinetRecord[])">
+            <summary>
+            Serializes all records into XmlStream and writes them into xml file.
+            </summary>
+            <param name="records">File Cabinet records.</param>
+        </member>
         <member name="T:FileCabinetApp.FileCabinetService">
             <summary>
             Class contains methods which handle the user commands.
@@ -208,6 +248,12 @@
             Initializes a new instance of the <see cref="T:FileCabinetApp.FileCabinetService"/> class.
             </summary>
             <param name="validator">Validator object to implement.</param>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetService.MakeSnapshot">
+            <summary>
+            Gets snapshot entity.
+            </summary>
+            <returns>Snapshot object.</returns>
         </member>
         <member name="M:FileCabinetApp.FileCabinetService.CreateRecord(System.Object,FileCabinetApp.FileCabinetEventArgs)">
             <summary>
@@ -255,6 +301,29 @@
             </summary>
             <param name="dateOfBirth">Person's date of birth which record should be found with.</param>
             <returns>Records which fit search requirements.</returns>
+        </member>
+        <member name="T:FileCabinetApp.FileCabinetServiceSnapshot">
+            <summary>
+            Represents a snapshot of a FileCabinetService instance with particullar field.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetServiceSnapshot.#ctor(System.Collections.Generic.List{FileCabinetApp.FileCabinetRecord})">
+            <summary>
+            Initializes a new instance of the <see cref="T:FileCabinetApp.FileCabinetServiceSnapshot"/> class.
+            </summary>
+            <param name="list">All file records to make a copy of.</param>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetServiceSnapshot.SaveToCsv(System.IO.StreamWriter)">
+            <summary>
+            Calls for stream write method.
+            </summary>
+            <param name="stream">StreamWriter instance opened to write to.</param>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetServiceSnapshot.SaveToXml(System.Xml.XmlWriter)">
+            <summary>
+            Calls for xml write method.
+            </summary>
+            <param name="stream">XmlWriter instance opened to write to.</param>
         </member>
         <member name="T:FileCabinetApp.IFileCabinetService">
             <summary>
@@ -307,6 +376,12 @@
             </summary>
             <param name="dateOfBirth">Person's dateOfBirth.</param>
             <returns>ReadonlyCollection of file records found.</returns>
+        </member>
+        <member name="M:FileCabinetApp.IFileCabinetService.MakeSnapshot">
+            <summary>
+            Makes snapshot of FileCabinetService list of records.
+            </summary>
+            <returns>Object of snapshot instance with file records.</returns>
         </member>
         <member name="T:FileCabinetApp.IReadInputValidator">
             <summary>

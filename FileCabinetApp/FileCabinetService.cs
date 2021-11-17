@@ -25,6 +25,15 @@ namespace FileCabinetApp
         }
 
         /// <summary>
+        /// Gets snapshot entity.
+        /// </summary>
+        /// <returns>Snapshot object.</returns>
+        public FileCabinetServiceSnapshot MakeSnapshot()
+        {
+            return new FileCabinetServiceSnapshot(this.list);
+        }
+
+        /// <summary>
         /// Creates a record about a person.
         /// </summary>
         /// <param name="sender">Sender object is null.</param>
