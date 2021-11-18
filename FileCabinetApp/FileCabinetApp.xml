@@ -366,6 +366,64 @@
             </summary>
             <param name="records">File Cabinet records.</param>
         </member>
+        <member name="T:FileCabinetApp.FileCabinetService">
+            <summary>
+            Initializes a new instance of the <see cref="T:FileCabinetApp.FileCabinetRecordCsvWriter"/> class.
+            </summary>
+            <param name="textWriter">Initializes field csvWriter.</param>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetRecordCsvWriter.Write(FileCabinetApp.FileCabinetRecord[])">
+            <summary>
+            Serializes all records into TextWriter Stream and writes them into csv file.
+            </summary>
+            <param name="records">File Cabinet records.</param>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetService.MakeSnapshot">
+            <summary>
+            Gets snapshot entity.
+            </summary>
+            <returns>Snapshot object.</returns>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetService.CreateRecord(System.Object,FileCabinetApp.FileCabinetEventArgs)">
+            <summary>
+            From stream to csv file writer.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetRecordXmlWriter.#ctor(System.Xml.XmlWriter)">
+            <summary>
+            Initializes a new instance of the <see cref="T:FileCabinetApp.FileCabinetRecordXmlWriter"/> class.
+            </summary>
+            <param name="writer">Initializes field xmlWriter.</param>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetRecordXmlWriter.Write(FileCabinetApp.FileCabinetRecord[])">
+            <summary>
+            Serializes all records into XmlStream and writes them into xml file.
+            </summary>
+            <param name="records">File Cabinet records.</param>
+        </member>
+        <member name="T:FileCabinetApp.FileCabinetServiceSnapshot">
+            <summary>
+            Represents a snapshot of a FileCabinetService instance with particullar field.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetServiceSnapshot.#ctor(System.Collections.Generic.List{FileCabinetApp.FileCabinetRecord})">
+            <summary>
+            Initializes a new instance of the <see cref="T:FileCabinetApp.FileCabinetServiceSnapshot"/> class.
+            </summary>
+            <param name="list">All file records to make a copy of.</param>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetServiceSnapshot.SaveToCsv(System.IO.StreamWriter)">
+            <summary>
+            Calls for stream write method.
+            </summary>
+            <param name="streamWriter">StreamWriter instance opened to write to.</param>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetServiceSnapshot.SaveToXml(System.IO.StreamWriter)">
+            <summary>
+            Calls for xml write method.
+            </summary>
+            <param name="streamWriter">StreamWriter instance opened to write to.</param>
+        </member>
         <member name="T:FileCabinetApp.FileCabinetServiceSnapshot">
             <summary>
             Represents a snapshot of a FileCabinetService instance with particullar field.
