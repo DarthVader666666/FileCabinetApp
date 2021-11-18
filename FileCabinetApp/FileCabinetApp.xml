@@ -151,6 +151,134 @@
             </summary>
             <value>Person's gender.</value>
         </member>
+        <member name="T:FileCabinetApp.FileCabinetFilesystemService">
+            <summary>
+            Class contains methods which handle the user commands.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetFilesystemService.#ctor(System.IO.FileStream)">
+            <summary>
+            Initializes a new instance of the <see cref="T:FileCabinetApp.FileCabinetFilesystemService"/> class.
+            </summary>
+            <param name="fileStream">FileStream object to initialize local fileStream field.</param>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetFilesystemService.MakeSnapshot">
+            <summary>
+            Gets snapshot entity.
+            </summary>
+            <returns>Snapshot object.</returns>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetFilesystemService.CreateRecord(System.Object,FileCabinetApp.FileCabinetEventArgs)">
+            <summary>
+            Creates a record about a person.
+            </summary>
+            <param name="sender">Sender object is null.</param>
+            <param name="e">Arguments for record creation.</param>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetFilesystemService.GetRecords">
+            <summary>
+            Gets all file cabinet records.
+            </summary>
+            <returns>The array of all file cabinet records.</returns>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetFilesystemService.GetStat">
+            <summary>
+            Gets count of all file cabinet records.
+            </summary>
+            <returns>Count of all file cabinet records.</returns>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetFilesystemService.EditRecord(System.Object,FileCabinetApp.FileCabinetEventArgs)">
+            <summary>
+            Edits a record about a person.
+            </summary>
+            <param name="sender">Sender object is null.</param>
+            <param name="recordArgs">Record arguments about a person with new data.</param>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetFilesystemService.FindByFirstName(System.String)">
+            <summary>
+            Edits a record about a person.
+            </summary>
+            <param name="firstName">Person's first name which record should be found with.</param>
+            <returns>Records which fit search requirements.</returns>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetFilesystemService.FindByLastName(System.String)">
+            <summary>
+            Edits a record about a person.
+            </summary>
+            <param name="lastName">Person's last name which record should be found with.</param>
+            <returns>Records which fit search requirements.</returns>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetFilesystemService.FindByDateOfBirth(System.String)">
+            <summary>
+            Edits a record about a person.
+            </summary>
+            <param name="dateOfBirth">Person's date of birth which record should be found with.</param>
+            <returns>Records which fit search requirements.</returns>
+        </member>
+        <member name="T:FileCabinetApp.FileCabinetMemoryService">
+            <summary>
+            Class contains methods which handle the user commands.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetMemoryService.#ctor(FileCabinetApp.IRecordValidator)">
+            <summary>
+            Initializes a new instance of the <see cref="T:FileCabinetApp.FileCabinetMemoryService"/> class.
+            </summary>
+            <param name="validator">Validator object to implement.</param>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetMemoryService.MakeSnapshot">
+            <summary>
+            Gets snapshot entity.
+            </summary>
+            <returns>Snapshot object.</returns>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetMemoryService.CreateRecord(System.Object,FileCabinetApp.FileCabinetEventArgs)">
+            <summary>
+            Creates a record about a person.
+            </summary>
+            <param name="sender">Sender object is null.</param>
+            <param name="e">Arguments for record creation.</param>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetMemoryService.GetRecords">
+            <summary>
+            Gets all file cabinet records.
+            </summary>
+            <returns>The array of all file cabinet records.</returns>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetMemoryService.GetStat">
+            <summary>
+            Gets count of all file cabinet records.
+            </summary>
+            <returns>Count of all file cabinet records.</returns>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetMemoryService.EditRecord(System.Object,FileCabinetApp.FileCabinetEventArgs)">
+            <summary>
+            Edits a record about a person.
+            </summary>
+            <param name="sender">Sender object is null.</param>
+            <param name="recordArgs">Record arguments about a person with new data.</param>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetMemoryService.FindByFirstName(System.String)">
+            <summary>
+            Edits a record about a person.
+            </summary>
+            <param name="firstName">Person's first name which record should be found with.</param>
+            <returns>Records which fit search requirements.</returns>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetMemoryService.FindByLastName(System.String)">
+            <summary>
+            Edits a record about a person.
+            </summary>
+            <param name="lastName">Person's last name which record should be found with.</param>
+            <returns>Records which fit search requirements.</returns>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetMemoryService.FindByDateOfBirth(System.String)">
+            <summary>
+            Edits a record about a person.
+            </summary>
+            <param name="dateOfBirth">Person's date of birth which record should be found with.</param>
+            <returns>Records which fit search requirements.</returns>
+        </member>
         <member name="T:FileCabinetApp.FileCabinetRecord">
             <summary>
             Class for defining a record about person.
@@ -198,63 +326,68 @@
             </summary>
             <value>Person's gender.</value>
         </member>
-        <member name="T:FileCabinetApp.FileCabinetService">
+        <member name="M:FileCabinetApp.FileCabinetRecord.ToString">
             <summary>
-            Class contains methods which handle the user commands.
+            Overrides an Object ToString Converter.
+            </summary>
+            <returns>line of properties in string representation.</returns>
+        </member>
+        <member name="T:FileCabinetApp.FileCabinetRecordCsvWriter">
+            <summary>
+            From stream to csv file writer.
             </summary>
         </member>
-        <member name="M:FileCabinetApp.FileCabinetService.#ctor(FileCabinetApp.IRecordValidator)">
+        <member name="M:FileCabinetApp.FileCabinetRecordCsvWriter.#ctor(System.IO.TextWriter)">
             <summary>
-            Initializes a new instance of the <see cref="T:FileCabinetApp.FileCabinetService"/> class.
+            Initializes a new instance of the <see cref="T:FileCabinetApp.FileCabinetRecordCsvWriter"/> class.
             </summary>
-            <param name="validator">Validator object to implement.</param>
+            <param name="textWriter">Initializes field csvWriter.</param>
         </member>
-        <member name="M:FileCabinetApp.FileCabinetService.CreateRecord(System.Object,FileCabinetApp.FileCabinetEventArgs)">
+        <member name="M:FileCabinetApp.FileCabinetRecordCsvWriter.Write(FileCabinetApp.FileCabinetRecord[])">
             <summary>
-            Creates a record about a person.
+            Serializes all records into TextWriter Stream and writes them into csv file.
             </summary>
-            <param name="sender">Sender object is null.</param>
-            <param name="e">Arguments for record creation.</param>
+            <param name="records">File Cabinet records.</param>
         </member>
-        <member name="M:FileCabinetApp.FileCabinetService.GetRecords">
+        <member name="T:FileCabinetApp.FileCabinetRecordXmlWriter">
             <summary>
-            Gets all file cabinet records.
+            From stream to csv file writer.
             </summary>
-            <returns>The array of all file cabinet records.</returns>
         </member>
-        <member name="M:FileCabinetApp.FileCabinetService.GetStat">
+        <member name="M:FileCabinetApp.FileCabinetRecordXmlWriter.#ctor(System.Xml.XmlWriter)">
             <summary>
-            Gets count of all file cabinet records.
+            Initializes a new instance of the <see cref="T:FileCabinetApp.FileCabinetRecordXmlWriter"/> class.
             </summary>
-            <returns>Count of all file cabinet records.</returns>
+            <param name="writer">Initializes field xmlWriter.</param>
         </member>
-        <member name="M:FileCabinetApp.FileCabinetService.EditRecord(System.Object,FileCabinetApp.FileCabinetEventArgs)">
+        <member name="M:FileCabinetApp.FileCabinetRecordXmlWriter.Write(FileCabinetApp.FileCabinetRecord[])">
             <summary>
-            Edits a record about a person.
+            Serializes all records into XmlStream and writes them into xml file.
             </summary>
-            <param name="sender">Sender object is null.</param>
-            <param name="recordArgs">Record arguments about a person with new data.</param>
+            <param name="records">File Cabinet records.</param>
         </member>
-        <member name="M:FileCabinetApp.FileCabinetService.FindByFirstName(System.String)">
+        <member name="T:FileCabinetApp.FileCabinetServiceSnapshot">
             <summary>
-            Edits a record about a person.
+            Represents a snapshot of a FileCabinetService instance with particullar field.
             </summary>
-            <param name="firstName">Person's first name which record should be found with.</param>
-            <returns>Records which fit search requirements.</returns>
         </member>
-        <member name="M:FileCabinetApp.FileCabinetService.FindByLastName(System.String)">
+        <member name="M:FileCabinetApp.FileCabinetServiceSnapshot.#ctor(System.Collections.Generic.List{FileCabinetApp.FileCabinetRecord})">
             <summary>
-            Edits a record about a person.
+            Initializes a new instance of the <see cref="T:FileCabinetApp.FileCabinetServiceSnapshot"/> class.
             </summary>
-            <param name="lastName">Person's last name which record should be found with.</param>
-            <returns>Records which fit search requirements.</returns>
+            <param name="list">All file records to make a copy of.</param>
         </member>
-        <member name="M:FileCabinetApp.FileCabinetService.FindByDateOfBirth(System.String)">
+        <member name="M:FileCabinetApp.FileCabinetServiceSnapshot.SaveToCsv(System.IO.StreamWriter)">
             <summary>
-            Edits a record about a person.
+            Calls for stream write method.
             </summary>
-            <param name="dateOfBirth">Person's date of birth which record should be found with.</param>
-            <returns>Records which fit search requirements.</returns>
+            <param name="streamWriter">StreamWriter instance opened to write to.</param>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetServiceSnapshot.SaveToXml(System.IO.StreamWriter)">
+            <summary>
+            Calls for xml write method.
+            </summary>
+            <param name="streamWriter">StreamWriter instance opened to write to.</param>
         </member>
         <member name="T:FileCabinetApp.IFileCabinetService">
             <summary>
@@ -307,6 +440,12 @@
             </summary>
             <param name="dateOfBirth">Person's dateOfBirth.</param>
             <returns>ReadonlyCollection of file records found.</returns>
+        </member>
+        <member name="M:FileCabinetApp.IFileCabinetService.MakeSnapshot">
+            <summary>
+            Makes snapshot of FileCabinetService list of records.
+            </summary>
+            <returns>Object of snapshot instance with file records.</returns>
         </member>
         <member name="T:FileCabinetApp.IReadInputValidator">
             <summary>
@@ -363,6 +502,11 @@
         <member name="T:FileCabinetApp.Program">
             <summary>
             Class which operates application.
+            </summary>
+        </member>
+        <member name="F:FileCabinetApp.Program.fileStream">
+            <summary>
+            Initializes FIleCabinetFilesystemService instance.
             </summary>
         </member>
         <member name="E:FileCabinetApp.Program.CreateRecordEvent">

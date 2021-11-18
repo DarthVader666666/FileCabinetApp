@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 
 namespace FileCabinetApp
 {
@@ -48,5 +49,15 @@ namespace FileCabinetApp
         /// </summary>
         /// <value>Person's gender.</value>
         public char Gender { get; set; }
+
+        /// <summary>
+        /// Overrides an Object ToString Converter.
+        /// </summary>
+        /// <returns>line of properties in string representation.</returns>
+        public override string ToString()
+        {
+            return $"{this.Id},{this.FirstName},{this.LastName},{this.DateOfBirth.Day:D2}/{this.DateOfBirth.Month:D2}/{this.DateOfBirth.Year}," +
+                   $"{this.JobExperience},{this.MonthlyPay},{this.Gender}";
+        }
     }
 }

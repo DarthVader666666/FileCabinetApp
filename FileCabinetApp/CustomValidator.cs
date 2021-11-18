@@ -57,7 +57,7 @@ namespace FileCabinetApp
                 DateOfBirth = recordArgs.DateOfBirth,
                 JobExperience = recordArgs.JobExperience,
                 MonthlyPay = recordArgs.MonthlyPay,
-                Gender = char.ToUpper(recordArgs.Gender, System.Globalization.CultureInfo.InvariantCulture),
+                Gender = recordArgs.Gender,
             };
         }
 

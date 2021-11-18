@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.Globalization;
+using System.IO;
+using System.Xml;
 
 namespace FileCabinetApp
 {
@@ -16,6 +18,8 @@ namespace FileCabinetApp
         private const int ExplanationHelpIndex = 2;
         private const string DefaultValidationMessage = "Using default validation rules.";
         private const string CustomValidationMessage = "Using custom validation rules.";
+        private const string FileStorageMessage = "Using file storage.";
+        private const string MemoryStorageMessage = "Using memory storage.";
         private static readonly Tuple<string, Action<string>>[] Commands = new Tuple<string, Action<string>>[]
         {
             new Tuple<string, Action<string>>("help", PrintHelp),
@@ -24,6 +28,7 @@ namespace FileCabinetApp
             new Tuple<string, Action<string>>("list", List),
             new Tuple<string, Action<string>>("edit", Edit),
             new Tuple<string, Action<string>>("find", Find),
+            new Tuple<string, Action<string>>("export", Export),
         };
 
         private static readonly string[][] HelpMessages = new string[][]
@@ -33,9 +38,14 @@ namespace FileCabinetApp
         };
 
         private static IReadInputValidator readInputValidator = new DefaultValidator();
-        private static IFileCabinetService fileCabinetService = new FileCabinetService(new DefaultValidator());
+        private static IFileCabinetService fileCabinetService = new FileCabinetMemoryService(new DefaultValidator());
 
         private static bool isRunning = true;
+
+        /// <summary>
+        /// Initializes FIleCabinetFilesystemService instance.
+        /// </summary>
+        private static FileStream fileStream;
 
         /// <summary>
         /// Create record handler
@@ -68,11 +78,11 @@ namespace FileCabinetApp
                 switch (args[1].ToUpper(CultureInfo.InvariantCulture))
                 {
                     case "DEFAULT":
-                        fileCabinetService = new FileCabinetService(new DefaultValidator());
+                        fileCabinetService = new FileCabinetMemoryService(new DefaultValidator());
                         readInputValidator = new DefaultValidator();
                         Console.WriteLine(DefaultValidationMessage); break;
                     case "CUSTOM":
-                        fileCabinetService = new FileCabinetService(new CustomValidator());
+                        fileCabinetService = new FileCabinetMemoryService(new CustomValidator());
                         readInputValidator = new CustomValidator();
                         Console.WriteLine(CustomValidationMessage); break;
                 }
@@ -80,6 +90,24 @@ namespace FileCabinetApp
             else
             {
                 Console.WriteLine(DefaultValidationMessage);
+            }
+
+            if (args.Length == 2 && args[1].Length > 0 && (args[0] == "--storage" || args[0] == "-s"))
+            {
+                switch (args[1].ToUpper(CultureInfo.InvariantCulture))
+                {
+                    case "MEMORY":
+                        fileCabinetService = new FileCabinetMemoryService(new DefaultValidator());
+                        Console.WriteLine(MemoryStorageMessage); break;
+                    case "FILE":
+                        fileStream = new FileStream("cabinet-records.db", FileMode.OpenOrCreate, FileAccess.ReadWrite);
+                        fileCabinetService = new FileCabinetFilesystemService(fileStream);
+                        Console.WriteLine(FileStorageMessage); break;
+                }
+            }
+            else
+            {
+                Console.WriteLine(MemoryStorageMessage);
             }
 
             CreateRecordEvent += fileCabinetService.CreateRecord;
@@ -153,6 +181,12 @@ namespace FileCabinetApp
         private static void Exit(string parameters)
         {
             Console.WriteLine("Exiting an application...");
+
+            if (fileStream != null)
+            {
+                fileStream.Close();
+            }
+
             isRunning = false;
         }
 
@@ -170,6 +204,12 @@ namespace FileCabinetApp
         {
             ReadOnlyCollection<FileCabinetRecord> recordList = fileCabinetService.GetRecords();
 
+            if (recordList.Count == 0)
+            {
+                Console.WriteLine("Record list is empty.");
+                return;
+            }
+
             foreach (FileCabinetRecord fileCabinetRecord in recordList)
             {
                 Console.WriteLine($"#{fileCabinetRecord.Id}, {fileCabinetRecord.FirstName}, {fileCabinetRecord.LastName}, " +
@@ -180,6 +220,12 @@ namespace FileCabinetApp
 
         private static void Edit(string parameters)
         {
+            if (string.IsNullOrEmpty(parameters))
+            {
+                Console.WriteLine("No number input.");
+                return;
+            }
+
             FileCabinetRecord record = new FileCabinetRecord();
             record.Id = int.Parse(parameters, CultureInfo.InvariantCulture);
             int listCount = fileCabinetService.GetStat();
@@ -227,6 +273,95 @@ namespace FileCabinetApp
                 Console.WriteLine($"#{record.Id}, {record.FirstName}, {record.LastName}, " +
                     $"{record.DateOfBirth.Year}-{record.DateOfBirth.Month}-{record.DateOfBirth.Day}, " +
                     $"{record.JobExperience}, {record.MonthlyPay}, {record.Gender}");
+            }
+        }
+
+        private static void Export(string parameters)
+        {
+            if (parameters is null)
+            {
+                throw new ArgumentException("Parameters argument is null");
+            }
+
+            string[] exportParams = parameters.Split(' ');
+            char unswer = ' ';
+            bool run;
+
+            if (File.Exists(exportParams[1]))
+            {
+                Console.WriteLine($"File exists - rewrite {exportParams[1]}? [Y/n]");
+                do
+                {
+                    try
+                    {
+                        unswer = char.ToUpper(char.Parse(Console.ReadLine()), CultureInfo.InvariantCulture);
+                    }
+                    catch (FormatException)
+                    {
+                        unswer = ' ';
+                    }
+
+                    if (!(unswer == 'Y' || unswer == 'N'))
+                    {
+                        Console.WriteLine("Type Y or N");
+                        run = true;
+                    }
+                    else
+                    {
+                        run = false;
+                    }
+                }
+                while (run);
+            }
+            else
+            {
+                StreamWriter stream = new StreamWriter(exportParams[1]);
+                stream.Close();
+            }
+
+            switch (unswer)
+            {
+                case 'Y': ExportToFile(exportParams[0], exportParams[1]); break;
+                case 'N': break;
+                default: ExportToFile(exportParams[0], exportParams[1]); break;
+            }
+        }
+
+        private static void ExportToFile(string format, string path)
+        {
+            FileStream file;
+            FileCabinetServiceSnapshot snapshot;
+            StreamWriter streamWriter;
+
+            try
+            {
+                file = new FileStream(path, FileMode.Open);
+                file.Dispose();
+                file.Close();
+            }
+            catch (UnauthorizedAccessException)
+            {
+                Console.WriteLine($"Export failed: can't open file {path}");
+                return;
+            }
+
+            switch (format.ToUpper(CultureInfo.InvariantCulture))
+            {
+                case "CSV":
+                    snapshot = fileCabinetService.MakeSnapshot();
+                    streamWriter = new StreamWriter(path);
+                    snapshot.SaveToCsv(streamWriter);
+                    streamWriter.Close();
+                    Console.WriteLine($"All records are exported to file {path}");
+                    break;
+                case "XML":
+                    snapshot = fileCabinetService.MakeSnapshot();
+                    streamWriter = new StreamWriter(path);
+                    snapshot.SaveToXml(streamWriter);
+                    streamWriter.Close();
+                    Console.WriteLine($"All records are exported to file {path}");
+                    break;
+                default: Console.WriteLine("Unsupported file format"); break;
             }
         }
 
@@ -404,7 +539,7 @@ namespace FileCabinetApp
             }
             else
             {
-                result = char.Parse(inputString);
+                result = char.ToUpper(char.Parse(inputString), CultureInfo.InvariantCulture);
             }
 
             return new Tuple<bool, string, char>(successful, failureMessage, result);

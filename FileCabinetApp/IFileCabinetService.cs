@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 
 namespace FileCabinetApp
@@ -54,5 +55,11 @@ namespace FileCabinetApp
         /// <param name="dateOfBirth">Person's dateOfBirth.</param>
         /// <returns>ReadonlyCollection of file records found.</returns>
         ReadOnlyCollection<FileCabinetRecord> FindByDateOfBirth(string dateOfBirth);
+
+        /// <summary>
+        /// Makes snapshot of FileCabinetService list of records.
+        /// </summary>
+        /// <returns>Object of snapshot instance with file records.</returns>
+        FileCabinetServiceSnapshot MakeSnapshot();
     }
 }
