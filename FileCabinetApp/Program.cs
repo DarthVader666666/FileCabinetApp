@@ -2,12 +2,11 @@
 using System.Collections.ObjectModel;
 using System.Globalization;
 using System.IO;
-using System.Xml;
 
 namespace FileCabinetApp
 {
     /// <summary>
-    /// Class which operates application.
+    /// Class which operates FileCabinetApp application.
     /// </summary>
     public static class Program
     {
