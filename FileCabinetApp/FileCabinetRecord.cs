@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 
 namespace FileCabinetApp
 {
@@ -56,7 +57,7 @@ namespace FileCabinetApp
         public override string ToString()
         {
             return $"{this.Id},{this.FirstName},{this.LastName},{this.DateOfBirth.Day:D2}/{this.DateOfBirth.Month:D2}/{this.DateOfBirth.Year}," +
-                   $"{this.JobExperience},{this.MonthlyPay},{this.Gender}";
+                   $"{this.JobExperience}," + string.Format(CultureInfo.CreateSpecificCulture("en-US"), "{0:F2}", this.MonthlyPay) + $",{this.Gender}";
         }
     }
 }

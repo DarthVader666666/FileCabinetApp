@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Globalization;
 using System.IO;
 using System.Xml.Serialization;
 using FileCabinetApp;
@@ -122,6 +123,54 @@ namespace FileCabinetGenerator
 
             XmlSerializer xmlSerializer = new XmlSerializer(typeof(FileCabinetGenerator.FileCabinetXmlSerializeble));
             xmlSerializer.Serialize(steramWriter, data);
+        }
+
+        public void ImportCsv(StreamReader csvReader)
+        {
+            csvReader.ReadLine();
+            string[] recordFields;
+            string line;
+            int index;
+            FileCabinetRecord record;
+            int count = 0;
+            int replaced = 0;
+
+            while ((line = csvReader.ReadLine()) != null)
+            {
+                recordFields = line.Split(',');
+
+                try
+                {
+                    record = new FileCabinetRecord();
+                    record.Id = int.Parse(recordFields[0]);
+                    record.FirstName = recordFields[1];
+                    record.LastName = recordFields[2];
+                    record.DateOfBirth = DateTime.Parse(recordFields[3]);
+                    record.JobExperience = short.Parse(recordFields[4]);
+                    record.MonthlyPay = decimal.Parse(recordFields[5], CultureInfo.CreateSpecificCulture("en-US"));
+                    record.Gender = char.Parse(recordFields[6]);
+                }
+                catch (ArgumentException)
+                {
+                    throw new ArgumentException("Import data has wrong format.");
+                }
+
+                index = list.FindIndex(0, list.Count, i => i.Id.Equals(int.Parse(recordFields[0])));
+
+                if (index != -1)
+                {
+                    list[index] = record;
+                    replaced++;
+                }
+                else
+                {
+                    list.Add(record);
+                }
+
+                count++;
+            }
+
+            Console.WriteLine("{0} records were imported, {1} records were replaced.", count, replaced);
         }
     }
 }

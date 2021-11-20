@@ -37,6 +37,7 @@ namespace FileCabinetGenerator
             new Tuple<string, Action<string>>("list", List),
             new Tuple<string, Action<string>>("generate", Generate),
             new Tuple<string, Action<string>>("export", Export),
+            new Tuple<string, Action<string>>("import", Import),
         };
 
         private static readonly string[][] HelpMessages = new string[][]
@@ -52,7 +53,7 @@ namespace FileCabinetGenerator
 
         static void Main(string[] args)
         {
-            //args = new string[] { "-t", "xml", "-o", "fil.xml", "-a", "1000", "-i", "3" };
+            args = new string[] { "-t", "csv", "-o", "d:\\file1.csv", "-a", "10", "-i", "1" };
 
             if (args is null)
             {
@@ -205,13 +206,14 @@ namespace FileCabinetGenerator
             {
                 Console.WriteLine($"#{fileCabinetRecord.Id}, {fileCabinetRecord.FirstName}, {fileCabinetRecord.LastName}, " +
                     $"{fileCabinetRecord.DateOfBirth.Year}-{fileCabinetRecord.DateOfBirth.Month}-{fileCabinetRecord.DateOfBirth.Day}, " +
-                    $"{fileCabinetRecord.JobExperience}, {fileCabinetRecord.MonthlyPay}, {fileCabinetRecord.Gender}");
+                    $"{fileCabinetRecord.JobExperience}, " + string.Format(CultureInfo.CreateSpecificCulture("en-US"), "{0:F2}", fileCabinetRecord.MonthlyPay) + 
+                    $", {fileCabinetRecord.Gender}");
             }
         }
 
         private static void Generate(string parameters)
         {
-            Console.WriteLine("Generating. Please, wait.");
+            Console.WriteLine("Generating. Please, wait...");
             fileGenerator.GenerateRecordList(startId, recordsAmount);
             Console.WriteLine("Records generated successfully. Type \"export\" to write chosen file.");
         }
@@ -301,11 +303,62 @@ namespace FileCabinetGenerator
                     break;
                 case "XML":
                     streamWriter = new StreamWriter(filePath);
+                    Console.WriteLine("Writing...");
                     fileGenerator.SerializeRecordsToXml(streamWriter);
                     streamWriter.Close();
                     Console.WriteLine($"{recordsAmount} records were written to {filePath}");
                     break;
                 default: Console.WriteLine("Unsupported file format"); break;
+            }
+        }
+
+        private static void Import(string parameters)
+        {
+            if (parameters is null)
+            {
+                throw new ArgumentException("Parameters argument is null");
+            }
+
+            string[] importArguments = parameters.Split(' ');
+            string dataType = importArguments[0];
+            string path = importArguments[1];
+
+            if (importArguments.Length < 2 || (dataType.ToLower() != "csv" && dataType.ToLower() != "xml"))
+            {
+                Console.WriteLine("Wrong data type or command format.");
+                return;
+            }
+
+            if (!importArguments[0].ToLower().Equals(path[(Array.FindIndex(path.ToCharArray(), i => i.Equals('.')) + 1)..].ToLower()))
+            {
+                Console.WriteLine("Wrong import file extension.");
+                return;
+            }
+
+            if (!File.Exists(path))
+            {
+                Console.WriteLine("File doesn't exist.");
+                return;
+            }
+
+            try
+            {
+                fileStream = new FileStream(path, FileMode.Open, FileAccess.Read);
+                fileStream.Close();
+            }
+            catch (UnauthorizedAccessException)
+            {
+                Console.WriteLine($"Can't open file {path} due it's access limitations.");
+                fileStream.Close();
+            }
+
+            switch (dataType.ToUpper())
+            {
+                case "CSV":   
+                    StreamReader csvReader = new StreamReader(path);
+                    fileGenerator.ImportCsv(csvReader);
+                    csvReader.Close();
+                    break;
             }
         }
     }

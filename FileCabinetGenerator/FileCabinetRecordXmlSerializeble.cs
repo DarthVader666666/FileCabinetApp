@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using System.Xml.Serialization;
 using FileCabinetApp;
 
@@ -70,7 +71,7 @@ namespace FileCabinetGenerator
             LastName = record.LastName;
             DateOfBirth = $"{record.DateOfBirth.Day:D2}/{record.DateOfBirth.Month:D2}/{record.DateOfBirth.Year}";
             JobExperience = record.JobExperience;
-            MonthlyPay = $"{record.MonthlyPay:D2}";
+            MonthlyPay = string.Format(CultureInfo.CreateSpecificCulture("en-US"), "{0:F2}", record.MonthlyPay);
             Gender = $"{record.Gender}";
         }
 
