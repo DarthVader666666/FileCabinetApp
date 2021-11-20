@@ -1,62 +1,81 @@
 ﻿using System;
+using System.Xml.Serialization;
+using FileCabinetApp;
 
-namespace FileCabinetApp
+namespace FileCabinetGenerator
 {
     /// <summary>
     /// Class for defining a record about person.
     /// </summary>
-    public class FileCabinetRecord
+    public class FileCabinetRecordXmlSerializeble
     {
         /// <summary>
         /// Gets or sets record's number.
         /// </summary>
         /// <value>Number of record in file cabinet.</value>
+        [XmlAttribute("id")]
         public int Id { get; set; }
 
         /// <summary>
         /// Gets or sets person's first name.
         /// </summary>
         /// <value>Person's first name.</value>
+        [XmlElement("first_name")]
         public string FirstName { get; set; }
 
         /// <summary>
         /// Gets or sets person's last name.
         /// </summary>
         /// <value>Person's last name.</value>
+        [XmlElement("last_name")]
         public string LastName { get; set; }
 
         /// <summary>
         /// Gets or sets person's day if birth.
         /// </summary>
         /// <value>Person's day of birth.</value>
-        public DateTime DateOfBirth { get; set; }
+        [XmlElement("date_Of_Birth")]
+        public string DateOfBirth { get; set; }
 
         /// <summary>
         /// Gets or sets quantity of years a person works on the current job.
         /// </summary>
         /// <value>The quantity of years person works.</value>
+        [XmlElement("Job_Experience")]
         public short JobExperience { get; set; }
 
         /// <summary>
         /// Gets or sets hom much a person earns per month.
         /// </summary>
         /// <value>The size of person's monthly salary.</value>
-        public decimal MonthlyPay { get; set; }
+        [XmlElement("Monthly_Pay")]
+        public string MonthlyPay { get; set; }
 
         /// <summary>
         /// Gets or sets first letter of peson's gender.
         /// </summary>
         /// <value>Person's gender.</value>
-        public char Gender { get; set; }
+        [XmlElement("gender")]
+        public string Gender { get; set; }
 
-        /// <summary>
-        /// Overrides an Object ToString Converter.
-        /// </summary>
-        /// <returns>line of properties in string representation.</returns>
-        public override string ToString()
+        public FileCabinetRecordXmlSerializeble(FileCabinetRecord record)
         {
-            return $"{this.Id},{this.FirstName},{this.LastName},{this.DateOfBirth.Day:D2}/{this.DateOfBirth.Month:D2}/{this.DateOfBirth.Year}," +
-                   $"{this.JobExperience},{this.MonthlyPay},{this.Gender}";
+            if (record is null)
+            {
+                throw new ArgumentNullException($"{record} is null");
+            }
+
+            Id = record.Id;
+            FirstName = record.FirstName;
+            LastName = record.LastName;
+            DateOfBirth = $"{record.DateOfBirth.Day:D2}/{record.DateOfBirth.Month:D2}/{record.DateOfBirth.Year}";
+            JobExperience = record.JobExperience;
+            MonthlyPay = $"{record.MonthlyPay:D2}";
+            Gender = $"{record.Gender}";
+        }
+
+        public FileCabinetRecordXmlSerializeble()
+        {
         }
     }
 }

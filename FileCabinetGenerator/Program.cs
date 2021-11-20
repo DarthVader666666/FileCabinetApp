@@ -1,6 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Globalization;
 using System.IO;
+using System.Xml.Serialization;
 using FileCabinetApp;
 
 namespace FileCabinetGenerator
@@ -14,7 +17,12 @@ namespace FileCabinetGenerator
         private static string filePath;
         private static int recordsAmount;
         private static int startId;
-        private static StreamReader streamReader;
+        /// <summary>
+        /// FileCabinetFilesystemService instance.
+        /// </summary>
+        private static IFileCabinetService fileCabinetService;
+        private static FileCabinetRecordGenerator fileGenerator = new FileCabinetRecordGenerator();
+        private static FileStream fileStream;
 
         private const string DeveloperName = "Vadzim Rumiantsau";
         private const string HintMessage = "Enter your command, or enter 'help' to get help.";
@@ -26,28 +34,34 @@ namespace FileCabinetGenerator
         {
             new Tuple<string, Action<string>>("help", PrintHelp),
             new Tuple<string, Action<string>>("exit", Exit),
-            new Tuple<string, Action<string>>("generate", Generate),
             new Tuple<string, Action<string>>("list", List),
+            new Tuple<string, Action<string>>("generate", Generate),
+            new Tuple<string, Action<string>>("export", Export),
         };
 
         private static readonly string[][] HelpMessages = new string[][]
         {
             new string[] { "help", "prints the help screen", "The 'help' command prints the help screen." },
             new string[] { "exit", "exits the application", "The 'exit' command exits the application." },
+            new string[] { "list", "prints generated record list" },
+            new string[] { "generate", "generates record list" },
+            new string[] { "export", "exports records into chosen file and format." },
         };
 
         private static bool isRunning = true;
 
-        private static readonly FileCabinetGenerator fileCabinetGenerator = new FileCabinetGenerator();
-
         static void Main(string[] args)
         {
-            args = new string[] { "-t", "csv", "-o", "file.csv", "-a", "5", "-i", "2" };
+            //args = new string[] { "-t", "xml", "-o", "fil.xml", "-a", "1000", "-i", "3" };
 
             if (args is null)
             {
                 throw new ArgumentNullException($"{args} is null");
             }
+
+            Console.WriteLine($"File Generatort Application, developed by {DeveloperName}");
+            Console.WriteLine(HintMessage);
+            Console.WriteLine();
 
             if (args.Length <= 8)
             {
@@ -73,12 +87,6 @@ namespace FileCabinetGenerator
                     return;
                 }
 
-                if (!File.Exists(filePath))
-                {
-                    Console.WriteLine("No such file.");
-                    return;
-                }
-
                 try
                 {
                     int.TryParse(args[5], out recordsAmount);
@@ -100,13 +108,15 @@ namespace FileCabinetGenerator
                 }
             }
 
-            Console.WriteLine($"File Generatort Application, developed by {DeveloperName}");
-            Console.WriteLine($"File type {fileType} chosen. Output file: {filePath}.");
+            Console.WriteLine($"Chosen file type: {fileType}. Output file: {filePath}.");
             Console.WriteLine($"Amount of records: {recordsAmount}. Id start: {startId}");
-            Console.WriteLine(HintMessage);
-            Console.WriteLine();
 
-            streamReader = new StreamReader(filePath);
+            if (!File.Exists(filePath))
+            {
+                Console.WriteLine($"File {filePath} does not exist. It will be created during data export.");
+            }
+
+            Generate(string.Empty);
 
             do
             {
@@ -173,9 +183,9 @@ namespace FileCabinetGenerator
         {
             Console.WriteLine("Exiting an application...");
 
-            if (streamReader != null)
+            if (fileStream != null)
             {
-                streamReader.Close();
+                fileStream.Close();
             }
 
             isRunning = false;
@@ -183,7 +193,7 @@ namespace FileCabinetGenerator
 
         private static void List(string parameters)
         {
-            ReadOnlyCollection<FileCabinetRecord> recordList = fileCabinetGenerator.GetRecords();
+            ReadOnlyCollection<FileCabinetRecord> recordList = fileGenerator.GetRecords();
 
             if (recordList.Count == 0)
             {
@@ -201,9 +211,102 @@ namespace FileCabinetGenerator
 
         private static void Generate(string parameters)
         {
-            fileCabinetGenerator.GenerateRecordList(startId, recordsAmount);
-            Console.WriteLine("Records generated successfully.");
+            Console.WriteLine("Generating. Please, wait.");
+            fileGenerator.GenerateRecordList(startId, recordsAmount);
+            Console.WriteLine("Records generated successfully. Type \"export\" to write chosen file.");
         }
 
+        private static void Export(string parameters)
+        {
+            if (parameters is null)
+            {
+                throw new ArgumentException("Parameters argument is null");
+            }
+
+            if (parameters.Length > 0)
+            {
+                Console.WriteLine($"Unrecognized additional parameters. {fileType} format was chosen.");
+                Console.WriteLine($"Type \"export\" to write data into {filePath}.");
+                return;
+            }
+
+            char unswer = ' ';
+            bool run;
+
+            if (File.Exists(filePath))
+            {
+                Console.WriteLine($"File exists - rewrite {filePath}? [Y/n]");
+                do
+                {
+                    try
+                    {
+                        unswer = char.ToUpper(char.Parse(Console.ReadLine()), CultureInfo.InvariantCulture);
+                    }
+                    catch (FormatException)
+                    {
+                        unswer = ' ';
+                    }
+
+                    if (!(unswer == 'Y' || unswer == 'N'))
+                    {
+                        Console.WriteLine("Type Y or N");
+                        run = true;
+                    }
+                    else
+                    {
+                        run = false;
+                    }
+                }
+                while (run);
+            }
+            else
+            {
+                StreamWriter stream = new StreamWriter(filePath);
+                stream.Close();
+            }
+
+            switch (unswer)
+            {
+                case 'Y': ExportToFile(); break;
+                case 'N': break;
+                default: ExportToFile(); break;
+            }
+        }
+
+        private static void ExportToFile()
+        {
+            FileCabinetServiceSnapshot snapshot;
+            StreamWriter streamWriter;
+
+            try
+            {
+                fileStream = new FileStream(filePath, FileMode.Open);
+                fileStream.Dispose();
+                fileStream.Close();
+            }
+            catch (UnauthorizedAccessException)
+            {
+                Console.WriteLine($"Export failed: can't open file {filePath}");
+                return;
+            }
+
+            switch (fileType.ToUpper())
+            {
+                case "CSV":
+                    snapshot = fileGenerator.MakeSnapshot();
+                    streamWriter = new StreamWriter(filePath);
+                    snapshot.SaveToCsv(streamWriter);
+                    streamWriter.Close();
+                    Console.WriteLine($"{recordsAmount} records were written to {filePath}");
+                    break;
+                case "XML":
+                    streamWriter = new StreamWriter(filePath);
+                    fileGenerator.SerializeRecordsToXml(streamWriter);
+                    streamWriter.Close();
+                    Console.WriteLine($"{recordsAmount} records were written to {filePath}");
+                    break;
+                default: Console.WriteLine("Unsupported file format"); break;
+            }
+        }
     }
 }

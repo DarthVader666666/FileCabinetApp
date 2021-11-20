@@ -1,16 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.IO;
+using System.Xml.Serialization;
 using FileCabinetApp;
 
 namespace FileCabinetGenerator
 {
-    class FileCabinetGenerator
+    public class FileCabinetRecordGenerator
     {
         private readonly IRecordValidator validator;
+
         private readonly List<FileCabinetRecord> list = new List<FileCabinetRecord>();
 
-        public FileCabinetGenerator()
+        public List<FileCabinetRecord> RecordList { get { return list; } }
+
+        public FileCabinetRecordGenerator()
         {
             validator = new FileCabinetApp.DefaultValidator();            
         }
@@ -19,7 +24,7 @@ namespace FileCabinetGenerator
         {
             FileCabinetRecord record;
             Random random = new Random();
-            char[] genderChars = new char[] { 'f', 'F', 'm', 'M' };
+            char[] genderChars = new char[] { 'F', 'M' };
             bool running;
             list.Clear();
 
@@ -38,8 +43,8 @@ namespace FileCabinetGenerator
                         record.LastName = GenerateString();
                         record.DateOfBirth = GenerateDateTime();
                         record.JobExperience = (short)random.Next(0, 40);
-                        record.MonthlyPay = random.Next(0, 10000);
-                        record.Gender = genderChars[random.Next(genderChars.Length)];
+                        record.MonthlyPay = (decimal)random.Next(30000, 300000) / 100;
+                        record.Gender = genderChars[random.Next(2)];
 
                         validator.ValidateParameters(new FileCabinetEventArgs(record));
 
@@ -64,15 +69,11 @@ namespace FileCabinetGenerator
         private static string GenerateString()
         {
             Random random = new Random();
-            string letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
-            char[] chars = new char[random.Next(10)];
+            string[] names = new string[] { "Vadim", "Mark", "John", "Wick", "Neo", "Radagast", "Bilbo", "Baggins", "Sveta", "Tanya", "Colonel", "Beavis",
+                "Gretta", "Turnberg", "Peater", "Lennon", "Trinity", "Gendalf", "Spock", "Katz", "Merkel", "Daiva", "Stark", "Comrade", "Parker", "Frodo",
+                "Tauriel", "Lora", "Palmer", "Sarah", "Connor", "Vladimir", "Harconer", "Leto", "Atredis", "Poul", "Muaddib", "Batista", "Brad", "Pitt" };
 
-            for (int i = 0; i < chars.Length; i++)
-            {
-                chars[i] = letters[random.Next(letters.Length)];
-            }
-
-            return new string(chars);
+            return names[random.Next(names.Length + 1)];
         }
 
         private static DateTime GenerateDateTime()
@@ -104,6 +105,23 @@ namespace FileCabinetGenerator
             while (running);
 
             return dateOfBirth;
+        }
+
+        /// <summary>
+        /// Gets snapshot entity.
+        /// </summary>
+        /// <returns>Snapshot object.</returns>
+        public FileCabinetServiceSnapshot MakeSnapshot()
+        {
+            return new FileCabinetServiceSnapshot(this.list);
+        }
+
+        public void SerializeRecordsToXml(StreamWriter steramWriter)
+        {
+            FileCabinetXmlSerializeble data = new FileCabinetXmlSerializeble(list);
+
+            XmlSerializer xmlSerializer = new XmlSerializer(typeof(FileCabinetGenerator.FileCabinetXmlSerializeble));
+            xmlSerializer.Serialize(steramWriter, data);
         }
     }
 }

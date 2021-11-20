@@ -34,6 +34,10 @@ namespace FileCabinetApp
         {
             new string[] { "help", "prints the help screen", "The 'help' command prints the help screen." },
             new string[] { "exit", "exits the application", "The 'exit' command exits the application." },
+            new string[] { "list", "prints record list" },
+            new string[] { "create", "creates new record" },
+            new string[] { "export", "exports records into chosen file and format. Ex: export csv D:\\file.csv" },
+            new string[] { "find", "finds records by specified parameter. Ex: find firstname \"Vadim\"" },
         };
 
         private static IReadInputValidator readInputValidator = new DefaultValidator();
@@ -213,7 +217,7 @@ namespace FileCabinetApp
             {
                 Console.WriteLine($"#{fileCabinetRecord.Id}, {fileCabinetRecord.FirstName}, {fileCabinetRecord.LastName}, " +
                     $"{fileCabinetRecord.DateOfBirth.Year}-{fileCabinetRecord.DateOfBirth.Month}-{fileCabinetRecord.DateOfBirth.Day}, " +
-                    $"{fileCabinetRecord.JobExperience}, {fileCabinetRecord.MonthlyPay}, {fileCabinetRecord.Gender}");
+                    $"{fileCabinetRecord.JobExperience}, {fileCabinetRecord.MonthlyPay:C2}, {fileCabinetRecord.Gender}");
             }
         }
 
