@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Xml;
 
@@ -10,7 +11,7 @@ namespace FileCabinetApp
     /// </summary>
     public class FileCabinetServiceSnapshot
     {
-        private readonly FileCabinetRecord[] records;
+        private FileCabinetRecord[] records;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="FileCabinetServiceSnapshot"/> class.
@@ -24,6 +25,27 @@ namespace FileCabinetApp
             }
 
             this.records = list.ToArray();
+        }
+
+        /// <summary>
+        /// Gets collection of records to implement restore.
+        /// </summary>
+        /// <value>
+        /// Collection of records to implement Restore().
+        /// </value>
+        public ReadOnlyCollection<FileCabinetRecord> Records
+        {
+            get { return new ReadOnlyCollection<FileCabinetRecord>(this.records); }
+        }
+
+        /// <summary>
+        /// Loads data from csv file and gets list of recods.
+        /// </summary>
+        /// <param name="streamReader">Stream of file to read.</param>
+        public void LoadFromCsv(StreamReader streamReader)
+        {
+            FileCabinetRecordCsvReader csvReader = new FileCabinetRecordCsvReader(streamReader);
+            this.records = csvReader.ReadAll().ToArray();
         }
 
         /// <summary>

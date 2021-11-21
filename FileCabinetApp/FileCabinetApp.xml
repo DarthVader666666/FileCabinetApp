@@ -215,6 +215,12 @@
             <param name="dateOfBirth">Person's date of birth which record should be found with.</param>
             <returns>Records which fit search requirements.</returns>
         </member>
+        <member name="M:FileCabinetApp.FileCabinetFilesystemService.Restore(FileCabinetApp.FileCabinetServiceSnapshot)">
+            <summary>
+            Places records from csv file to current *.db file.
+            </summary>
+            <param name="snapshot">Loaded records from csv file.</param>
+        </member>
         <member name="T:FileCabinetApp.FileCabinetMemoryService">
             <summary>
             Class contains methods which handle the user commands.
@@ -279,6 +285,12 @@
             <param name="dateOfBirth">Person's date of birth which record should be found with.</param>
             <returns>Records which fit search requirements.</returns>
         </member>
+        <member name="M:FileCabinetApp.FileCabinetMemoryService.Restore(FileCabinetApp.FileCabinetServiceSnapshot)">
+            <summary>
+            Places records from csv file to current record list.
+            </summary>
+            <param name="snapshot">Loaded records from csv file.</param>
+        </member>
         <member name="T:FileCabinetApp.FileCabinetRecord">
             <summary>
             Class for defining a record about person.
@@ -332,6 +344,23 @@
             </summary>
             <returns>line of properties in string representation.</returns>
         </member>
+        <member name="T:FileCabinetApp.FileCabinetRecordCsvReader">
+            <summary>
+            From file to stream csv reader.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetRecordCsvReader.#ctor(System.IO.StreamReader)">
+            <summary>
+            Initializes a new instance of the <see cref="T:FileCabinetApp.FileCabinetRecordCsvReader"/> class.
+            </summary>
+            <param name="fileStream">Stream to read from csv file.</param>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetRecordCsvReader.ReadAll">
+            <summary>
+            Reads csv file and returns data in IList format.
+            </summary>
+            <returns>List of records.</returns>
+        </member>
         <member name="T:FileCabinetApp.FileCabinetRecordCsvWriter">
             <summary>
             From stream to csv file writer.
@@ -376,6 +405,20 @@
             Initializes a new instance of the <see cref="T:FileCabinetApp.FileCabinetServiceSnapshot"/> class.
             </summary>
             <param name="list">All file records to make a copy of.</param>
+        </member>
+        <member name="P:FileCabinetApp.FileCabinetServiceSnapshot.Records">
+            <summary>
+            Gets collection of records to implement restore.
+            </summary>
+            <value>
+            Collection of records to implement Restore().
+            </value>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetServiceSnapshot.LoadFromCsv(System.IO.StreamReader)">
+            <summary>
+            Loads data from csv file and gets list of recods.
+            </summary>
+            <param name="streamReader">Stream of file to read.</param>
         </member>
         <member name="M:FileCabinetApp.FileCabinetServiceSnapshot.SaveToCsv(System.IO.StreamWriter)">
             <summary>
@@ -446,6 +489,12 @@
             Makes snapshot of FileCabinetService list of records.
             </summary>
             <returns>Object of snapshot instance with file records.</returns>
+        </member>
+        <member name="M:FileCabinetApp.IFileCabinetService.Restore(FileCabinetApp.FileCabinetServiceSnapshot)">
+            <summary>
+            Restores FileCabinetMemoryService record list with imported records.
+            </summary>
+            <param name="snapshot">FileCabinetMemoryService snapshot.</param>
         </member>
         <member name="T:FileCabinetApp.IReadInputValidator">
             <summary>

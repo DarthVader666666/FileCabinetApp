@@ -170,6 +170,36 @@ namespace FileCabinetApp
             return new List<FileCabinetRecord>().AsReadOnly();
         }
 
+        /// <summary>
+        /// Places records from csv file to current record list.
+        /// </summary>
+        /// <param name="snapshot">Loaded records from csv file.</param>
+        public void Restore(FileCabinetServiceSnapshot snapshot)
+        {
+            if (snapshot is null)
+            {
+                throw new ArgumentNullException($"{snapshot} is null.");
+            }
+
+            int index = -1;
+
+            foreach (FileCabinetRecord record in snapshot.Records)
+            {
+                index = this.list.FindIndex(i => i.Id.Equals(record.Id));
+
+                if (index != -1)
+                {
+                    this.list[index] = record;
+                }
+                else
+                {
+                    this.list.Add(record);
+                }
+            }
+
+            Console.WriteLine("CSV import to Memory Servise completed.");
+        }
+
         private void AddRecordToFirstNameDictionary(FileCabinetRecord record, string firstNameKey)
         {
             if (firstNameKey is null)

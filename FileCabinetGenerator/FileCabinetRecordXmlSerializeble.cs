@@ -1,15 +1,46 @@
-﻿using System;
-using System.Globalization;
-using System.Xml.Serialization;
-using FileCabinetApp;
+﻿// <copyright file="FileCabinetRecordXmlSerializeble.cs" company="PlaceholderCompany">
+// Copyright (c) PlaceholderCompany. All rights reserved.
+// </copyright>
 
 namespace FileCabinetGenerator
 {
+    using System;
+    using System.Globalization;
+    using System.Xml.Serialization;
+    using FileCabinetApp;
+
     /// <summary>
     /// Class for defining a record about person.
     /// </summary>
     public class FileCabinetRecordXmlSerializeble
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="FileCabinetRecordXmlSerializeble"/> class.
+        /// </summary>
+        /// <param name="record">File cabinet record to be changed for xml serialisation.</param>
+        public FileCabinetRecordXmlSerializeble(FileCabinetRecord record)
+        {
+            if (record is null)
+            {
+                throw new ArgumentNullException($"{record} is null");
+            }
+
+            this.Id = record.Id;
+            this.FirstName = record.FirstName;
+            this.LastName = record.LastName;
+            this.DateOfBirth = $"{record.DateOfBirth.Day:D2}/{record.DateOfBirth.Month:D2}/{record.DateOfBirth.Year}";
+            this.JobExperience = record.JobExperience;
+            this.MonthlyPay = string.Format(CultureInfo.CreateSpecificCulture("en-US"), "{0:F2}", record.MonthlyPay);
+            this.Gender = $"{record.Gender}";
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="FileCabinetRecordXmlSerializeble"/> class.
+        /// </summary>
+        public FileCabinetRecordXmlSerializeble()
+        {
+        }
+
         /// <summary>
         /// Gets or sets record's number.
         /// </summary>
@@ -58,25 +89,5 @@ namespace FileCabinetGenerator
         /// <value>Person's gender.</value>
         [XmlElement("gender")]
         public string Gender { get; set; }
-
-        public FileCabinetRecordXmlSerializeble(FileCabinetRecord record)
-        {
-            if (record is null)
-            {
-                throw new ArgumentNullException($"{record} is null");
-            }
-
-            Id = record.Id;
-            FirstName = record.FirstName;
-            LastName = record.LastName;
-            DateOfBirth = $"{record.DateOfBirth.Day:D2}/{record.DateOfBirth.Month:D2}/{record.DateOfBirth.Year}";
-            JobExperience = record.JobExperience;
-            MonthlyPay = string.Format(CultureInfo.CreateSpecificCulture("en-US"), "{0:F2}", record.MonthlyPay);
-            Gender = $"{record.Gender}";
-        }
-
-        public FileCabinetRecordXmlSerializeble()
-        {
-        }
     }
 }

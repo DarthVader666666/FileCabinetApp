@@ -12,6 +12,7 @@ namespace FileCabinetApp
     {
         private const string DeveloperName = "Vadzim Rumiantsau";
         private const string HintMessage = "Enter your command, or enter 'help' to get help.";
+        private const string StorageDbFilePath = "cabinet-records.db";
         private const int CommandHelpIndex = 0;
         private const int DescriptionHelpIndex = 1;
         private const int ExplanationHelpIndex = 2;
@@ -19,6 +20,7 @@ namespace FileCabinetApp
         private const string CustomValidationMessage = "Using custom validation rules.";
         private const string FileStorageMessage = "Using file storage.";
         private const string MemoryStorageMessage = "Using memory storage.";
+
         private static readonly Tuple<string, Action<string>>[] Commands = new Tuple<string, Action<string>>[]
         {
             new Tuple<string, Action<string>>("help", PrintHelp),
@@ -28,6 +30,7 @@ namespace FileCabinetApp
             new Tuple<string, Action<string>>("edit", Edit),
             new Tuple<string, Action<string>>("find", Find),
             new Tuple<string, Action<string>>("export", Export),
+            new Tuple<string, Action<string>>("import", Import),
         };
 
         private static readonly string[][] HelpMessages = new string[][]
@@ -71,6 +74,8 @@ namespace FileCabinetApp
                 throw new ArgumentNullException($"{args} is null");
             }
 
+            // args = new string[] { "-s", "file" };
+
             if (args.Length == 1)
             {
                 args = args[0].Split('=');
@@ -103,7 +108,7 @@ namespace FileCabinetApp
                         fileCabinetService = new FileCabinetMemoryService(new DefaultValidator());
                         Console.WriteLine(MemoryStorageMessage); break;
                     case "FILE":
-                        fileStream = new FileStream("cabinet-records.db", FileMode.OpenOrCreate, FileAccess.ReadWrite);
+                        fileStream = new FileStream(StorageDbFilePath, FileMode.OpenOrCreate, FileAccess.ReadWrite);
                         fileCabinetService = new FileCabinetFilesystemService(fileStream);
                         Console.WriteLine(FileStorageMessage); break;
                 }
@@ -217,7 +222,8 @@ namespace FileCabinetApp
             {
                 Console.WriteLine($"#{fileCabinetRecord.Id}, {fileCabinetRecord.FirstName}, {fileCabinetRecord.LastName}, " +
                     $"{fileCabinetRecord.DateOfBirth.Year}-{fileCabinetRecord.DateOfBirth.Month}-{fileCabinetRecord.DateOfBirth.Day}, " +
-                    $"{fileCabinetRecord.JobExperience}, {fileCabinetRecord.MonthlyPay:C2}, {fileCabinetRecord.Gender}");
+                    $"{fileCabinetRecord.JobExperience}," + string.Format(CultureInfo.InvariantCulture, "{0:F2}", fileCabinetRecord.MonthlyPay) +
+                    $", {fileCabinetRecord.Gender}");
             }
         }
 
@@ -546,6 +552,59 @@ namespace FileCabinetApp
             }
 
             return new Tuple<bool, string, char>(successful, failureMessage, result);
+        }
+
+        private static void Import(string parameters)
+        {
+            if (parameters is null)
+            {
+                throw new ArgumentException("Parameters argument is null");
+            }
+
+            string[] importArguments = parameters.Split(' ');
+            string dataType = importArguments[0];
+            string path = importArguments[1];
+
+            if (importArguments.Length < 2 || (dataType.ToUpperInvariant() != "CSV" && dataType.ToUpperInvariant() != "XML"))
+            {
+                Console.WriteLine("Wrong data type or command format.");
+                return;
+            }
+
+            if (!importArguments[0].ToUpperInvariant().Equals(path[(Array.FindIndex(path.ToCharArray(), i => i.Equals('.')) + 1) ..].ToUpperInvariant()))
+            {
+                Console.WriteLine("Wrong import file extension.");
+                return;
+            }
+
+            if (!File.Exists(path))
+            {
+                Console.WriteLine("File doesn't exist.");
+                return;
+            }
+
+            try
+            {
+                fileStream = new FileStream(path, FileMode.Open, FileAccess.Read);
+
+                switch (dataType.ToUpperInvariant())
+                {
+                    case "CSV":
+                        FileCabinetServiceSnapshot snapshot = fileCabinetService.MakeSnapshot();
+                        StreamReader streamReader = new StreamReader(fileStream);
+                        snapshot.LoadFromCsv(streamReader);
+                        fileCabinetService.Restore(snapshot);
+                        streamReader.Close();
+                        break;
+                }
+
+                fileStream.Close();
+            }
+            catch (UnauthorizedAccessException)
+            {
+                Console.WriteLine($"Can't open file {path} due it's access limitations.");
+                fileStream.Close();
+            }
         }
     }
 }

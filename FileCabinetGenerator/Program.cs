@@ -1,34 +1,34 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Globalization;
-using System.IO;
-using System.Xml.Serialization;
-using FileCabinetApp;
+﻿// <copyright file="Program.cs" company="PlaceholderCompany">
+// Copyright (c) PlaceholderCompany. All rights reserved.
+// </copyright>
 
 namespace FileCabinetGenerator
 {
-    /// <summary>
-    /// Class which operates FileCabinetGenerator application. 
-    /// </summary>
-    static class Program
-    {
-        private static string fileType;
-        private static string filePath;
-        private static int recordsAmount;
-        private static int startId;
-        /// <summary>
-        /// FileCabinetFilesystemService instance.
-        /// </summary>
-        private static IFileCabinetService fileCabinetService;
-        private static FileCabinetRecordGenerator fileGenerator = new FileCabinetRecordGenerator();
-        private static FileStream fileStream;
+    using System;
+    using System.Collections.ObjectModel;
+    using System.Globalization;
+    using System.IO;
+    using FileCabinetApp;
 
+    /// <summary>
+    /// Class which operates FileCabinetGenerator application.
+    /// </summary>
+    public static class Program
+    {
         private const string DeveloperName = "Vadzim Rumiantsau";
         private const string HintMessage = "Enter your command, or enter 'help' to get help.";
         private const int CommandHelpIndex = 0;
         private const int DescriptionHelpIndex = 1;
         private const int ExplanationHelpIndex = 2;
+
+        private static readonly string[][] HelpMessages = new string[][]
+        {
+            new string[] { "help", "prints the help screen", "The 'help' command prints the help screen." },
+            new string[] { "exit", "exits the application", "The 'exit' command exits the application." },
+            new string[] { "list", "prints generated record list" },
+            new string[] { "generate", "generates record list" },
+            new string[] { "export", "exports records into chosen file and format." },
+        };
 
         private static readonly Tuple<string, Action<string>>[] Commands = new Tuple<string, Action<string>>[]
         {
@@ -40,18 +40,21 @@ namespace FileCabinetGenerator
             new Tuple<string, Action<string>>("import", Import),
         };
 
-        private static readonly string[][] HelpMessages = new string[][]
-        {
-            new string[] { "help", "prints the help screen", "The 'help' command prints the help screen." },
-            new string[] { "exit", "exits the application", "The 'exit' command exits the application." },
-            new string[] { "list", "prints generated record list" },
-            new string[] { "generate", "generates record list" },
-            new string[] { "export", "exports records into chosen file and format." },
-        };
+        private static string fileType;
+        private static string filePath;
+        private static int recordsAmount;
+        private static int startId;
+
+        private static FileCabinetRecordGenerator fileGenerator = new FileCabinetRecordGenerator();
+        private static FileStream fileStream;
 
         private static bool isRunning = true;
 
-        static void Main(string[] args)
+        /// <summary>
+        /// Provides user interface and calls command handlers.
+        /// </summary>
+        /// <param name="args">Command line args.</param>
+        public static void Main(string[] args)
         {
             args = new string[] { "-t", "csv", "-o", "d:\\file1.csv", "-a", "10", "-i", "1" };
 
@@ -82,7 +85,7 @@ namespace FileCabinetGenerator
                     return;
                 }
 
-                if (!fileType.ToLower().Equals(filePath[(Array.FindIndex(filePath.ToCharArray(), i => i.Equals('.')) + 1)..].ToLower()))
+                if (!fileType.ToLower().Equals(filePath[(Array.FindIndex(filePath.ToCharArray(), i => i.Equals('.')) + 1) ..].ToLower()))
                 {
                     Console.WriteLine("File type and file extention don't match.");
                     return;
@@ -92,7 +95,7 @@ namespace FileCabinetGenerator
                 {
                     int.TryParse(args[5], out recordsAmount);
                 }
-                catch(ArgumentException)
+                catch (ArgumentException)
                 {
                     Console.WriteLine("Wrong records amount parameter.");
                     return;
@@ -206,8 +209,8 @@ namespace FileCabinetGenerator
             {
                 Console.WriteLine($"#{fileCabinetRecord.Id}, {fileCabinetRecord.FirstName}, {fileCabinetRecord.LastName}, " +
                     $"{fileCabinetRecord.DateOfBirth.Year}-{fileCabinetRecord.DateOfBirth.Month}-{fileCabinetRecord.DateOfBirth.Day}, " +
-                    $"{fileCabinetRecord.JobExperience}, " + string.Format(CultureInfo.CreateSpecificCulture("en-US"), "{0:F2}", fileCabinetRecord.MonthlyPay) + 
-                    $", {fileCabinetRecord.Gender}");
+                    $"{fileCabinetRecord.JobExperience}, " + string.Format(CultureInfo.CreateSpecificCulture("en-US"), "{0:F2}", fileCabinetRecord.MonthlyPay) +
+                    $" ,{fileCabinetRecord.Gender}");
             }
         }
 
@@ -329,7 +332,7 @@ namespace FileCabinetGenerator
                 return;
             }
 
-            if (!importArguments[0].ToLower().Equals(path[(Array.FindIndex(path.ToCharArray(), i => i.Equals('.')) + 1)..].ToLower()))
+            if (!importArguments[0].ToLower().Equals(path[(Array.FindIndex(path.ToCharArray(), i => i.Equals('.')) + 1) ..].ToLower()))
             {
                 Console.WriteLine("Wrong import file extension.");
                 return;
@@ -354,7 +357,7 @@ namespace FileCabinetGenerator
 
             switch (dataType.ToUpper())
             {
-                case "CSV":   
+                case "CSV":
                     StreamReader csvReader = new StreamReader(path);
                     fileGenerator.ImportCsv(csvReader);
                     csvReader.Close();

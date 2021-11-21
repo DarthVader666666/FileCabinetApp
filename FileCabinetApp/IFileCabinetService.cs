@@ -61,5 +61,11 @@ namespace FileCabinetApp
         /// </summary>
         /// <returns>Object of snapshot instance with file records.</returns>
         FileCabinetServiceSnapshot MakeSnapshot();
+
+        /// <summary>
+        /// Restores FileCabinetMemoryService record list with imported records.
+        /// </summary>
+        /// <param name="snapshot">FileCabinetMemoryService snapshot.</param>
+        void Restore(FileCabinetServiceSnapshot snapshot);
     }
 }
