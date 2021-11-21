@@ -40,7 +40,7 @@ namespace FileCabinetApp
         /// <returns>Snapshot object.</returns>
         public FileCabinetServiceSnapshot MakeSnapshot()
         {
-            throw new NotImplementedException();
+            return new FileCabinetServiceSnapshot(this.list);
         }
 
         /// <summary>
@@ -151,7 +151,7 @@ namespace FileCabinetApp
             int count = 0;
             this.fileStream.Position = 0;
 
-            while (this.fileStream.Position < this.fileStream.Length)
+            while (this.fileStream.Position <= this.fileStream.Length)
             {
                 this.fileStream.Seek(BufferSize, SeekOrigin.Current);
                 count++;
@@ -257,6 +257,45 @@ namespace FileCabinetApp
             }
 
             return new List<FileCabinetRecord>().AsReadOnly();
+        }
+
+        /// <summary>
+        /// Places records from csv file to current *.db file.
+        /// </summary>
+        /// <param name="snapshot">Loaded records from csv file.</param>
+        public void Restore(FileCabinetServiceSnapshot snapshot)
+        {
+            if (snapshot is null)
+            {
+                throw new ArgumentNullException($"{snapshot} is null.");
+            }
+
+            this.GetRecords();
+
+            int index = -1;
+
+            foreach (FileCabinetRecord record in snapshot.Records)
+            {
+                index = this.list.FindIndex(i => i.Id.Equals(record.Id));
+
+                if (index != -1)
+                {
+                    this.list[index] = record;
+                }
+                else
+                {
+                    this.list.Add(record);
+                }
+            }
+
+            this.fileStream.Position = 0;
+
+            foreach (FileCabinetRecord record in this.list)
+            {
+                this.WriteRecordToFile(record);
+            }
+
+            Console.WriteLine("CSV import to Filesystem Servise completed.");
         }
 
         private void WriteRecordToFile(FileCabinetRecord record)
