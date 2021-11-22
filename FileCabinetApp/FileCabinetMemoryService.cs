@@ -207,6 +207,11 @@ namespace FileCabinetApp
             }
         }
 
+        public void RemoveRecord(int id)
+        {
+            throw new NotImplementedException();
+        }
+
         private void AddRecordToFirstNameDictionary(FileCabinetRecord record, string firstNameKey)
         {
             if (firstNameKey is null)

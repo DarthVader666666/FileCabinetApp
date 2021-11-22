@@ -303,6 +303,11 @@ namespace FileCabinetApp
             }
         }
 
+        public void RemoveRecord(int id)
+        {
+            throw new NotImplementedException();
+        }
+
         private void WriteRecordToFile(FileCabinetRecord record)
         {
             Encoding unicode = Encoding.Unicode;

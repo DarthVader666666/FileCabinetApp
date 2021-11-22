@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Globalization;
 using System.IO;
@@ -31,6 +32,7 @@ namespace FileCabinetApp
             new Tuple<string, Action<string>>("find", Find),
             new Tuple<string, Action<string>>("export", Export),
             new Tuple<string, Action<string>>("import", Import),
+            new Tuple<string, Action<string>>("remove", Remove),
         };
 
         private static readonly string[][] HelpMessages = new string[][]
@@ -42,6 +44,7 @@ namespace FileCabinetApp
             new string[] { "export", "exports records into chosen file and format (csv or xml). Ex: export csv D:\\file.csv" },
             new string[] { "find", "finds records by specified parameter. Ex: find firstname \"Vadim\"" },
             new string[] { "import", "Imports records from csv or xml file. Ex: import csv d:\\file.csv" },
+            new string[] { "remove", "Removes specific record from record list (uses id parameter)." },
         };
 
         private static IReadInputValidator readInputValidator = new DefaultValidator();
@@ -622,6 +625,30 @@ namespace FileCabinetApp
                 Console.WriteLine($"Can't open file {path} due it's access limitations.");
                 fileStream.Close();
             }
+        }
+
+        private static void Remove(string parameters)
+        {
+            if (parameters is null)
+            {
+                throw new ArgumentException("Parameters argument is null");
+            }
+
+            if (parameters.Length == 0)
+            {
+                Console.WriteLine("Type record's id.");
+                return;
+            }
+
+            int id;
+
+            if (!int.TryParse(parameters, out id))
+            {
+                Console.WriteLine("Unrecognized number.");
+                return;
+            }
+
+            fileCabinetService.RemoveRecord(id);
         }
     }
 }

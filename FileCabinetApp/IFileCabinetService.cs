@@ -73,5 +73,11 @@ namespace FileCabinetApp
         /// </summary>
         /// <returns>Last record's id.</returns>
         int GetLastId();
+
+        /// <summary>
+        /// Removes specified record from FileCabinetService data storage.
+        /// </summary>
+        /// <param name="id">Number of record.</param>
+        void RemoveRecord(int id);
     }
 }
