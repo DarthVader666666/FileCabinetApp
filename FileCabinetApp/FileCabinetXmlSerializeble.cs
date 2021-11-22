@@ -15,7 +15,8 @@ namespace FileCabinetApp
     [XmlRoot("records")]
     public class FileCabinetXmlSerializeble
     {
-        private readonly List<FileCabinetRecordXmlSerializeble> recordsForXml;
+        [XmlElement("record")]
+        private List<FileCabinetRecordXmlSerializeble> recordsForXml;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="FileCabinetXmlSerializeble"/> class.
@@ -47,18 +48,28 @@ namespace FileCabinetApp
         {
             List<FileCabinetRecord> records = new List<FileCabinetRecord>();
             FileCabinetRecord record;
+            int id = 0;
 
             foreach (FileCabinetRecordXmlSerializeble xmlRecord in this.recordsForXml)
             {
                 record = new FileCabinetRecord();
 
-                record.Id = xmlRecord.Id;
-                record.FirstName = xmlRecord.FirstName;
-                record.LastName = xmlRecord.LastName;
-                record.DateOfBirth = DateTime.Parse(xmlRecord.DateOfBirth, CultureInfo.CreateSpecificCulture("en-GB"));
-                record.JobExperience = xmlRecord.JobExperience;
-                record.MonthlyPay = short.Parse(xmlRecord.MonthlyPay, CultureInfo.InvariantCulture);
-                record.Gender = char.Parse(xmlRecord.Gender);
+                try
+                {
+                    id = record.Id = xmlRecord.Id;
+                    record.FirstName = xmlRecord.FirstName;
+                    record.LastName = xmlRecord.LastName;
+                    record.DateOfBirth = DateTime.Parse(xmlRecord.DateOfBirth, CultureInfo.CreateSpecificCulture("en-GB"));
+                    record.JobExperience = xmlRecord.JobExperience;
+                    record.MonthlyPay = decimal.Parse(xmlRecord.MonthlyPay, CultureInfo.InvariantCulture);
+                    record.Gender = char.Parse(xmlRecord.Gender);
+
+                    records.Add(record);
+                }
+                catch (FormatException)
+                {
+                    Console.WriteLine($"Record #{id} has wrong format. Line skipped.");
+                }
             }
 
             return records;
@@ -67,10 +78,10 @@ namespace FileCabinetApp
         /// <summary>
         /// Gets records for xml serialization.
         /// </summary>
-        [XmlElement("record")]
         public List<FileCabinetRecordXmlSerializeble> Records
         {
             get { return this.recordsForXml; }
+            set { this.recordsForXml = value; }
         }
 
         private void ConvertToSerializebleData(List<FileCabinetRecord> list)

@@ -75,7 +75,7 @@ namespace FileCabinetApp
                 throw new ArgumentNullException($"{args} is null");
             }
 
-            // args = new string[] { "-s", "file" };
+            //args = new string[] { "-s", "file" };
 
             if (args.Length == 1)
             {
@@ -203,7 +203,7 @@ namespace FileCabinetApp
         {
             FileCabinetRecord record = new FileCabinetRecord();
             InputRecordProperties(record);
-            record.Id = fileCabinetService.GetStat() + 1;
+            record.Id = fileCabinetService.GetLastId() + 1;
             FileCabinetEventArgs recordArgs = new FileCabinetEventArgs(record);
             CreateRecordEvent(null, recordArgs);
             Console.WriteLine($"Record #{record.Id} is created.");
@@ -223,7 +223,7 @@ namespace FileCabinetApp
             {
                 Console.WriteLine($"#{fileCabinetRecord.Id}, {fileCabinetRecord.FirstName}, {fileCabinetRecord.LastName}, " +
                     $"{fileCabinetRecord.DateOfBirth.Year}-{fileCabinetRecord.DateOfBirth.Month}-{fileCabinetRecord.DateOfBirth.Day}, " +
-                    $"{fileCabinetRecord.JobExperience}," + string.Format(CultureInfo.InvariantCulture, "{0:F2}", fileCabinetRecord.MonthlyPay) +
+                    $"{fileCabinetRecord.JobExperience}, " + string.Format(CultureInfo.InvariantCulture, "{0:F2}", fileCabinetRecord.MonthlyPay) +
                     $", {fileCabinetRecord.Gender}");
             }
         }
@@ -568,7 +568,13 @@ namespace FileCabinetApp
             string dataType = importArguments[0];
             string path = importArguments[1];
 
-            if (importArguments.Length < 2 || (dataType.ToUpperInvariant() != "CSV" && dataType.ToUpperInvariant() != "XML"))
+            if (importArguments.Length < 2)
+            {
+                Console.WriteLine("Wrong data type or command format.");
+                return;
+            }
+
+            if (dataType.ToUpperInvariant() != "CSV" && dataType.ToUpperInvariant() != "XML")
             {
                 Console.WriteLine("Wrong data type or command format.");
                 return;
@@ -597,6 +603,7 @@ namespace FileCabinetApp
                         streamReader = new StreamReader(fileStream);
                         snapshot.LoadFromCsv(streamReader);
                         fileCabinetService.Restore(snapshot);
+                        Console.WriteLine("CSV import completed.");
                         streamReader.Close();
                         break;
                     case "XML":
@@ -604,6 +611,7 @@ namespace FileCabinetApp
                         streamReader = new StreamReader(fileStream);
                         snapshot.LoadFromXml(streamReader);
                         fileCabinetService.Restore(snapshot);
+                        Console.WriteLine("XML import completed.");
                         streamReader.Close();
                         break;
                 }
