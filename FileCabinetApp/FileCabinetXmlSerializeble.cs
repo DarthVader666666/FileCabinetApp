@@ -2,12 +2,12 @@
 // Copyright (c) PlaceholderCompany. All rights reserved.
 // </copyright>
 
-namespace FileCabinetGenerator
+namespace FileCabinetApp
 {
     using System;
     using System.Collections.Generic;
+    using System.Globalization;
     using System.Xml.Serialization;
-    using FileCabinetApp;
 
     /// <summary>
     /// Serializes records to xml format.
@@ -37,6 +37,31 @@ namespace FileCabinetGenerator
         /// </summary>
         public FileCabinetXmlSerializeble()
         {
+        }
+
+        /// <summary>
+        /// Converts xmlSerializeble records from xml file to FileCabinetRecords.
+        /// </summary>
+        /// <returns>List of FileCabinetRecords.</returns>
+        public List<FileCabinetRecord> GetRecordsFromXml()
+        {
+            List<FileCabinetRecord> records = new List<FileCabinetRecord>();
+            FileCabinetRecord record;
+
+            foreach (FileCabinetRecordXmlSerializeble xmlRecord in this.recordsForXml)
+            {
+                record = new FileCabinetRecord();
+
+                record.Id = xmlRecord.Id;
+                record.FirstName = xmlRecord.FirstName;
+                record.LastName = xmlRecord.LastName;
+                record.DateOfBirth = DateTime.Parse(xmlRecord.DateOfBirth, CultureInfo.CreateSpecificCulture("en-GB"));
+                record.JobExperience = xmlRecord.JobExperience;
+                record.MonthlyPay = short.Parse(xmlRecord.MonthlyPay, CultureInfo.InvariantCulture);
+                record.Gender = char.Parse(xmlRecord.Gender);
+            }
+
+            return records;
         }
 
         /// <summary>

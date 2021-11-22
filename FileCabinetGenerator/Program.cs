@@ -37,7 +37,6 @@ namespace FileCabinetGenerator
             new Tuple<string, Action<string>>("list", List),
             new Tuple<string, Action<string>>("generate", Generate),
             new Tuple<string, Action<string>>("export", Export),
-            new Tuple<string, Action<string>>("import", Import),
         };
 
         private static string fileType;
@@ -56,7 +55,7 @@ namespace FileCabinetGenerator
         /// <param name="args">Command line args.</param>
         public static void Main(string[] args)
         {
-            args = new string[] { "-t", "csv", "-o", "d:\\file1.csv", "-a", "10", "-i", "1" };
+            //args = new string[] { "-t", "csv", "-o", "d:\\file.csv", "-a", "10", "-i", "1" };
 
             if (args is null)
             {
@@ -312,56 +311,6 @@ namespace FileCabinetGenerator
                     Console.WriteLine($"{recordsAmount} records were written to {filePath}");
                     break;
                 default: Console.WriteLine("Unsupported file format"); break;
-            }
-        }
-
-        private static void Import(string parameters)
-        {
-            if (parameters is null)
-            {
-                throw new ArgumentException("Parameters argument is null");
-            }
-
-            string[] importArguments = parameters.Split(' ');
-            string dataType = importArguments[0];
-            string path = importArguments[1];
-
-            if (importArguments.Length < 2 || (dataType.ToLower() != "csv" && dataType.ToLower() != "xml"))
-            {
-                Console.WriteLine("Wrong data type or command format.");
-                return;
-            }
-
-            if (!importArguments[0].ToLower().Equals(path[(Array.FindIndex(path.ToCharArray(), i => i.Equals('.')) + 1) ..].ToLower()))
-            {
-                Console.WriteLine("Wrong import file extension.");
-                return;
-            }
-
-            if (!File.Exists(path))
-            {
-                Console.WriteLine("File doesn't exist.");
-                return;
-            }
-
-            try
-            {
-                fileStream = new FileStream(path, FileMode.Open, FileAccess.Read);
-                fileStream.Close();
-            }
-            catch (UnauthorizedAccessException)
-            {
-                Console.WriteLine($"Can't open file {path} due it's access limitations.");
-                fileStream.Close();
-            }
-
-            switch (dataType.ToUpper())
-            {
-                case "CSV":
-                    StreamReader csvReader = new StreamReader(path);
-                    fileGenerator.ImportCsv(csvReader);
-                    csvReader.Close();
-                    break;
             }
         }
     }

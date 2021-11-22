@@ -109,64 +109,8 @@ namespace FileCabinetGenerator
         {
             FileCabinetXmlSerializeble data = new FileCabinetXmlSerializeble(this.list);
 
-            XmlSerializer xmlSerializer = new XmlSerializer(typeof(FileCabinetGenerator.FileCabinetXmlSerializeble));
+            XmlSerializer xmlSerializer = new XmlSerializer(typeof(FileCabinetApp.FileCabinetXmlSerializeble));
             xmlSerializer.Serialize(steramWriter, data);
-        }
-
-        /// <summary>
-        /// Imports generated list of records.
-        /// </summary>
-        /// <param name="csvReader">Stream for file reading.</param>
-        public void ImportCsv(StreamReader csvReader)
-        {
-            csvReader.ReadLine();
-            string[] recordFields;
-            string line;
-            int index;
-            FileCabinetRecord record;
-            int count = 0;
-            int replaced = 0;
-
-            while ((line = csvReader.ReadLine()) != null)
-            {
-                recordFields = line.Split(',');
-
-                try
-                {
-                    record = new FileCabinetRecord();
-                    record.Id = int.Parse(recordFields[0]);
-                    record.FirstName = recordFields[1];
-                    record.LastName = recordFields[2];
-                    record.DateOfBirth = DateTime.Parse(recordFields[3], CultureInfo.CreateSpecificCulture("en-GB"));
-                    record.JobExperience = short.Parse(recordFields[4]);
-                    record.MonthlyPay = decimal.Parse(recordFields[5], CultureInfo.CreateSpecificCulture("en-US"));
-                    record.Gender = char.Parse(recordFields[6]);
-                }
-                catch (FormatException)
-                {
-                    throw new ArgumentException("Import data has wrong format.");
-                }
-                catch (ArgumentException)
-                {
-                    throw new ArgumentException("Import data has wrong format.");
-                }
-
-                index = this.list.FindIndex(0, this.list.Count, i => i.Id.Equals(int.Parse(recordFields[0])));
-
-                if (index != -1)
-                {
-                    this.list[index] = record;
-                    replaced++;
-                }
-                else
-                {
-                    this.list.Add(record);
-                }
-
-                count++;
-            }
-
-            Console.WriteLine("{0} records were imported, {1} records were replaced.", count, replaced);
         }
 
         private static string GenerateString()

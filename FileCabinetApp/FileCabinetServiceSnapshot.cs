@@ -49,6 +49,16 @@ namespace FileCabinetApp
         }
 
         /// <summary>
+        /// Loads data from csv file and gets list of recods.
+        /// </summary>
+        /// <param name="streamReader">Stream of file to read.</param>
+        public void LoadFromXml(StreamReader streamReader)
+        {
+            FileCabinetRecordXmlReader xmlReader = new FileCabinetRecordXmlReader(streamReader);
+            this.records = xmlReader.ReadAll().ToArray();
+        }
+
+        /// <summary>
         /// Calls for stream write method.
         /// </summary>
         /// <param name="streamWriter">StreamWriter instance opened to write to.</param>

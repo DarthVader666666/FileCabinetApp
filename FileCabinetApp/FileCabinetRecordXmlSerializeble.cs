@@ -2,12 +2,11 @@
 // Copyright (c) PlaceholderCompany. All rights reserved.
 // </copyright>
 
-namespace FileCabinetGenerator
+namespace FileCabinetApp
 {
     using System;
     using System.Globalization;
     using System.Xml.Serialization;
-    using FileCabinetApp;
 
     /// <summary>
     /// Class for defining a record about person.

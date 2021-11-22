@@ -39,8 +39,9 @@ namespace FileCabinetApp
             new string[] { "exit", "exits the application", "The 'exit' command exits the application." },
             new string[] { "list", "prints record list" },
             new string[] { "create", "creates new record" },
-            new string[] { "export", "exports records into chosen file and format. Ex: export csv D:\\file.csv" },
+            new string[] { "export", "exports records into chosen file and format (csv or xml). Ex: export csv D:\\file.csv" },
             new string[] { "find", "finds records by specified parameter. Ex: find firstname \"Vadim\"" },
+            new string[] { "import", "Imports records from csv or xml file. Ex: import csv d:\\file.csv" },
         };
 
         private static IReadInputValidator readInputValidator = new DefaultValidator();
@@ -561,6 +562,8 @@ namespace FileCabinetApp
                 throw new ArgumentException("Parameters argument is null");
             }
 
+            FileCabinetServiceSnapshot snapshot;
+            StreamReader streamReader;
             string[] importArguments = parameters.Split(' ');
             string dataType = importArguments[0];
             string path = importArguments[1];
@@ -590,9 +593,16 @@ namespace FileCabinetApp
                 switch (dataType.ToUpperInvariant())
                 {
                     case "CSV":
-                        FileCabinetServiceSnapshot snapshot = fileCabinetService.MakeSnapshot();
-                        StreamReader streamReader = new StreamReader(fileStream);
+                        snapshot = fileCabinetService.MakeSnapshot();
+                        streamReader = new StreamReader(fileStream);
                         snapshot.LoadFromCsv(streamReader);
+                        fileCabinetService.Restore(snapshot);
+                        streamReader.Close();
+                        break;
+                    case "XML":
+                        snapshot = fileCabinetService.MakeSnapshot();
+                        streamReader = new StreamReader(fileStream);
+                        snapshot.LoadFromXml(streamReader);
                         fileCabinetService.Restore(snapshot);
                         streamReader.Close();
                         break;
