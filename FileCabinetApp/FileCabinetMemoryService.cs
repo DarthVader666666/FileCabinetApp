@@ -207,9 +207,38 @@ namespace FileCabinetApp
             }
         }
 
+        /// <summary>
+        /// Removes record from record list and all dictionaries.
+        /// </summary>
+        /// <param name="id">Record's id.</param>
         public void RemoveRecord(int id)
         {
-            throw new NotImplementedException();
+            FileCabinetRecord record;
+
+            if ((record = this.list.Find(i => i.Id.Equals(id))) is null)
+            {
+                Console.WriteLine("Specified record doesn't exist. Can't remove.");
+                return;
+            }
+
+            this.list.Remove(record);
+
+            foreach (KeyValuePair<string, List<FileCabinetRecord>> pair in this.firstNameDictionary)
+            {
+                pair.Value.Remove(record);
+            }
+
+            foreach (KeyValuePair<string, List<FileCabinetRecord>> pair in this.lastNameDictionary)
+            {
+                pair.Value.Remove(record);
+            }
+
+            foreach (KeyValuePair<string, List<FileCabinetRecord>> pair in this.dateOfBirthDictionary)
+            {
+                pair.Value.Remove(record);
+            }
+
+            Console.WriteLine($"Record #{id} removed.");
         }
 
         private void AddRecordToFirstNameDictionary(FileCabinetRecord record, string firstNameKey)

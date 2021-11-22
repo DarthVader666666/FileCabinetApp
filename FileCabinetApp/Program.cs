@@ -78,7 +78,7 @@ namespace FileCabinetApp
                 throw new ArgumentNullException($"{args} is null");
             }
 
-            args = new string[] { "-s", "file" };
+            args = new string[] { "-s", "memory" };
             if (args.Length == 1)
             {
                 args = args[0].Split('=');

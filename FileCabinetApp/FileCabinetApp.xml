@@ -303,6 +303,12 @@
             </summary>
             <param name="snapshot">Loaded records from csv file.</param>
         </member>
+        <member name="M:FileCabinetApp.FileCabinetMemoryService.RemoveRecord(System.Int32)">
+            <summary>
+            Removes record from record list and all dictionaries.
+            </summary>
+            <param name="id">Record's id.</param>
+        </member>
         <member name="T:FileCabinetApp.FileCabinetRecord">
             <summary>
             Class for defining a record about person.
@@ -616,6 +622,12 @@
             Gets last record's id.
             </summary>
             <returns>Last record's id.</returns>
+        </member>
+        <member name="M:FileCabinetApp.IFileCabinetService.RemoveRecord(System.Int32)">
+            <summary>
+            Removes specified record from FileCabinetService data storage.
+            </summary>
+            <param name="id">Number of record.</param>
         </member>
         <member name="T:FileCabinetApp.IReadInputValidator">
             <summary>
