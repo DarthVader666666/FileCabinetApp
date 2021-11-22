@@ -429,18 +429,6 @@
             </summary>
             <value>Number of record in file cabinet.</value>
         </member>
-        <member name="P:FileCabinetApp.FileCabinetRecordXmlSerializeble.FirstName">
-            <summary>
-            Gets or sets person's first name.
-            </summary>
-            <value>Person's first name.</value>
-        </member>
-        <member name="P:FileCabinetApp.FileCabinetRecordXmlSerializeble.LastName">
-            <summary>
-            Gets or sets person's last name.
-            </summary>
-            <value>Person's last name.</value>
-        </member>
         <member name="P:FileCabinetApp.FileCabinetRecordXmlSerializeble.DateOfBirth">
             <summary>
             Gets or sets person's day if birth.
@@ -541,16 +529,17 @@
             Initializes a new instance of the <see cref="T:FileCabinetApp.FileCabinetXmlSerializeble"/> class.
             </summary>
         </member>
+        <member name="P:FileCabinetApp.FileCabinetXmlSerializeble.Records">
+            <summary>
+            Gets or sets records for xml serialization.
+            </summary>
+            <value></value>
+        </member>
         <member name="M:FileCabinetApp.FileCabinetXmlSerializeble.GetRecordsFromXml">
             <summary>
             Converts xmlSerializeble records from xml file to FileCabinetRecords.
             </summary>
             <returns>List of FileCabinetRecords.</returns>
-        </member>
-        <member name="P:FileCabinetApp.FileCabinetXmlSerializeble.Records">
-            <summary>
-            Gets records for xml serialization.
-            </summary>
         </member>
         <member name="T:FileCabinetApp.IFileCabinetService">
             <summary>

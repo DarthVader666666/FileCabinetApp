@@ -8,11 +8,27 @@ namespace FileCabinetApp
     using System.Globalization;
     using System.Xml.Serialization;
 
+    public class NameClass
+    {
+        [XmlAttribute("first")]
+        public string First { get; set; }
+
+        [XmlAttribute("last")]
+        public string Last { get; set; }
+
+        public NameClass()
+        {
+        }
+    }
+
     /// <summary>
     /// Class for defining a record about person.
     /// </summary>
     public class FileCabinetRecordXmlSerializeble
     {
+        [XmlElement("name")]
+        private NameClass name = new NameClass();
+
         /// <summary>
         /// Initializes a new instance of the <see cref="FileCabinetRecordXmlSerializeble"/> class.
         /// </summary>
@@ -25,8 +41,8 @@ namespace FileCabinetApp
             }
 
             this.Id = record.Id;
-            this.FirstName = record.FirstName;
-            this.LastName = record.LastName;
+            this.Name.First = record.FirstName;
+            this.Name.Last = record.LastName;
             this.DateOfBirth = $"{record.DateOfBirth.Day:D2}/{record.DateOfBirth.Month:D2}/{record.DateOfBirth.Year}";
             this.JobExperience = record.JobExperience;
             this.MonthlyPay = string.Format(CultureInfo.CreateSpecificCulture("en-US"), "{0:F2}", record.MonthlyPay);
@@ -47,19 +63,11 @@ namespace FileCabinetApp
         [XmlAttribute("id")]
         public int Id { get; set; }
 
-        /// <summary>
-        /// Gets or sets person's first name.
-        /// </summary>
-        /// <value>Person's first name.</value>
-        [XmlElement("first_name")]
-        public string FirstName { get; set; }
-
-        /// <summary>
-        /// Gets or sets person's last name.
-        /// </summary>
-        /// <value>Person's last name.</value>
-        [XmlElement("last_name")]
-        public string LastName { get; set; }
+        public NameClass Name
+        {
+            get { return name; }
+            set { name = new NameClass(); }
+        }
 
         /// <summary>
         /// Gets or sets person's day if birth.

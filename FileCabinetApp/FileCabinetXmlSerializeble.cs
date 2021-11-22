@@ -15,7 +15,6 @@ namespace FileCabinetApp
     [XmlRoot("records")]
     public class FileCabinetXmlSerializeble
     {
-        [XmlElement("record")]
         private List<FileCabinetRecordXmlSerializeble> recordsForXml;
 
         /// <summary>
@@ -41,6 +40,17 @@ namespace FileCabinetApp
         }
 
         /// <summary>
+        /// Gets or sets records for xml serialization.
+        /// </summary>
+        /// <value></value>
+        [XmlElement("record")]
+        public List<FileCabinetRecordXmlSerializeble> Records
+        {
+            get { return this.recordsForXml; }
+            set { this.recordsForXml = value; }
+        }
+
+        /// <summary>
         /// Converts xmlSerializeble records from xml file to FileCabinetRecords.
         /// </summary>
         /// <returns>List of FileCabinetRecords.</returns>
@@ -50,15 +60,15 @@ namespace FileCabinetApp
             FileCabinetRecord record;
             int id = 0;
 
-            foreach (FileCabinetRecordXmlSerializeble xmlRecord in this.recordsForXml)
+            foreach (FileCabinetRecordXmlSerializeble xmlRecord in this.Records)
             {
                 record = new FileCabinetRecord();
 
                 try
                 {
                     id = record.Id = xmlRecord.Id;
-                    record.FirstName = xmlRecord.FirstName;
-                    record.LastName = xmlRecord.LastName;
+                    record.FirstName = xmlRecord.Name.First;
+                    record.LastName = xmlRecord.Name.Last;
                     record.DateOfBirth = DateTime.Parse(xmlRecord.DateOfBirth, CultureInfo.CreateSpecificCulture("en-GB"));
                     record.JobExperience = xmlRecord.JobExperience;
                     record.MonthlyPay = decimal.Parse(xmlRecord.MonthlyPay, CultureInfo.InvariantCulture);
@@ -73,15 +83,6 @@ namespace FileCabinetApp
             }
 
             return records;
-        }
-
-        /// <summary>
-        /// Gets records for xml serialization.
-        /// </summary>
-        public List<FileCabinetRecordXmlSerializeble> Records
-        {
-            get { return this.recordsForXml; }
-            set { this.recordsForXml = value; }
         }
 
         private void ConvertToSerializebleData(List<FileCabinetRecord> list)
