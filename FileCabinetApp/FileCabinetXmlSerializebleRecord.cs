@@ -8,32 +8,16 @@ namespace FileCabinetApp
     using System.Globalization;
     using System.Xml.Serialization;
 
-    public class NameClass
-    {
-        [XmlAttribute("first")]
-        public string First { get; set; }
-
-        [XmlAttribute("last")]
-        public string Last { get; set; }
-
-        public NameClass()
-        {
-        }
-    }
-
     /// <summary>
     /// Class for defining a record about person.
     /// </summary>
-    public class FileCabinetRecordXmlSerializeble
+    public class FileCabinetXmlSerializebleRecord
     {
-        [XmlElement("name")]
-        private NameClass name = new NameClass();
-
         /// <summary>
-        /// Initializes a new instance of the <see cref="FileCabinetRecordXmlSerializeble"/> class.
+        /// Initializes a new instance of the <see cref="FileCabinetXmlSerializebleRecord"/> class.
         /// </summary>
         /// <param name="record">File cabinet record to be changed for xml serialisation.</param>
-        public FileCabinetRecordXmlSerializeble(FileCabinetRecord record)
+        public FileCabinetXmlSerializebleRecord(FileCabinetRecord record)
         {
             if (record is null)
             {
@@ -50,9 +34,9 @@ namespace FileCabinetApp
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="FileCabinetRecordXmlSerializeble"/> class.
+        /// Initializes a new instance of the <see cref="FileCabinetXmlSerializebleRecord"/> class.
         /// </summary>
-        public FileCabinetRecordXmlSerializeble()
+        public FileCabinetXmlSerializebleRecord()
         {
         }
 
@@ -63,11 +47,12 @@ namespace FileCabinetApp
         [XmlAttribute("id")]
         public int Id { get; set; }
 
-        public NameClass Name
-        {
-            get { return name; }
-            set { name = new NameClass(); }
-        }
+        /// <summary>
+        /// Gets or sets Name property.
+        /// </summary>
+        /// <value></value>
+        [XmlElement("name")]
+        public NameClass Name { get; set; } = new NameClass();
 
         /// <summary>
         /// Gets or sets person's day if birth.

@@ -28,8 +28,8 @@ namespace FileCabinetApp
         /// <returns>List of records.</returns>
         public List<FileCabinetRecord> ReadAll()
         {
-            XmlSerializer xmlSerializer = new XmlSerializer(typeof(FileCabinetXmlSerializeble));
-            FileCabinetXmlSerializeble records = (FileCabinetXmlSerializeble)xmlSerializer.Deserialize(this.xmlReader);
+            XmlSerializer xmlSerializer = new XmlSerializer(typeof(FileCabinetXmlSerializebleData));
+            FileCabinetXmlSerializebleData records = (FileCabinetXmlSerializebleData)xmlSerializer.Deserialize(this.xmlReader);
 
             return records.GetRecordsFromXml();
         }

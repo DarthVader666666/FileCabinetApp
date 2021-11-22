@@ -72,8 +72,6 @@ namespace FileCabinetApp
             FileCabinetRecord record = this.validator.ValidateParameters(e);
             this.fileStream.Position = this.fileStream.Length;
             this.WriteRecordToFile(record);
-            //this.RecordCount++;
-
             this.AddRecordToFirstNameDictionary(record, record.FirstName);
             this.AddRecordToLastNameDictionary(record, record.LastName);
             string dateOfBirthKey = $"{record.DateOfBirth.Year}-{record.DateOfBirth.Month}-{record.DateOfBirth.Day}";

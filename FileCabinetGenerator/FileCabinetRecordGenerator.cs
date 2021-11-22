@@ -107,9 +107,9 @@ namespace FileCabinetGenerator
         /// <param name="steramWriter">Stream fo searilization.</param>
         public void SerializeRecordsToXml(StreamWriter steramWriter)
         {
-            FileCabinetXmlSerializeble data = new FileCabinetXmlSerializeble(this.list);
+            FileCabinetXmlSerializebleData data = new FileCabinetXmlSerializebleData(this.list);
 
-            XmlSerializer xmlSerializer = new XmlSerializer(typeof(FileCabinetApp.FileCabinetXmlSerializeble));
+            XmlSerializer xmlSerializer = new XmlSerializer(typeof(FileCabinetApp.FileCabinetXmlSerializebleData));
             xmlSerializer.Serialize(steramWriter, data);
         }
 

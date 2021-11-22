@@ -407,52 +407,6 @@
             </summary>
             <returns>List of records.</returns>
         </member>
-        <member name="T:FileCabinetApp.FileCabinetRecordXmlSerializeble">
-            <summary>
-            Class for defining a record about person.
-            </summary>
-        </member>
-        <member name="M:FileCabinetApp.FileCabinetRecordXmlSerializeble.#ctor(FileCabinetApp.FileCabinetRecord)">
-            <summary>
-            Initializes a new instance of the <see cref="T:FileCabinetApp.FileCabinetRecordXmlSerializeble"/> class.
-            </summary>
-            <param name="record">File cabinet record to be changed for xml serialisation.</param>
-        </member>
-        <member name="M:FileCabinetApp.FileCabinetRecordXmlSerializeble.#ctor">
-            <summary>
-            Initializes a new instance of the <see cref="T:FileCabinetApp.FileCabinetRecordXmlSerializeble"/> class.
-            </summary>
-        </member>
-        <member name="P:FileCabinetApp.FileCabinetRecordXmlSerializeble.Id">
-            <summary>
-            Gets or sets record's number.
-            </summary>
-            <value>Number of record in file cabinet.</value>
-        </member>
-        <member name="P:FileCabinetApp.FileCabinetRecordXmlSerializeble.DateOfBirth">
-            <summary>
-            Gets or sets person's day if birth.
-            </summary>
-            <value>Person's day of birth.</value>
-        </member>
-        <member name="P:FileCabinetApp.FileCabinetRecordXmlSerializeble.JobExperience">
-            <summary>
-            Gets or sets quantity of years a person works on the current job.
-            </summary>
-            <value>The quantity of years person works.</value>
-        </member>
-        <member name="P:FileCabinetApp.FileCabinetRecordXmlSerializeble.MonthlyPay">
-            <summary>
-            Gets or sets hom much a person earns per month.
-            </summary>
-            <value>The size of person's monthly salary.</value>
-        </member>
-        <member name="P:FileCabinetApp.FileCabinetRecordXmlSerializeble.Gender">
-            <summary>
-            Gets or sets first letter of peson's gender.
-            </summary>
-            <value>Person's gender.</value>
-        </member>
         <member name="T:FileCabinetApp.FileCabinetRecordXmlWriter">
             <summary>
             From stream to csv file writer.
@@ -513,33 +467,85 @@
             </summary>
             <param name="streamWriter">StreamWriter instance opened to write to.</param>
         </member>
-        <member name="T:FileCabinetApp.FileCabinetXmlSerializeble">
+        <member name="T:FileCabinetApp.FileCabinetXmlSerializebleData">
             <summary>
             Serializes records to xml format.
             </summary>
         </member>
-        <member name="M:FileCabinetApp.FileCabinetXmlSerializeble.#ctor(System.Collections.Generic.List{FileCabinetApp.FileCabinetRecord})">
+        <member name="M:FileCabinetApp.FileCabinetXmlSerializebleData.#ctor(System.Collections.Generic.List{FileCabinetApp.FileCabinetRecord})">
             <summary>
-            Initializes a new instance of the <see cref="T:FileCabinetApp.FileCabinetXmlSerializeble"/> class.
+            Initializes a new instance of the <see cref="T:FileCabinetApp.FileCabinetXmlSerializebleData"/> class.
             </summary>
             <param name="list">List of records to import into xml file.</param>
         </member>
-        <member name="M:FileCabinetApp.FileCabinetXmlSerializeble.#ctor">
+        <member name="M:FileCabinetApp.FileCabinetXmlSerializebleData.#ctor">
             <summary>
-            Initializes a new instance of the <see cref="T:FileCabinetApp.FileCabinetXmlSerializeble"/> class.
+            Initializes a new instance of the <see cref="T:FileCabinetApp.FileCabinetXmlSerializebleData"/> class.
             </summary>
         </member>
-        <member name="P:FileCabinetApp.FileCabinetXmlSerializeble.Records">
+        <member name="P:FileCabinetApp.FileCabinetXmlSerializebleData.Records">
             <summary>
             Gets or sets records for xml serialization.
             </summary>
             <value></value>
         </member>
-        <member name="M:FileCabinetApp.FileCabinetXmlSerializeble.GetRecordsFromXml">
+        <member name="M:FileCabinetApp.FileCabinetXmlSerializebleData.GetRecordsFromXml">
             <summary>
             Converts xmlSerializeble records from xml file to FileCabinetRecords.
             </summary>
             <returns>List of FileCabinetRecords.</returns>
+        </member>
+        <member name="T:FileCabinetApp.FileCabinetXmlSerializebleRecord">
+            <summary>
+            Class for defining a record about person.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetXmlSerializebleRecord.#ctor(FileCabinetApp.FileCabinetRecord)">
+            <summary>
+            Initializes a new instance of the <see cref="T:FileCabinetApp.FileCabinetXmlSerializebleRecord"/> class.
+            </summary>
+            <param name="record">File cabinet record to be changed for xml serialisation.</param>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetXmlSerializebleRecord.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:FileCabinetApp.FileCabinetXmlSerializebleRecord"/> class.
+            </summary>
+        </member>
+        <member name="P:FileCabinetApp.FileCabinetXmlSerializebleRecord.Id">
+            <summary>
+            Gets or sets record's number.
+            </summary>
+            <value>Number of record in file cabinet.</value>
+        </member>
+        <member name="P:FileCabinetApp.FileCabinetXmlSerializebleRecord.Name">
+            <summary>
+            Gets or sets Name property.
+            </summary>
+            <value></value>
+        </member>
+        <member name="P:FileCabinetApp.FileCabinetXmlSerializebleRecord.DateOfBirth">
+            <summary>
+            Gets or sets person's day if birth.
+            </summary>
+            <value>Person's day of birth.</value>
+        </member>
+        <member name="P:FileCabinetApp.FileCabinetXmlSerializebleRecord.JobExperience">
+            <summary>
+            Gets or sets quantity of years a person works on the current job.
+            </summary>
+            <value>The quantity of years person works.</value>
+        </member>
+        <member name="P:FileCabinetApp.FileCabinetXmlSerializebleRecord.MonthlyPay">
+            <summary>
+            Gets or sets hom much a person earns per month.
+            </summary>
+            <value>The size of person's monthly salary.</value>
+        </member>
+        <member name="P:FileCabinetApp.FileCabinetXmlSerializebleRecord.Gender">
+            <summary>
+            Gets or sets first letter of peson's gender.
+            </summary>
+            <value>Person's gender.</value>
         </member>
         <member name="T:FileCabinetApp.IFileCabinetService">
             <summary>
@@ -662,6 +668,23 @@
             </summary>
             <param name="recordArgs">File recordArgs which parameters shall be validated.</param>
             <returns>Validated file record.</returns>
+        </member>
+        <member name="T:FileCabinetApp.NameClass">
+            <summary>
+            Contains first and last name.
+            </summary>
+        </member>
+        <member name="P:FileCabinetApp.NameClass.First">
+            <summary>
+            Gets or sets first name.
+            </summary>
+            <value></value>
+        </member>
+        <member name="P:FileCabinetApp.NameClass.Last">
+            <summary>
+            Gets or sets last name.
+            </summary>
+            <value></value>
         </member>
         <member name="T:FileCabinetApp.Program">
             <summary>

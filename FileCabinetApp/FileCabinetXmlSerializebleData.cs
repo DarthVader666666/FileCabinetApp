@@ -13,29 +13,27 @@ namespace FileCabinetApp
     /// Serializes records to xml format.
     /// </summary>
     [XmlRoot("records")]
-    public class FileCabinetXmlSerializeble
+    public class FileCabinetXmlSerializebleData
     {
-        private List<FileCabinetRecordXmlSerializeble> recordsForXml;
-
         /// <summary>
-        /// Initializes a new instance of the <see cref="FileCabinetXmlSerializeble"/> class.
+        /// Initializes a new instance of the <see cref="FileCabinetXmlSerializebleData"/> class.
         /// </summary>
         /// <param name="list">List of records to import into xml file.</param>
-        public FileCabinetXmlSerializeble(List<FileCabinetRecord> list)
+        public FileCabinetXmlSerializebleData(List<FileCabinetRecord> list)
         {
             if (list is null)
             {
                 throw new ArgumentNullException($"{list} is null");
             }
 
-            this.recordsForXml = new List<FileCabinetRecordXmlSerializeble>();
+            this.Records = new List<FileCabinetXmlSerializebleRecord>();
             this.ConvertToSerializebleData(list);
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="FileCabinetXmlSerializeble"/> class.
+        /// Initializes a new instance of the <see cref="FileCabinetXmlSerializebleData"/> class.
         /// </summary>
-        public FileCabinetXmlSerializeble()
+        public FileCabinetXmlSerializebleData()
         {
         }
 
@@ -44,11 +42,7 @@ namespace FileCabinetApp
         /// </summary>
         /// <value></value>
         [XmlElement("record")]
-        public List<FileCabinetRecordXmlSerializeble> Records
-        {
-            get { return this.recordsForXml; }
-            set { this.recordsForXml = value; }
-        }
+        public List<FileCabinetXmlSerializebleRecord> Records { get; set; }
 
         /// <summary>
         /// Converts xmlSerializeble records from xml file to FileCabinetRecords.
@@ -60,7 +54,7 @@ namespace FileCabinetApp
             FileCabinetRecord record;
             int id = 0;
 
-            foreach (FileCabinetRecordXmlSerializeble xmlRecord in this.Records)
+            foreach (FileCabinetXmlSerializebleRecord xmlRecord in this.Records)
             {
                 record = new FileCabinetRecord();
 
@@ -94,7 +88,7 @@ namespace FileCabinetApp
 
             foreach (FileCabinetRecord record in list)
             {
-                this.Records.Add(new FileCabinetRecordXmlSerializeble(record));
+                this.Records.Add(new FileCabinetXmlSerializebleRecord(record));
             }
         }
     }

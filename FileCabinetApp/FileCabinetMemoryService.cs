@@ -39,7 +39,7 @@ namespace FileCabinetApp
         /// <returns>Last record's id.</returns>
         public int GetLastId()
         {
-            throw new NotImplementedException();
+            return this.list[^1].Id;
         }
 
         /// <summary>
