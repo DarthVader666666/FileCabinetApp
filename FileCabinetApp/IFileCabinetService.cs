@@ -67,5 +67,11 @@ namespace FileCabinetApp
         /// </summary>
         /// <param name="snapshot">FileCabinetMemoryService snapshot.</param>
         void Restore(FileCabinetServiceSnapshot snapshot);
+
+        /// <summary>
+        /// Gets last record's id.
+        /// </summary>
+        /// <returns>Last record's id.</returns>
+        int GetLastId();
     }
 }

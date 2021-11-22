@@ -34,6 +34,15 @@ namespace FileCabinetApp
         }
 
         /// <summary>
+        /// Gets last record's id.
+        /// </summary>
+        /// <returns>Last record's id.</returns>
+        public int GetLastId()
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
         /// Creates a record about a person.
         /// </summary>
         /// <param name="sender">Sender object is null.</param>
@@ -196,8 +205,6 @@ namespace FileCabinetApp
                     this.list.Add(record);
                 }
             }
-
-            Console.WriteLine("CSV import to Memory Servise completed.");
         }
 
         private void AddRecordToFirstNameDictionary(FileCabinetRecord record, string firstNameKey)

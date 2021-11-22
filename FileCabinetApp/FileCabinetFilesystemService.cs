@@ -35,6 +35,15 @@ namespace FileCabinetApp
         private int RecordCount { get; set; }
 
         /// <summary>
+        /// Gets last record's id.
+        /// </summary>
+        /// <returns>Last record's id.</returns>
+        public int GetLastId()
+        {
+            return this.list[^1].Id;
+        }
+
+        /// <summary>
         /// Gets snapshot entity.
         /// </summary>
         /// <returns>Snapshot object.</returns>
@@ -63,7 +72,7 @@ namespace FileCabinetApp
             FileCabinetRecord record = this.validator.ValidateParameters(e);
             this.fileStream.Position = this.fileStream.Length;
             this.WriteRecordToFile(record);
-            this.RecordCount++;
+            //this.RecordCount++;
 
             this.AddRecordToFirstNameDictionary(record, record.FirstName);
             this.AddRecordToLastNameDictionary(record, record.LastName);
@@ -294,8 +303,6 @@ namespace FileCabinetApp
             {
                 this.WriteRecordToFile(record);
             }
-
-            Console.WriteLine("CSV import to Filesystem Servise completed.");
         }
 
         private void WriteRecordToFile(FileCabinetRecord record)

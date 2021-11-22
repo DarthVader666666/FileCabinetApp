@@ -162,6 +162,12 @@
             </summary>
             <param name="fileStream">FileStream object to initialize local fileStream field.</param>
         </member>
+        <member name="M:FileCabinetApp.FileCabinetFilesystemService.GetLastId">
+            <summary>
+            Gets last record's id.
+            </summary>
+            <returns>Last record's id.</returns>
+        </member>
         <member name="M:FileCabinetApp.FileCabinetFilesystemService.MakeSnapshot">
             <summary>
             Gets snapshot entity.
@@ -237,6 +243,12 @@
             Gets snapshot entity.
             </summary>
             <returns>Snapshot object.</returns>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetMemoryService.GetLastId">
+            <summary>
+            Gets last record's id.
+            </summary>
+            <returns>Last record's id.</returns>
         </member>
         <member name="M:FileCabinetApp.FileCabinetMemoryService.CreateRecord(System.Object,FileCabinetApp.FileCabinetEventArgs)">
             <summary>
@@ -603,6 +615,12 @@
             Restores FileCabinetMemoryService record list with imported records.
             </summary>
             <param name="snapshot">FileCabinetMemoryService snapshot.</param>
+        </member>
+        <member name="M:FileCabinetApp.IFileCabinetService.GetLastId">
+            <summary>
+            Gets last record's id.
+            </summary>
+            <returns>Last record's id.</returns>
         </member>
         <member name="T:FileCabinetApp.IReadInputValidator">
             <summary>
