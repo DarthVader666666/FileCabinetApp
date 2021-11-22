@@ -603,7 +603,7 @@ namespace FileCabinetApp
                         streamReader = new StreamReader(fileStream);
                         snapshot.LoadFromCsv(streamReader);
                         fileCabinetService.Restore(snapshot);
-                        Console.WriteLine("CSV import completed.");
+                        Console.WriteLine($"{snapshot.Records.Count} records were imported from {path}");
                         streamReader.Close();
                         break;
                     case "XML":
@@ -611,7 +611,7 @@ namespace FileCabinetApp
                         streamReader = new StreamReader(fileStream);
                         snapshot.LoadFromXml(streamReader);
                         fileCabinetService.Restore(snapshot);
-                        Console.WriteLine("XML import completed.");
+                        Console.WriteLine($"{snapshot.Records.Count} records were imported from {path}");
                         streamReader.Close();
                         break;
                 }
