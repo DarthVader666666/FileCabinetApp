@@ -120,6 +120,8 @@ namespace FileCabinetApp
             this.AddRecordToFirstNameDictionary(record, record.FirstName);
             this.AddRecordToLastNameDictionary(record, record.LastName);
             this.AddRecordToDateOfBirthDictionary(record, dateOfBirthKey);
+
+            Console.WriteLine($"Record #{record.Id} is updated.");
         }
 
         /// <summary>

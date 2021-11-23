@@ -78,7 +78,7 @@ namespace FileCabinetApp
                 throw new ArgumentNullException($"{args} is null");
             }
 
-            args = new string[] { "-s", "memory" };
+            args = new string[] { "-s", "file" };
             if (args.Length == 1)
             {
                 args = args[0].Split('=');
@@ -251,8 +251,6 @@ namespace FileCabinetApp
             InputRecordProperties(record);
             FileCabinetEventArgs recordArgs = new FileCabinetEventArgs(record);
             EditRecordEvent(null, recordArgs);
-
-            Console.WriteLine($"Record #{record.Id} is updated.");
         }
 
         private static void Find(string parameters)

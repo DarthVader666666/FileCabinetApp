@@ -202,21 +202,21 @@
         </member>
         <member name="M:FileCabinetApp.FileCabinetFilesystemService.FindByFirstName(System.String)">
             <summary>
-            Edits a record about a person.
+            Finds a record about a person.
             </summary>
             <param name="firstName">Person's first name which record should be found with.</param>
             <returns>Records which fit search requirements.</returns>
         </member>
         <member name="M:FileCabinetApp.FileCabinetFilesystemService.FindByLastName(System.String)">
             <summary>
-            Edits a record about a person.
+            Finds a record about a person.
             </summary>
             <param name="lastName">Person's last name which record should be found with.</param>
             <returns>Records which fit search requirements.</returns>
         </member>
         <member name="M:FileCabinetApp.FileCabinetFilesystemService.FindByDateOfBirth(System.String)">
             <summary>
-            Edits a record about a person.
+            Finds a record about a person.
             </summary>
             <param name="dateOfBirth">Person's date of birth which record should be found with.</param>
             <returns>Records which fit search requirements.</returns>
@@ -226,6 +226,12 @@
             Places records from csv file to current *.db file.
             </summary>
             <param name="snapshot">Loaded records from csv file.</param>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetFilesystemService.RemoveRecord(System.Int32)">
+            <summary>
+            Removes record from *.db file.
+            </summary>
+            <param name="id">Record's id.</param>
         </member>
         <member name="T:FileCabinetApp.FileCabinetMemoryService">
             <summary>
