@@ -82,7 +82,8 @@ namespace FileCabinetApp
                 throw new ArgumentNullException($"{args} is null");
             }
 
-            args = new string[] { "-s", "file" };
+            //args = new string[] { "-s", "file" };
+
             if (args.Length == 1)
             {
                 args = args[0].Split('=');
@@ -115,8 +116,7 @@ namespace FileCabinetApp
                         fileCabinetService = new FileCabinetMemoryService(new DefaultValidator());
                         Console.WriteLine(MemoryStorageMessage); break;
                     case "FILE":
-                        fileStream = new FileStream(StorageDbFilePath, FileMode.OpenOrCreate, FileAccess.ReadWrite);
-                        fileCabinetService = new FileCabinetFilesystemService(fileStream);
+                        fileCabinetService = new FileCabinetFilesystemService(StorageDbFilePath);
                         Console.WriteLine(FileStorageMessage); break;
                 }
             }
@@ -209,7 +209,7 @@ namespace FileCabinetApp
         {
             FileCabinetRecord record = new FileCabinetRecord();
             InputRecordProperties(record);
-            record.Id = fileCabinetService.GetLastId() + 1;
+            record.Id = fileCabinetService.GetMaxId() + 1;
             FileCabinetEventArgs recordArgs = new FileCabinetEventArgs(record);
             CreateRecordEvent(null, recordArgs);
             Console.WriteLine($"Record #{record.Id} is created.");
@@ -661,7 +661,7 @@ namespace FileCabinetApp
                 return;
             }
 
-            fileCabinetService.PurgeFile(StorageDbFilePath);
+            fileCabinetService.PurgeFile();
         }
 
         private static void Stat(string parameters)

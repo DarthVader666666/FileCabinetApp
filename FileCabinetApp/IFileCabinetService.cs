@@ -72,7 +72,7 @@ namespace FileCabinetApp
         /// Gets last record's id.
         /// </summary>
         /// <returns>Last record's id.</returns>
-        int GetLastId();
+        int GetMaxId();
 
         /// <summary>
         /// Removes specified record from FileCabinetService data storage.
@@ -83,6 +83,6 @@ namespace FileCabinetApp
         /// <summary>
         /// Deletes marked as IsDeleted from *.db file.
         /// </summary>
-        void PurgeFile(string filePath);
+        void PurgeFile();
     }
 }

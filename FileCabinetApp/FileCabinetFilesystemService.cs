@@ -18,30 +18,38 @@ namespace FileCabinetApp
         private readonly Dictionary<string, List<FileCabinetRecord>> firstNameDictionary = new Dictionary<string, List<FileCabinetRecord>>();
         private readonly Dictionary<string, List<FileCabinetRecord>> lastNameDictionary = new Dictionary<string, List<FileCabinetRecord>>();
         private readonly Dictionary<string, List<FileCabinetRecord>> dateOfBirthDictionary = new Dictionary<string, List<FileCabinetRecord>>();
-        private FileStream fileStream;
-        private int deletedRecordsCount;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="FileCabinetFilesystemService"/> class.
         /// </summary>
-        /// <param name="fileStream">FileStream object to initialize local fileStream field.</param>
-        public FileCabinetFilesystemService(FileStream fileStream)
+        /// <param name="filePath">Path to *.db file.</param>
+        public FileCabinetFilesystemService(string filePath)
         {
-            this.fileStream = fileStream;
+            this.FilePath = filePath;
+            this.CheckFile();
             this.GetRecords();
-            this.RecordCount = this.GetStat().Item1;
+            this.RecordsCount = this.GetStat().Item1;
             this.FillAllDictionaries();
         }
 
-        private int RecordCount { get; set; }
+        private string FilePath { get; set; }
+
+        private int RecordsCount { get; set; }
 
         /// <summary>
-        /// Gets last record's id.
+        /// Gets max record's id.
         /// </summary>
         /// <returns>Last record's id.</returns>
-        public int GetLastId()
+        public int GetMaxId()
         {
-            return this.list[^1].Id;
+            int maxId = this.list[0].Id;
+
+            foreach (var record in this.list)
+            {
+                maxId = record.Id > maxId ? record.Id : maxId;
+            }
+
+            return maxId;
         }
 
         /// <summary>
@@ -65,20 +73,18 @@ namespace FileCabinetApp
                 throw new ArgumentNullException($"{e} argument is null.");
             }
 
-            if (this.fileStream is null)
-            {
-                throw new ArgumentNullException($"{this.fileStream} argument is null.");
-            }
-
             FileCabinetRecord record = this.validator.ValidateParameters(e);
-            this.fileStream.Position = this.fileStream.Length;
 
-            this.WriteRecordToFile(record);
+            FileStream fileStream = new FileStream(this.FilePath, FileMode.Append, FileAccess.Write);
+            this.WriteRecordToFile(record, fileStream);
+            fileStream.Close();
 
             this.AddRecordToFirstNameDictionary(record, record.FirstName);
             this.AddRecordToLastNameDictionary(record, record.LastName);
             string dateOfBirthKey = $"{record.DateOfBirth.Year}-{record.DateOfBirth.Month}-{record.DateOfBirth.Day}";
             this.AddRecordToDateOfBirthDictionary(record, dateOfBirthKey);
+
+            this.RecordsCount = this.GetStat().Item1;
         }
 
         /// <summary>
@@ -87,50 +93,52 @@ namespace FileCabinetApp
         /// <returns>The array of all file cabinet records.</returns>
         public ReadOnlyCollection<FileCabinetRecord> GetRecords()
         {
-            this.fileStream.Position = 0;
+            FileStream fileStream = new FileStream(this.FilePath, FileMode.Open, FileAccess.Read);
+            fileStream.Position = 0;
+
             this.list.Clear();
 
             FileCabinetRecord record;
             byte[] buffer;
             char[] charArray;
 
-            while (this.fileStream.Position < this.fileStream.Length)
+            while (fileStream.Position < fileStream.Length)
             {
-                if (!this.IsDeleted(this.fileStream.Position))
+                if (!this.IsDeleted(fileStream.Position, fileStream))
                 {
-                    this.fileStream.Seek(sizeof(short), SeekOrigin.Current);
+                    fileStream.Seek(sizeof(short), SeekOrigin.Current);
                     record = new FileCabinetRecord();
 
                     try
                     {
                         buffer = new byte[sizeof(int)];
-                        this.fileStream.Read(buffer, 0, sizeof(int));
+                        fileStream.Read(buffer, 0, sizeof(int));
                         record.Id = BitConverter.ToInt32(buffer);
 
                         buffer = new byte[120];
-                        this.fileStream.Read(buffer, 0, 120);
+                        fileStream.Read(buffer, 0, 120);
                         charArray = Encoding.Unicode.GetChars(buffer);
                         record.FirstName = new string(charArray[0..Array.FindIndex(charArray, 0, charArray.Length, i => i.Equals('\0'))]);
 
-                        this.fileStream.Read(buffer, 0, 120);
+                        fileStream.Read(buffer, 0, 120);
                         charArray = Encoding.Unicode.GetChars(buffer);
                         record.LastName = new string(charArray[0..Array.FindIndex(charArray, 0, charArray.Length, i => i.Equals('\0'))]);
 
                         buffer = new byte[sizeof(int)];
-                        this.fileStream.Read(buffer, 0, sizeof(int));
+                        fileStream.Read(buffer, 0, sizeof(int));
                         int year = BitConverter.ToInt32(buffer);
-                        this.fileStream.Read(buffer, 0, sizeof(int));
+                        fileStream.Read(buffer, 0, sizeof(int));
                         int month = BitConverter.ToInt32(buffer);
-                        this.fileStream.Read(buffer, 0, sizeof(int));
+                        fileStream.Read(buffer, 0, sizeof(int));
                         int day = BitConverter.ToInt32(buffer);
                         record.DateOfBirth = new DateTime(year, month, day);
 
                         buffer = new byte[sizeof(short)];
-                        this.fileStream.Read(buffer, 0, sizeof(short));
+                        fileStream.Read(buffer, 0, sizeof(short));
                         record.JobExperience = BitConverter.ToInt16(buffer);
 
                         buffer = new byte[sizeof(decimal)];
-                        this.fileStream.Read(buffer, 0, sizeof(decimal));
+                        fileStream.Read(buffer, 0, sizeof(decimal));
 
                         MemoryStream memoryStream = new MemoryStream(buffer);
                         BinaryReader binaryReader = new BinaryReader(memoryStream);
@@ -140,11 +148,12 @@ namespace FileCabinetApp
                         binaryReader.Close();
 
                         buffer = new byte[sizeof(char)];
-                        this.fileStream.Read(buffer, 0, sizeof(char));
+                        fileStream.Read(buffer, 0, sizeof(char));
                         record.Gender = BitConverter.ToChar(buffer);
                     }
                     catch (ArgumentException)
                     {
+                        fileStream.Close();
                         throw new ArgumentException("buffer overflown");
                     }
 
@@ -152,9 +161,11 @@ namespace FileCabinetApp
                 }
                 else
                 {
-                    this.fileStream.Seek(BufferSize, SeekOrigin.Current);
+                    fileStream.Seek(BufferSize, SeekOrigin.Current);
                 }
             }
+
+            fileStream.Close();
 
             return new ReadOnlyCollection<FileCabinetRecord>(this.list);
         }
@@ -165,20 +176,19 @@ namespace FileCabinetApp
         /// <returns>Count of all file cabinet records.</returns>
         public Tuple<int, int> GetStat()
         {
+            FileStream fileStream = new FileStream(this.FilePath, FileMode.Open, FileAccess.Read);
             int count = 0;
-            this.fileStream.Position = 0;
+            fileStream.Position = 0;
 
-            while (this.fileStream.Position < this.fileStream.Length)
+            while (fileStream.Position < fileStream.Length)
             {
-                if (!this.IsDeleted(this.fileStream.Position))
-                {
-                    count++;
-                }
-
-                this.fileStream.Seek(BufferSize, SeekOrigin.Current);
+                count++;
+                fileStream.Seek(BufferSize, SeekOrigin.Current);
             }
 
-            return new Tuple<int, int>(count, this.deletedRecordsCount);
+            fileStream.Close();
+
+            return new Tuple<int, int>(count, this.CountDeleted());
         }
 
         /// <summary>
@@ -193,24 +203,20 @@ namespace FileCabinetApp
                 throw new ArgumentNullException(nameof(recordArgs), "Record is null");
             }
 
-            if (recordArgs.Id > this.GetStat().Item1 || recordArgs.Id < 1)
-            {
-                throw new ArgumentException("No such record");
-            }
+            FileStream fileStream = new FileStream(this.FilePath, FileMode.Open, FileAccess.ReadWrite);
+            long offset;
 
-            long position;
-
-            if ((position = this.SeekRecordPosition(recordArgs.Id)) == -1)
+            if ((offset = this.SeekRecordPosition(recordArgs.Id, fileStream)) == -1 || recordArgs.Id < 1)
             {
                 Console.WriteLine($"Record #{recordArgs.Id} not found");
+                fileStream.Close();
                 return;
             }
 
-            this.fileStream.Position = position;
-
-            if (this.IsDeleted(position))
+            if (this.IsDeleted(offset, fileStream))
             {
                 Console.WriteLine($"Record #{recordArgs.Id} marked as Deleted. Can't edit.");
+                fileStream.Close();
                 return;
             }
 
@@ -229,7 +235,9 @@ namespace FileCabinetApp
             oldRecord.MonthlyPay = record.MonthlyPay;
             oldRecord.Gender = record.Gender;
 
-            this.WriteRecordToFile(record);
+            fileStream.Seek(offset, SeekOrigin.Begin);
+            this.WriteRecordToFile(record, fileStream);
+            fileStream.Close();
 
             this.AddRecordToFirstNameDictionary(record, record.FirstName);
             this.AddRecordToLastNameDictionary(record, record.LastName);
@@ -310,6 +318,7 @@ namespace FileCabinetApp
             this.GetRecords();
 
             int index = -1;
+            long offset;
 
             foreach (FileCabinetRecord record in snapshot.Records)
             {
@@ -325,12 +334,27 @@ namespace FileCabinetApp
                 }
             }
 
-            this.fileStream.Position = 0;
+            this.FillAllDictionaries();
+
+            FileStream fileStream = new FileStream(this.FilePath, FileMode.Open, FileAccess.ReadWrite);
 
             foreach (FileCabinetRecord record in this.list)
             {
-                this.WriteRecordToFile(record);
+                if ((offset = this.SeekRecordPosition(record.Id, fileStream)) == -1)
+                {
+                    fileStream.Seek(0, SeekOrigin.End);
+                }
+                else
+                {
+                    fileStream.Seek(offset, SeekOrigin.Begin);
+                }
+
+                this.WriteRecordToFile(record, fileStream);
             }
+
+            fileStream.Close();
+
+            this.RecordsCount = this.GetStat().Item1;
         }
 
         /// <summary>
@@ -339,16 +363,18 @@ namespace FileCabinetApp
         /// <param name="id">Record's id.</param>
         public void RemoveRecord(int id)
         {
-            long position = this.SeekRecordPosition(id);
+            FileStream fileStream = new FileStream(this.FilePath, FileMode.Open, FileAccess.ReadWrite);
+            long position = this.SeekRecordPosition(id, fileStream);
 
             if (position == -1)
             {
                 Console.WriteLine("Specified record doesn't exist. Can't remove.");
+                fileStream.Close();
                 return;
             }
 
-            this.SetIsDeletedBit(position);
-            this.deletedRecordsCount++;
+            this.SetIsDeletedBit(position, fileStream);
+            fileStream.Close();
 
             FileCabinetRecord record = this.list.Find(i => i.Id.Equals(id));
 
@@ -369,37 +395,40 @@ namespace FileCabinetApp
                 pair.Value.Remove(record);
             }
 
+            this.RecordsCount = this.GetStat().Item1;
+
             Console.WriteLine($"Record #{id} removed.");
         }
 
         /// <summary>
         /// Purges *.db file.
         /// </summary>
-        /// <param name="filePath">Path to current file.</param>
-        public void PurgeFile(string filePath)
+        public void PurgeFile()
         {
-            this.fileStream.Close();
-            this.fileStream = new FileStream(filePath, FileMode.Truncate);
-            int count = 0;
+            int deleted = this.CountDeleted();
+            this.GetRecords();
+
+            FileStream fileStream = new FileStream(this.FilePath, FileMode.Truncate, FileAccess.Write);
 
             foreach (FileCabinetRecord record in this.list)
             {
-                this.WriteRecordToFile(record);
-                count++;
+                this.WriteRecordToFile(record, fileStream);
             }
 
-            Console.WriteLine($"Data file processing is completed: {this.RecordCount - count} of {this.RecordCount} records were purged.");
+            fileStream.Close();
+
+            Console.WriteLine($"Data file processing is completed: {deleted} of {this.RecordsCount} records were purged.");
         }
 
-        private bool IsDeleted(long position)
+        private bool IsDeleted(long position, FileStream fileStream)
         {
-            this.fileStream.Position = position;
+            fileStream.Position = position;
             byte[] buffer = new byte[1];
 
             try
             {
-                this.fileStream.Read(buffer);
-                this.fileStream.Position--;
+                fileStream.Read(buffer);
+                fileStream.Position--;
             }
             catch (ArgumentException)
             {
@@ -409,44 +438,65 @@ namespace FileCabinetApp
             return ((buffer[0] >> 2) & 1) == 1;
         }
 
-        private long SeekRecordPosition(int id)
+        private long SeekRecordPosition(int id, FileStream fileStream)
         {
-            this.fileStream.Position = 0;
+            fileStream.Position = 0;
             byte[] buffer;
             int id_file;
 
-            while (this.fileStream.Position < this.fileStream.Length)
+            while (fileStream.Position < fileStream.Length)
             {
-                this.fileStream.Seek(sizeof(short), SeekOrigin.Current);
+                fileStream.Seek(sizeof(short), SeekOrigin.Current);
 
                 buffer = new byte[sizeof(int)];
-                this.fileStream.Read(buffer, 0, sizeof(int));
+                fileStream.Read(buffer, 0, sizeof(int));
                 id_file = BitConverter.ToInt32(buffer);
 
                 if (id_file == id)
                 {
-                    return this.fileStream.Position - sizeof(short) - sizeof(int);
+                    return fileStream.Position - sizeof(short) - sizeof(int);
                 }
                 else
                 {
-                    this.fileStream.Seek(BufferSize - sizeof(short) - sizeof(int), SeekOrigin.Current);
+                    fileStream.Seek(BufferSize - sizeof(short) - sizeof(int), SeekOrigin.Current);
                 }
             }
 
             return -1;
         }
 
-        private void SetIsDeletedBit(long position)
+        private void SetIsDeletedBit(long position, FileStream fileStream)
         {
-            this.fileStream.Position = position;
+            fileStream.Position = position;
             byte[] reserved = new byte[1];
-            this.fileStream.Read(reserved, 0, 1);
+            fileStream.Read(reserved, 0, 1);
             reserved[0] |= 1 << 2;
-            this.fileStream.Position -= 1;
-            this.fileStream.Write(reserved);
+            fileStream.Position -= 1;
+            fileStream.Write(reserved);
         }
 
-        private void WriteRecordToFile(FileCabinetRecord record)
+        private int CountDeleted()
+        {
+            int count = 0;
+            FileStream fileStream = new FileStream(this.FilePath, FileMode.Open, FileAccess.Read);
+            fileStream.Seek(0, SeekOrigin.Begin);
+
+            while (fileStream.Position < fileStream.Length)
+            {
+                if (this.IsDeleted(fileStream.Position, fileStream))
+                {
+                    count++;
+                }
+
+                fileStream.Seek(BufferSize, SeekOrigin.Current);
+            }
+
+            fileStream.Close();
+
+            return count;
+        }
+
+        private void WriteRecordToFile(FileCabinetRecord record, FileStream fileStream)
         {
             Encoding unicode = Encoding.Unicode;
             byte[] byteArray = new byte[BufferSize];
@@ -483,19 +533,20 @@ namespace FileCabinetApp
                 unicode.GetBytes(new char[] { record.Gender }, 0, 1, bufferBytes, 0);
                 bufferBytes.CopyTo(byteArray, 276);
 
-                this.fileStream.Write(byteArray, 0, sizeof(short));
-                this.fileStream.Write(byteArray, 2, sizeof(int));
-                this.fileStream.Write(byteArray, 6, 120);
-                this.fileStream.Write(byteArray, 126, 120);
-                this.fileStream.Write(byteArray, 246, sizeof(int));
-                this.fileStream.Write(byteArray, 250, sizeof(int));
-                this.fileStream.Write(byteArray, 254, sizeof(int));
-                this.fileStream.Write(byteArray, 258, sizeof(short));
-                this.fileStream.Write(byteArray, 260, sizeof(decimal));
-                this.fileStream.Write(byteArray, 276, sizeof(char));
+                fileStream.Write(byteArray, 0, sizeof(short));
+                fileStream.Write(byteArray, 2, sizeof(int));
+                fileStream.Write(byteArray, 6, 120);
+                fileStream.Write(byteArray, 126, 120);
+                fileStream.Write(byteArray, 246, sizeof(int));
+                fileStream.Write(byteArray, 250, sizeof(int));
+                fileStream.Write(byteArray, 254, sizeof(int));
+                fileStream.Write(byteArray, 258, sizeof(short));
+                fileStream.Write(byteArray, 260, sizeof(decimal));
+                fileStream.Write(byteArray, 276, sizeof(char));
             }
             catch (ArgumentException)
             {
+                fileStream.Close();
                 throw new ArgumentException("buffer overflown");
             }
         }
@@ -503,6 +554,9 @@ namespace FileCabinetApp
         private void FillAllDictionaries()
         {
             string dateOfBirthKey;
+            this.firstNameDictionary.Clear();
+            this.lastNameDictionary.Clear();
+            this.dateOfBirthDictionary.Clear();
 
             foreach (FileCabinetRecord record in this.list)
             {
@@ -511,6 +565,12 @@ namespace FileCabinetApp
                 dateOfBirthKey = $"{record.DateOfBirth.Year}-{record.DateOfBirth.Month}-{record.DateOfBirth.Day}";
                 this.AddRecordToDateOfBirthDictionary(record, dateOfBirthKey);
             }
+        }
+
+        private void CheckFile()
+        {
+            FileStream fileStream = new FileStream(this.FilePath, FileMode.OpenOrCreate);
+            fileStream.Close();
         }
 
         private void AddRecordToFirstNameDictionary(FileCabinetRecord record, string firstNameKey)

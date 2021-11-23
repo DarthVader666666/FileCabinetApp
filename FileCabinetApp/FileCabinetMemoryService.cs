@@ -34,12 +34,19 @@ namespace FileCabinetApp
         }
 
         /// <summary>
-        /// Gets last record's id.
+        /// Gets max record's id.
         /// </summary>
         /// <returns>Last record's id.</returns>
-        public int GetLastId()
+        public int GetMaxId()
         {
-            return this.list[^1].Id;
+            int maxId = this.list[0].Id;
+
+            foreach (var record in this.list)
+            {
+                maxId = record.Id > maxId ? record.Id : maxId;
+            }
+
+            return maxId;
         }
 
         /// <summary>
@@ -246,8 +253,7 @@ namespace FileCabinetApp
         /// <summary>
         /// Does nothing.
         /// </summary>
-        /// <param name="filePath">Path to *.db file.</param>
-        public void PurgeFile(string filePath)
+        public void PurgeFile()
         {
             // Method intentionally left empty.
         }

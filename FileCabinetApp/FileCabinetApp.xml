@@ -156,15 +156,15 @@
             Class contains methods which handle the user commands.
             </summary>
         </member>
-        <member name="M:FileCabinetApp.FileCabinetFilesystemService.#ctor(System.IO.FileStream)">
+        <member name="M:FileCabinetApp.FileCabinetFilesystemService.#ctor(System.String)">
             <summary>
             Initializes a new instance of the <see cref="T:FileCabinetApp.FileCabinetFilesystemService"/> class.
             </summary>
-            <param name="fileStream">FileStream object to initialize local fileStream field.</param>
+            <param name="filePath">Path to *.db file.</param>
         </member>
-        <member name="M:FileCabinetApp.FileCabinetFilesystemService.GetLastId">
+        <member name="M:FileCabinetApp.FileCabinetFilesystemService.GetMaxId">
             <summary>
-            Gets last record's id.
+            Gets max record's id.
             </summary>
             <returns>Last record's id.</returns>
         </member>
@@ -233,11 +233,10 @@
             </summary>
             <param name="id">Record's id.</param>
         </member>
-        <member name="M:FileCabinetApp.FileCabinetFilesystemService.PurgeFile(System.String)">
+        <member name="M:FileCabinetApp.FileCabinetFilesystemService.PurgeFile">
             <summary>
             Purges *.db file.
             </summary>
-            <param name="filePath">Path to current file.</param>
         </member>
         <member name="T:FileCabinetApp.FileCabinetMemoryService">
             <summary>
@@ -256,9 +255,9 @@
             </summary>
             <returns>Snapshot object.</returns>
         </member>
-        <member name="M:FileCabinetApp.FileCabinetMemoryService.GetLastId">
+        <member name="M:FileCabinetApp.FileCabinetMemoryService.GetMaxId">
             <summary>
-            Gets last record's id.
+            Gets max record's id.
             </summary>
             <returns>Last record's id.</returns>
         </member>
@@ -321,11 +320,10 @@
             </summary>
             <param name="id">Record's id.</param>
         </member>
-        <member name="M:FileCabinetApp.FileCabinetMemoryService.PurgeFile(System.String)">
+        <member name="M:FileCabinetApp.FileCabinetMemoryService.PurgeFile">
             <summary>
             Does nothing.
             </summary>
-            <param name="filePath">Path to *.db file.</param>
         </member>
         <member name="T:FileCabinetApp.FileCabinetRecord">
             <summary>
@@ -635,7 +633,7 @@
             </summary>
             <param name="snapshot">FileCabinetMemoryService snapshot.</param>
         </member>
-        <member name="M:FileCabinetApp.IFileCabinetService.GetLastId">
+        <member name="M:FileCabinetApp.IFileCabinetService.GetMaxId">
             <summary>
             Gets last record's id.
             </summary>
@@ -647,7 +645,7 @@
             </summary>
             <param name="id">Number of record.</param>
         </member>
-        <member name="M:FileCabinetApp.IFileCabinetService.PurgeFile(System.String)">
+        <member name="M:FileCabinetApp.IFileCabinetService.PurgeFile">
             <summary>
             Deletes marked as IsDeleted from *.db file.
             </summary>
