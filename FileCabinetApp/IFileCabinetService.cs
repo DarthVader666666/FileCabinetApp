@@ -26,7 +26,7 @@ namespace FileCabinetApp
         /// Gets total count of file records.
         /// </summary>
         /// <returns>Number of file records.</returns>
-        int GetStat();
+        Tuple<int, int> GetStat();
 
         /// <summary>
         /// Edits file record.
@@ -79,5 +79,10 @@ namespace FileCabinetApp
         /// </summary>
         /// <param name="id">Number of record.</param>
         void RemoveRecord(int id);
+
+        /// <summary>
+        /// Deletes marked as IsDeleted from *.db file.
+        /// </summary>
+        void PurgeFile(string filePath);
     }
 }

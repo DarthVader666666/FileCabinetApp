@@ -33,6 +33,8 @@ namespace FileCabinetApp
             new Tuple<string, Action<string>>("export", Export),
             new Tuple<string, Action<string>>("import", Import),
             new Tuple<string, Action<string>>("remove", Remove),
+            new Tuple<string, Action<string>>("purge", Purge),
+            new Tuple<string, Action<string>>("stat", Stat),
         };
 
         private static readonly string[][] HelpMessages = new string[][]
@@ -45,6 +47,8 @@ namespace FileCabinetApp
             new string[] { "find", "finds records by specified parameter. Ex: find firstname \"Vadim\"" },
             new string[] { "import", "Imports records from csv or xml file. Ex: import csv d:\\file.csv" },
             new string[] { "remove", "Removes specific record from record list (uses id parameter)." },
+            new string[] { "purge", "Deletes record from *.db file in FilesystemService." },
+            new string[] { "stat", "Displays record list statistics." },
         };
 
         private static IReadInputValidator readInputValidator = new DefaultValidator();
@@ -240,7 +244,7 @@ namespace FileCabinetApp
 
             FileCabinetRecord record = new FileCabinetRecord();
             record.Id = int.Parse(parameters, CultureInfo.InvariantCulture);
-            int listCount = fileCabinetService.GetStat();
+            int listCount = fileCabinetService.GetStat().Item1;
 
             if (record.Id > listCount || record.Id < 1)
             {
@@ -647,6 +651,29 @@ namespace FileCabinetApp
             }
 
             fileCabinetService.RemoveRecord(id);
+        }
+
+        private static void Purge(string parameters)
+        {
+            if (parameters.Length > 0)
+            {
+                Console.WriteLine($"Unrecognized parameter {parameters}");
+                return;
+            }
+
+            fileCabinetService.PurgeFile(StorageDbFilePath);
+        }
+
+        private static void Stat(string parameters)
+        {
+            if (parameters.Length > 0)
+            {
+                Console.WriteLine($"Unrecognized parameter {parameters}");
+                return;
+            }
+
+            Tuple<int, int> countDeleted = fileCabinetService.GetStat();
+            Console.WriteLine($"{countDeleted.Item1} recods in list, {countDeleted.Item2} deleted.");
         }
     }
 }

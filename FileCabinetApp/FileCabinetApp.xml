@@ -233,6 +233,12 @@
             </summary>
             <param name="id">Record's id.</param>
         </member>
+        <member name="M:FileCabinetApp.FileCabinetFilesystemService.PurgeFile(System.String)">
+            <summary>
+            Purges *.db file.
+            </summary>
+            <param name="filePath">Path to current file.</param>
+        </member>
         <member name="T:FileCabinetApp.FileCabinetMemoryService">
             <summary>
             Class contains methods which handle the user commands.
@@ -314,6 +320,12 @@
             Removes record from record list and all dictionaries.
             </summary>
             <param name="id">Record's id.</param>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetMemoryService.PurgeFile(System.String)">
+            <summary>
+            Does nothing.
+            </summary>
+            <param name="filePath">Path to *.db file.</param>
         </member>
         <member name="T:FileCabinetApp.FileCabinetRecord">
             <summary>
@@ -634,6 +646,11 @@
             Removes specified record from FileCabinetService data storage.
             </summary>
             <param name="id">Number of record.</param>
+        </member>
+        <member name="M:FileCabinetApp.IFileCabinetService.PurgeFile(System.String)">
+            <summary>
+            Deletes marked as IsDeleted from *.db file.
+            </summary>
         </member>
         <member name="T:FileCabinetApp.IReadInputValidator">
             <summary>

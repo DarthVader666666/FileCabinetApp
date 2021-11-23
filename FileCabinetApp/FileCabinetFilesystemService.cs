@@ -18,7 +18,8 @@ namespace FileCabinetApp
         private readonly Dictionary<string, List<FileCabinetRecord>> firstNameDictionary = new Dictionary<string, List<FileCabinetRecord>>();
         private readonly Dictionary<string, List<FileCabinetRecord>> lastNameDictionary = new Dictionary<string, List<FileCabinetRecord>>();
         private readonly Dictionary<string, List<FileCabinetRecord>> dateOfBirthDictionary = new Dictionary<string, List<FileCabinetRecord>>();
-        private readonly FileStream fileStream;
+        private FileStream fileStream;
+        private int deletedRecordsCount;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="FileCabinetFilesystemService"/> class.
@@ -28,7 +29,7 @@ namespace FileCabinetApp
         {
             this.fileStream = fileStream;
             this.GetRecords();
-            this.RecordCount = this.GetStat();
+            this.RecordCount = this.GetStat().Item1;
             this.FillAllDictionaries();
         }
 
@@ -95,12 +96,9 @@ namespace FileCabinetApp
 
             while (this.fileStream.Position < this.fileStream.Length)
             {
-                buffer = new byte[1];
-                this.fileStream.Read(buffer);
-
-                if (((buffer[0] >> 2) & 1) == 0)
+                if (!this.IsDeleted(this.fileStream.Position))
                 {
-                    this.fileStream.Seek(sizeof(byte), SeekOrigin.Current);
+                    this.fileStream.Seek(sizeof(short), SeekOrigin.Current);
                     record = new FileCabinetRecord();
 
                     try
@@ -154,7 +152,7 @@ namespace FileCabinetApp
                 }
                 else
                 {
-                    this.fileStream.Seek(BufferSize - 1, SeekOrigin.Current);
+                    this.fileStream.Seek(BufferSize, SeekOrigin.Current);
                 }
             }
 
@@ -165,26 +163,9 @@ namespace FileCabinetApp
         /// Gets count of all file cabinet records.
         /// </summary>
         /// <returns>Count of all file cabinet records.</returns>
-        public int GetStat()
+        public Tuple<int, int> GetStat()
         {
-            int count = 0;
-            this.fileStream.Position = 0;
-            byte[] buffer;
-
-            while (this.fileStream.Position <= this.fileStream.Length)
-            {
-                buffer = new byte[1];
-                this.fileStream.Read(buffer);
-
-                if (((buffer[0] >> 2) & 1) == 0)
-                {
-                    count++;
-                }
-
-                this.fileStream.Seek(BufferSize - 1, SeekOrigin.Current);
-            }
-
-            return count;
+            throw new NotImplementedException();
         }
 
         /// <summary>
@@ -199,7 +180,7 @@ namespace FileCabinetApp
                 throw new ArgumentNullException(nameof(recordArgs), "Record is null");
             }
 
-            if (recordArgs.Id > this.GetStat() || recordArgs.Id < 1)
+            if (recordArgs.Id > this.GetStat().Item1 || recordArgs.Id < 1)
             {
                 throw new ArgumentException("No such record");
             }
@@ -213,16 +194,13 @@ namespace FileCabinetApp
             }
 
             this.fileStream.Position = position;
-            byte[] buffer = new byte[1];
-            this.fileStream.Read(buffer);
 
-            if (((buffer[0] >> 2) & 1) == 1)
+            if (this.IsDeleted(position))
             {
                 Console.WriteLine($"Record #{recordArgs.Id} marked as Deleted. Can't edit.");
                 return;
             }
 
-            this.fileStream.Position = position;
             FileCabinetRecord record = this.validator.ValidateParameters(recordArgs);
             var oldRecord = this.list[record.Id - 1];
             string dateOfBirthKey = $"{oldRecord.DateOfBirth.Year}-{oldRecord.DateOfBirth.Month}-{oldRecord.DateOfBirth.Day}";
@@ -357,6 +335,7 @@ namespace FileCabinetApp
             }
 
             this.SetIsDeletedBit(position);
+            this.deletedRecordsCount++;
 
             FileCabinetRecord record = this.list.Find(i => i.Id.Equals(id));
 
@@ -378,6 +357,43 @@ namespace FileCabinetApp
             }
 
             Console.WriteLine($"Record #{id} removed.");
+        }
+
+        /// <summary>
+        /// Purges *.db file.
+        /// </summary>
+        /// <param name="filePath">Path to current file.</param>
+        public void PurgeFile(string filePath)
+        {
+            this.fileStream.Close();
+            this.fileStream = new FileStream(filePath, FileMode.Truncate);
+            int count = 0;
+
+            foreach (FileCabinetRecord record in this.list)
+            {
+                this.WriteRecordToFile(record);
+                count++;
+            }
+
+            Console.WriteLine($"Data file processing is completed: {this.RecordCount - count} of {this.RecordCount} records were purged.");
+        }
+
+        private bool IsDeleted(long position)
+        {
+            this.fileStream.Position = position;
+            byte[] buffer = new byte[1];
+
+            try
+            {
+                this.fileStream.Read(buffer);
+                this.fileStream.Position--;
+            }
+            catch (ArgumentException)
+            {
+                throw new ArgumentException($"{buffer} gone reading out of file ranges.");
+            }
+
+            return ((buffer[0] >> 2) & 1) == 1;
         }
 
         private long SeekRecordPosition(int id)

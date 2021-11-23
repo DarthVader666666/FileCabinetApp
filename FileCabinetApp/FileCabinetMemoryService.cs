@@ -77,9 +77,9 @@ namespace FileCabinetApp
         /// Gets count of all file cabinet records.
         /// </summary>
         /// <returns>Count of all file cabinet records.</returns>
-        public int GetStat()
+        public Tuple<int, int> GetStat()
         {
-            return this.list.Count;
+            return new Tuple<int, int>(this.list.Count, 0);
         }
 
         /// <summary>
@@ -94,7 +94,7 @@ namespace FileCabinetApp
                 throw new ArgumentNullException(nameof(recordArgs), "Record is null");
             }
 
-            if (recordArgs.Id > this.GetStat() || recordArgs.Id < 1)
+            if (recordArgs.Id > this.GetStat().Item1 || recordArgs.Id < 1)
             {
                 throw new ArgumentException("No such record");
             }
@@ -241,6 +241,15 @@ namespace FileCabinetApp
             }
 
             Console.WriteLine($"Record #{id} removed.");
+        }
+
+        /// <summary>
+        /// Does nothing.
+        /// </summary>
+        /// <param name="filePath">Path to *.db file.</param>
+        public void PurgeFile(string filePath)
+        {
+            // Method intentionally left empty.
         }
 
         private void AddRecordToFirstNameDictionary(FileCabinetRecord record, string firstNameKey)
