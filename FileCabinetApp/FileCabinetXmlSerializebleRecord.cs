@@ -24,6 +24,7 @@ namespace FileCabinetApp
                 throw new ArgumentNullException($"{record} is null");
             }
 
+            this.Name = new NameClass();
             this.Id = record.Id;
             this.Name.First = record.FirstName;
             this.Name.Last = record.LastName;
@@ -52,7 +53,7 @@ namespace FileCabinetApp
         /// </summary>
         /// <value></value>
         [XmlElement("name")]
-        public NameClass Name { get; set; } = new NameClass();
+        public NameClass Name { get; set; }
 
         /// <summary>
         /// Gets or sets person's day if birth.

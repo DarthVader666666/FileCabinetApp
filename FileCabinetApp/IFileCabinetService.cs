@@ -26,7 +26,7 @@ namespace FileCabinetApp
         /// Gets total count of file records.
         /// </summary>
         /// <returns>Number of file records.</returns>
-        int GetStat();
+        Tuple<int, int> GetStat();
 
         /// <summary>
         /// Edits file record.
@@ -72,6 +72,17 @@ namespace FileCabinetApp
         /// Gets last record's id.
         /// </summary>
         /// <returns>Last record's id.</returns>
-        int GetLastId();
+        int GetMaxId();
+
+        /// <summary>
+        /// Removes specified record from FileCabinetService data storage.
+        /// </summary>
+        /// <param name="id">Number of record.</param>
+        void RemoveRecord(int id);
+
+        /// <summary>
+        /// Deletes marked as IsDeleted from *.db file.
+        /// </summary>
+        void PurgeFile();
     }
 }

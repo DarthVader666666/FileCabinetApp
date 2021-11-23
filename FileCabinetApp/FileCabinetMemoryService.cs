@@ -34,12 +34,19 @@ namespace FileCabinetApp
         }
 
         /// <summary>
-        /// Gets last record's id.
+        /// Gets max record's id.
         /// </summary>
         /// <returns>Last record's id.</returns>
-        public int GetLastId()
+        public int GetMaxId()
         {
-            return this.list[^1].Id;
+            int maxId = this.list[0].Id;
+
+            foreach (var record in this.list)
+            {
+                maxId = record.Id > maxId ? record.Id : maxId;
+            }
+
+            return maxId;
         }
 
         /// <summary>
@@ -77,9 +84,9 @@ namespace FileCabinetApp
         /// Gets count of all file cabinet records.
         /// </summary>
         /// <returns>Count of all file cabinet records.</returns>
-        public int GetStat()
+        public Tuple<int, int> GetStat()
         {
-            return this.list.Count;
+            return new Tuple<int, int>(this.list.Count, 0);
         }
 
         /// <summary>
@@ -94,7 +101,7 @@ namespace FileCabinetApp
                 throw new ArgumentNullException(nameof(recordArgs), "Record is null");
             }
 
-            if (recordArgs.Id > this.GetStat() || recordArgs.Id < 1)
+            if (recordArgs.Id > this.GetStat().Item1 || recordArgs.Id < 1)
             {
                 throw new ArgumentException("No such record");
             }
@@ -120,6 +127,8 @@ namespace FileCabinetApp
             this.AddRecordToFirstNameDictionary(record, record.FirstName);
             this.AddRecordToLastNameDictionary(record, record.LastName);
             this.AddRecordToDateOfBirthDictionary(record, dateOfBirthKey);
+
+            Console.WriteLine($"Record #{record.Id} is updated.");
         }
 
         /// <summary>
@@ -205,6 +214,48 @@ namespace FileCabinetApp
                     this.list.Add(record);
                 }
             }
+        }
+
+        /// <summary>
+        /// Removes record from record list and all dictionaries.
+        /// </summary>
+        /// <param name="id">Record's id.</param>
+        public void RemoveRecord(int id)
+        {
+            FileCabinetRecord record;
+
+            if ((record = this.list.Find(i => i.Id.Equals(id))) is null)
+            {
+                Console.WriteLine("Specified record doesn't exist. Can't remove.");
+                return;
+            }
+
+            this.list.Remove(record);
+
+            foreach (KeyValuePair<string, List<FileCabinetRecord>> pair in this.firstNameDictionary)
+            {
+                pair.Value.Remove(record);
+            }
+
+            foreach (KeyValuePair<string, List<FileCabinetRecord>> pair in this.lastNameDictionary)
+            {
+                pair.Value.Remove(record);
+            }
+
+            foreach (KeyValuePair<string, List<FileCabinetRecord>> pair in this.dateOfBirthDictionary)
+            {
+                pair.Value.Remove(record);
+            }
+
+            Console.WriteLine($"Record #{id} removed.");
+        }
+
+        /// <summary>
+        /// Does nothing.
+        /// </summary>
+        public void PurgeFile()
+        {
+            // Method intentionally left empty.
         }
 
         private void AddRecordToFirstNameDictionary(FileCabinetRecord record, string firstNameKey)

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Globalization;
 using System.IO;
@@ -31,6 +32,9 @@ namespace FileCabinetApp
             new Tuple<string, Action<string>>("find", Find),
             new Tuple<string, Action<string>>("export", Export),
             new Tuple<string, Action<string>>("import", Import),
+            new Tuple<string, Action<string>>("remove", Remove),
+            new Tuple<string, Action<string>>("purge", Purge),
+            new Tuple<string, Action<string>>("stat", Stat),
         };
 
         private static readonly string[][] HelpMessages = new string[][]
@@ -42,6 +46,9 @@ namespace FileCabinetApp
             new string[] { "export", "exports records into chosen file and format (csv or xml). Ex: export csv D:\\file.csv" },
             new string[] { "find", "finds records by specified parameter. Ex: find firstname \"Vadim\"" },
             new string[] { "import", "Imports records from csv or xml file. Ex: import csv d:\\file.csv" },
+            new string[] { "remove", "Removes specific record from record list (uses id parameter)." },
+            new string[] { "purge", "Deletes record from *.db file in FilesystemService." },
+            new string[] { "stat", "Displays record list statistics." },
         };
 
         private static IReadInputValidator readInputValidator = new DefaultValidator();
@@ -75,7 +82,8 @@ namespace FileCabinetApp
                 throw new ArgumentNullException($"{args} is null");
             }
 
-            args = new string[] { "-s", "file" };
+            //args = new string[] { "-s", "file" };
+
             if (args.Length == 1)
             {
                 args = args[0].Split('=');
@@ -108,8 +116,7 @@ namespace FileCabinetApp
                         fileCabinetService = new FileCabinetMemoryService(new DefaultValidator());
                         Console.WriteLine(MemoryStorageMessage); break;
                     case "FILE":
-                        fileStream = new FileStream(StorageDbFilePath, FileMode.OpenOrCreate, FileAccess.ReadWrite);
-                        fileCabinetService = new FileCabinetFilesystemService(fileStream);
+                        fileCabinetService = new FileCabinetFilesystemService(StorageDbFilePath);
                         Console.WriteLine(FileStorageMessage); break;
                 }
             }
@@ -202,7 +209,7 @@ namespace FileCabinetApp
         {
             FileCabinetRecord record = new FileCabinetRecord();
             InputRecordProperties(record);
-            record.Id = fileCabinetService.GetLastId() + 1;
+            record.Id = fileCabinetService.GetMaxId() + 1;
             FileCabinetEventArgs recordArgs = new FileCabinetEventArgs(record);
             CreateRecordEvent(null, recordArgs);
             Console.WriteLine($"Record #{record.Id} is created.");
@@ -237,7 +244,7 @@ namespace FileCabinetApp
 
             FileCabinetRecord record = new FileCabinetRecord();
             record.Id = int.Parse(parameters, CultureInfo.InvariantCulture);
-            int listCount = fileCabinetService.GetStat();
+            int listCount = fileCabinetService.GetStat().Item1;
 
             if (record.Id > listCount || record.Id < 1)
             {
@@ -248,8 +255,6 @@ namespace FileCabinetApp
             InputRecordProperties(record);
             FileCabinetEventArgs recordArgs = new FileCabinetEventArgs(record);
             EditRecordEvent(null, recordArgs);
-
-            Console.WriteLine($"Record #{record.Id} is updated.");
         }
 
         private static void Find(string parameters)
@@ -622,6 +627,53 @@ namespace FileCabinetApp
                 Console.WriteLine($"Can't open file {path} due it's access limitations.");
                 fileStream.Close();
             }
+        }
+
+        private static void Remove(string parameters)
+        {
+            if (parameters is null)
+            {
+                throw new ArgumentException("Parameters argument is null");
+            }
+
+            if (parameters.Length == 0)
+            {
+                Console.WriteLine("Type record's id.");
+                return;
+            }
+
+            int id;
+
+            if (!int.TryParse(parameters, out id))
+            {
+                Console.WriteLine("Unrecognized number.");
+                return;
+            }
+
+            fileCabinetService.RemoveRecord(id);
+        }
+
+        private static void Purge(string parameters)
+        {
+            if (parameters.Length > 0)
+            {
+                Console.WriteLine($"Unrecognized parameter {parameters}");
+                return;
+            }
+
+            fileCabinetService.PurgeFile();
+        }
+
+        private static void Stat(string parameters)
+        {
+            if (parameters.Length > 0)
+            {
+                Console.WriteLine($"Unrecognized parameter {parameters}");
+                return;
+            }
+
+            Tuple<int, int> countDeleted = fileCabinetService.GetStat();
+            Console.WriteLine($"{countDeleted.Item1} recods in list, {countDeleted.Item2} deleted.");
         }
     }
 }

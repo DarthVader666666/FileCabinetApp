@@ -156,15 +156,15 @@
             Class contains methods which handle the user commands.
             </summary>
         </member>
-        <member name="M:FileCabinetApp.FileCabinetFilesystemService.#ctor(System.IO.FileStream)">
+        <member name="M:FileCabinetApp.FileCabinetFilesystemService.#ctor(System.String)">
             <summary>
             Initializes a new instance of the <see cref="T:FileCabinetApp.FileCabinetFilesystemService"/> class.
             </summary>
-            <param name="fileStream">FileStream object to initialize local fileStream field.</param>
+            <param name="filePath">Path to *.db file.</param>
         </member>
-        <member name="M:FileCabinetApp.FileCabinetFilesystemService.GetLastId">
+        <member name="M:FileCabinetApp.FileCabinetFilesystemService.GetMaxId">
             <summary>
-            Gets last record's id.
+            Gets max record's id.
             </summary>
             <returns>Last record's id.</returns>
         </member>
@@ -202,21 +202,21 @@
         </member>
         <member name="M:FileCabinetApp.FileCabinetFilesystemService.FindByFirstName(System.String)">
             <summary>
-            Edits a record about a person.
+            Finds a record about a person.
             </summary>
             <param name="firstName">Person's first name which record should be found with.</param>
             <returns>Records which fit search requirements.</returns>
         </member>
         <member name="M:FileCabinetApp.FileCabinetFilesystemService.FindByLastName(System.String)">
             <summary>
-            Edits a record about a person.
+            Finds a record about a person.
             </summary>
             <param name="lastName">Person's last name which record should be found with.</param>
             <returns>Records which fit search requirements.</returns>
         </member>
         <member name="M:FileCabinetApp.FileCabinetFilesystemService.FindByDateOfBirth(System.String)">
             <summary>
-            Edits a record about a person.
+            Finds a record about a person.
             </summary>
             <param name="dateOfBirth">Person's date of birth which record should be found with.</param>
             <returns>Records which fit search requirements.</returns>
@@ -226,6 +226,17 @@
             Places records from csv file to current *.db file.
             </summary>
             <param name="snapshot">Loaded records from csv file.</param>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetFilesystemService.RemoveRecord(System.Int32)">
+            <summary>
+            Removes record from *.db file.
+            </summary>
+            <param name="id">Record's id.</param>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetFilesystemService.PurgeFile">
+            <summary>
+            Purges *.db file.
+            </summary>
         </member>
         <member name="T:FileCabinetApp.FileCabinetMemoryService">
             <summary>
@@ -244,9 +255,9 @@
             </summary>
             <returns>Snapshot object.</returns>
         </member>
-        <member name="M:FileCabinetApp.FileCabinetMemoryService.GetLastId">
+        <member name="M:FileCabinetApp.FileCabinetMemoryService.GetMaxId">
             <summary>
-            Gets last record's id.
+            Gets max record's id.
             </summary>
             <returns>Last record's id.</returns>
         </member>
@@ -302,6 +313,17 @@
             Places records from csv file to current record list.
             </summary>
             <param name="snapshot">Loaded records from csv file.</param>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetMemoryService.RemoveRecord(System.Int32)">
+            <summary>
+            Removes record from record list and all dictionaries.
+            </summary>
+            <param name="id">Record's id.</param>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetMemoryService.PurgeFile">
+            <summary>
+            Does nothing.
+            </summary>
         </member>
         <member name="T:FileCabinetApp.FileCabinetRecord">
             <summary>
@@ -611,11 +633,22 @@
             </summary>
             <param name="snapshot">FileCabinetMemoryService snapshot.</param>
         </member>
-        <member name="M:FileCabinetApp.IFileCabinetService.GetLastId">
+        <member name="M:FileCabinetApp.IFileCabinetService.GetMaxId">
             <summary>
             Gets last record's id.
             </summary>
             <returns>Last record's id.</returns>
+        </member>
+        <member name="M:FileCabinetApp.IFileCabinetService.RemoveRecord(System.Int32)">
+            <summary>
+            Removes specified record from FileCabinetService data storage.
+            </summary>
+            <param name="id">Number of record.</param>
+        </member>
+        <member name="M:FileCabinetApp.IFileCabinetService.PurgeFile">
+            <summary>
+            Deletes marked as IsDeleted from *.db file.
+            </summary>
         </member>
         <member name="T:FileCabinetApp.IReadInputValidator">
             <summary>
