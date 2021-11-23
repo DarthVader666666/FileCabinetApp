@@ -165,7 +165,20 @@ namespace FileCabinetApp
         /// <returns>Count of all file cabinet records.</returns>
         public Tuple<int, int> GetStat()
         {
-            throw new NotImplementedException();
+            int count = 0;
+            this.fileStream.Position = 0;
+
+            while (this.fileStream.Position < this.fileStream.Length)
+            {
+                if (!this.IsDeleted(this.fileStream.Position))
+                {
+                    count++;
+                }
+
+                this.fileStream.Seek(BufferSize, SeekOrigin.Current);
+            }
+
+            return new Tuple<int, int>(count, this.deletedRecordsCount);
         }
 
         /// <summary>
