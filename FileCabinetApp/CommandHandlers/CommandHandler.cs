@@ -1,17 +1,52 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Collections.ObjectModel;
+using System.Globalization;
+using System.IO;
 
 namespace FileCabinetApp.CommandHandlers
 {
-    public class CommandHandler: CommandHandlerBase
+    public class CommandHandler : CommandHandlerBase
     {
-        public void Handle(AppCommandRequest request)
-        { 
-            
+        public CommandHandler()
+        {
+            CreateRecordEvent += Program.fileCabinetService.CreateRecord;
+            EditRecordEvent += Program.fileCabinetService.EditRecord;
         }
+
+        public void Handle(AppCommandRequest request)
+        {
+
+        }
+
+
+
+        private const int CommandHelpIndex = 0;
+        private const int DescriptionHelpIndex = 1;
+        private const int ExplanationHelpIndex = 2;
+
+        /// <summary>
+        /// Create record handler
+        /// </summary>
+        private static event EventHandler<FileCabinetEventArgs> CreateRecordEvent;
+
+        /// <summary>
+        /// Edit record handler
+        /// </summary>
+        private static event EventHandler<FileCabinetEventArgs> EditRecordEvent;
+
+        private static readonly string[][] HelpMessages = new string[][]
+        {
+            new string[] { "help", "prints the help screen", "The 'help' command prints the help screen." },
+            new string[] { "exit", "exits the application", "The 'exit' command exits the application." },
+            new string[] { "list", "prints record list" },
+            new string[] { "create", "creates new record" },
+            new string[] { "export", "exports records into chosen file and format (csv or xml). Ex: export csv D:\\file.csv" },
+            new string[] { "find", "finds records by specified parameter. Ex: find firstname \"Vadim\"" },
+            new string[] { "import", "Imports records from csv or xml file. Ex: import csv d:\\file.csv" },
+            new string[] { "remove", "Removes specific record from record list (uses id parameter)." },
+            new string[] { "purge", "Deletes record from *.db file in FilesystemService." },
+            new string[] { "stat", "Displays record list statistics." },
+        };
 
         private static void PrintHelp(string parameters)
         {
@@ -43,20 +78,14 @@ namespace FileCabinetApp.CommandHandlers
         private static void Exit(string parameters)
         {
             Console.WriteLine("Exiting an application...");
-
-            if (fileStream != null)
-            {
-                fileStream.Close();
-            }
-
-            isRunning = false;
+            Program.isRunning = false;
         }
 
         private static void Create(string parameters)
         {
             FileCabinetRecord record = new FileCabinetRecord();
-            InputRecordProperties(record);
-            record.Id = fileCabinetService.GetMaxId() + 1;
+            Program.InputRecordProperties(record);
+            record.Id = Program.fileCabinetService.GetMaxId() + 1;
             FileCabinetEventArgs recordArgs = new FileCabinetEventArgs(record);
             CreateRecordEvent(null, recordArgs);
             Console.WriteLine($"Record #{record.Id} is created.");
@@ -64,7 +93,7 @@ namespace FileCabinetApp.CommandHandlers
 
         private static void List(string parameters)
         {
-            ReadOnlyCollection<FileCabinetRecord> recordList = fileCabinetService.GetRecords();
+            ReadOnlyCollection<FileCabinetRecord> recordList = Program.fileCabinetService.GetRecords();
 
             if (recordList.Count == 0)
             {
@@ -91,7 +120,7 @@ namespace FileCabinetApp.CommandHandlers
 
             FileCabinetRecord record = new FileCabinetRecord();
             record.Id = int.Parse(parameters, CultureInfo.InvariantCulture);
-            int listCount = fileCabinetService.GetStat().Item1;
+            int listCount = Program.fileCabinetService.GetStat().Item1;
 
             if (record.Id > listCount || record.Id < 1)
             {
@@ -99,7 +128,7 @@ namespace FileCabinetApp.CommandHandlers
                 return;
             }
 
-            InputRecordProperties(record);
+            Program.InputRecordProperties(record);
             FileCabinetEventArgs recordArgs = new FileCabinetEventArgs(record);
             EditRecordEvent(null, recordArgs);
         }
@@ -123,9 +152,9 @@ namespace FileCabinetApp.CommandHandlers
 
             switch (searchArguments[0])
             {
-                case "FIRSTNAME": fileCabinetRecords = fileCabinetService.FindByFirstName(searchArguments[1][1..^1]); break;
-                case "LASTNAME": fileCabinetRecords = fileCabinetService.FindByLastName(searchArguments[1][1..^1]); break;
-                case "DATEOFBIRTH": fileCabinetRecords = fileCabinetService.FindByDateOfBirth(searchArguments[1][1..^1]); break;
+                case "FIRSTNAME": fileCabinetRecords = Program.fileCabinetService.FindByFirstName(searchArguments[1][1..^1]); break;
+                case "LASTNAME": fileCabinetRecords = Program.fileCabinetService.FindByLastName(searchArguments[1][1..^1]); break;
+                case "DATEOFBIRTH": fileCabinetRecords = Program.fileCabinetService.FindByDateOfBirth(searchArguments[1][1..^1]); break;
                 default: Console.WriteLine("! Wrong search parameter."); return;
             }
 
@@ -209,14 +238,14 @@ namespace FileCabinetApp.CommandHandlers
             switch (format.ToUpper(CultureInfo.InvariantCulture))
             {
                 case "CSV":
-                    snapshot = fileCabinetService.MakeSnapshot();
+                    snapshot = Program.fileCabinetService.MakeSnapshot();
                     streamWriter = new StreamWriter(path);
                     snapshot.SaveToCsv(streamWriter);
                     streamWriter.Close();
                     Console.WriteLine($"All records are exported to file {path}");
                     break;
                 case "XML":
-                    snapshot = fileCabinetService.MakeSnapshot();
+                    snapshot = Program.fileCabinetService.MakeSnapshot();
                     streamWriter = new StreamWriter(path);
                     snapshot.SaveToXml(streamWriter);
                     streamWriter.Close();
@@ -224,186 +253,6 @@ namespace FileCabinetApp.CommandHandlers
                     break;
                 default: Console.WriteLine("Unsupported file format"); break;
             }
-        }
-
-        private static void InputRecordProperties(FileCabinetRecord record)
-        {
-            if (record is null)
-            {
-                throw new ArgumentNullException(nameof(record), "Record is null");
-            }
-
-            Func<string, Tuple<bool, string, string>> stringConverter;
-            Func<string, Tuple<bool, string, DateTime>> dateTimeConverter;
-            Func<string, Tuple<bool, string, short>> shortConverter;
-            Func<string, Tuple<bool, string, decimal>> decimalConverter;
-            Func<string, Tuple<bool, string, char>> charConverter;
-            Func<string, Tuple<bool, string>> firstNameValidator;
-            Func<string, Tuple<bool, string>> lastNameValidator;
-            Func<DateTime, Tuple<bool, string>> dateOfBirthValidator;
-            Func<short, Tuple<bool, string>> jobExperienceValidator;
-            Func<decimal, Tuple<bool, string>> monthlyPayValidator;
-            Func<char, Tuple<bool, string>> genderValidator;
-
-            stringConverter = ConvertToString;
-            dateTimeConverter = ConvertToDateTime;
-            shortConverter = ConvertToShort;
-            decimalConverter = ConvertToDecimal;
-            charConverter = ConvertToChar;
-            firstNameValidator = readInputValidator.ValidateString;
-            lastNameValidator = readInputValidator.ValidateString;
-            dateOfBirthValidator = readInputValidator.ValidateDateTime;
-            jobExperienceValidator = readInputValidator.ValidateShort;
-            monthlyPayValidator = readInputValidator.ValidateDecimal;
-            genderValidator = readInputValidator.ValidateChar;
-
-            Console.Write("First name: ");
-            record.FirstName = ReadInput(stringConverter, firstNameValidator);
-
-            Console.Write("Last name: ");
-            record.LastName = ReadInput(stringConverter, lastNameValidator);
-
-            Console.Write("Date of birth: ");
-            record.DateOfBirth = ReadInput(dateTimeConverter, dateOfBirthValidator);
-
-            Console.Write("Job experience (yrs): ");
-            record.JobExperience = ReadInput(shortConverter, jobExperienceValidator);
-
-            Console.Write("Monthly pay ($): ");
-            record.MonthlyPay = ReadInput(decimalConverter, monthlyPayValidator);
-
-            Console.Write("Gender (M/F): ");
-            record.Gender = ReadInput(charConverter, genderValidator);
-        }
-
-        private static T ReadInput<T>(Func<string, Tuple<bool, string, T>> converter, Func<T, Tuple<bool, string>> validator)
-        {
-            do
-            {
-                T value;
-
-                var input = Console.ReadLine();
-                var conversionResult = converter(input);
-
-                if (!conversionResult.Item1)
-                {
-                    Console.WriteLine($"Conversion failed: {conversionResult.Item2}. Please, correct your input.");
-                    continue;
-                }
-
-                value = conversionResult.Item3;
-
-                var validationResult = validator(value);
-                if (!validationResult.Item1)
-                {
-                    Console.WriteLine($"Validation failed: {validationResult.Item2}. Please, correct your input.");
-                    continue;
-                }
-
-                return value;
-            }
-            while (true);
-        }
-
-        private static Tuple<bool, string, string> ConvertToString(string inputString)
-        {
-            bool successful = !string.IsNullOrEmpty(inputString);
-            string failureMessage = string.Empty;
-
-            if (!successful)
-            {
-                inputString = string.Empty;
-                failureMessage = "Input string is null or empty";
-            }
-
-            return new Tuple<bool, string, string>(successful, failureMessage, inputString);
-        }
-
-        private static Tuple<bool, string, DateTime> ConvertToDateTime(string inputString)
-        {
-            bool successful = true;
-            DateTime result;
-            string failureMessage = string.Empty;
-
-            try
-            {
-                result = DateTime.Parse(inputString, CultureInfo.InvariantCulture);
-            }
-            catch (FormatException)
-            {
-                successful = false;
-                result = new();
-                failureMessage = "DateTime format must be day/month/year";
-            }
-
-            return new Tuple<bool, string, DateTime>(successful, failureMessage, result);
-        }
-
-        private static Tuple<bool, string, short> ConvertToShort(string inputString)
-        {
-            bool successful = true;
-            short result = 0;
-            string failureMessage = string.Empty;
-
-            try
-            {
-                result = short.Parse(inputString, CultureInfo.InvariantCulture);
-            }
-            catch (FormatException)
-            {
-                failureMessage = "Short gets wrong number format";
-                successful = false;
-            }
-            catch (OverflowException)
-            {
-                failureMessage = "Short number is overflown";
-                successful = false;
-            }
-
-            return new Tuple<bool, string, short>(successful, failureMessage, result);
-        }
-
-        private static Tuple<bool, string, decimal> ConvertToDecimal(string inputString)
-        {
-            bool successful = true;
-            decimal result = 0;
-            string failureMessage = string.Empty;
-
-            try
-            {
-                result = decimal.Parse(inputString, CultureInfo.InvariantCulture);
-            }
-            catch (FormatException)
-            {
-                failureMessage = "Decimal gets wrong number format";
-                successful = false;
-            }
-            catch (OverflowException)
-            {
-                failureMessage = "Decimal is overflown";
-                successful = false;
-            }
-
-            return new Tuple<bool, string, decimal>(successful, failureMessage, result);
-        }
-
-        private static Tuple<bool, string, char> ConvertToChar(string inputString)
-        {
-            bool successful = true;
-            char result = ' ';
-            string failureMessage = string.Empty;
-
-            if (inputString.Length > 1 || inputString.Length == 0)
-            {
-                failureMessage = "Char gets more than one symbol ore none";
-                successful = false;
-            }
-            else
-            {
-                result = char.ToUpper(char.Parse(inputString), CultureInfo.InvariantCulture);
-            }
-
-            return new Tuple<bool, string, char>(successful, failureMessage, result);
         }
 
         private static void Import(string parameters)
@@ -443,25 +292,25 @@ namespace FileCabinetApp.CommandHandlers
                 return;
             }
 
+            FileStream fileStream = new FileStream(path, FileMode.Open, FileAccess.Read);
+
             try
             {
-                fileStream = new FileStream(path, FileMode.Open, FileAccess.Read);
-
                 switch (dataType.ToUpperInvariant())
                 {
                     case "CSV":
-                        snapshot = fileCabinetService.MakeSnapshot();
+                        snapshot = Program.fileCabinetService.MakeSnapshot();
                         streamReader = new StreamReader(fileStream);
                         snapshot.LoadFromCsv(streamReader);
-                        fileCabinetService.Restore(snapshot);
+                        Program.fileCabinetService.Restore(snapshot);
                         Console.WriteLine($"{snapshot.Records.Count} records were imported from {path}");
                         streamReader.Close();
                         break;
                     case "XML":
-                        snapshot = fileCabinetService.MakeSnapshot();
+                        snapshot = Program.fileCabinetService.MakeSnapshot();
                         streamReader = new StreamReader(fileStream);
                         snapshot.LoadFromXml(streamReader);
-                        fileCabinetService.Restore(snapshot);
+                        Program.fileCabinetService.Restore(snapshot);
                         Console.WriteLine($"{snapshot.Records.Count} records were imported from {path}");
                         streamReader.Close();
                         break;
@@ -497,7 +346,7 @@ namespace FileCabinetApp.CommandHandlers
                 return;
             }
 
-            fileCabinetService.RemoveRecord(id);
+            Program.fileCabinetService.RemoveRecord(id);
         }
 
         private static void Purge(string parameters)
@@ -508,7 +357,7 @@ namespace FileCabinetApp.CommandHandlers
                 return;
             }
 
-            fileCabinetService.PurgeFile();
+            Program.fileCabinetService.PurgeFile();
         }
 
         private static void Stat(string parameters)
@@ -519,7 +368,7 @@ namespace FileCabinetApp.CommandHandlers
                 return;
             }
 
-            Tuple<int, int> countDeleted = fileCabinetService.GetStat();
+            Tuple<int, int> countDeleted = Program.fileCabinetService.GetStat();
             Console.WriteLine($"{countDeleted.Item1} recods in list, {countDeleted.Item2} deleted.");
         }
     }
