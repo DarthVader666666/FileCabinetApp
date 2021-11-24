@@ -55,8 +55,7 @@ namespace FileCabinetGenerator
         /// <param name="args">Command line args.</param>
         public static void Main(string[] args)
         {
-            //args = new string[] { "-t", "xml", "-o", "d:\\file.xml", "-a", "20", "-i", "1" };
-
+            // args = new string[] { "-t", "xml", "-o", "d:\\file.xml", "-a", "20", "-i", "1" };
             if (args is null)
             {
                 throw new ArgumentNullException($"{args} is null");

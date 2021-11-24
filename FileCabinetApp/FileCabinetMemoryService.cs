@@ -39,6 +39,11 @@ namespace FileCabinetApp
         /// <returns>Last record's id.</returns>
         public int GetMaxId()
         {
+            if (this.list.Count == 0)
+            {
+                return 0;
+            }
+
             int maxId = this.list[0].Id;
 
             foreach (var record in this.list)
@@ -199,6 +204,8 @@ namespace FileCabinetApp
                 throw new ArgumentNullException($"{snapshot} is null.");
             }
 
+            this.GetRecords();
+
             int index = -1;
 
             foreach (FileCabinetRecord record in snapshot.Records)
@@ -214,6 +221,8 @@ namespace FileCabinetApp
                     this.list.Add(record);
                 }
             }
+
+            this.FillAllDictionaries();
         }
 
         /// <summary>
@@ -223,8 +232,9 @@ namespace FileCabinetApp
         public void RemoveRecord(int id)
         {
             FileCabinetRecord record;
+            record = this.list.Find(i => i.Id.Equals(id));
 
-            if ((record = this.list.Find(i => i.Id.Equals(id))) is null)
+            if (record is null)
             {
                 Console.WriteLine("Specified record doesn't exist. Can't remove.");
                 return;
@@ -256,6 +266,22 @@ namespace FileCabinetApp
         public void PurgeFile()
         {
             // Method intentionally left empty.
+        }
+
+        private void FillAllDictionaries()
+        {
+            string dateOfBirthKey;
+            this.firstNameDictionary.Clear();
+            this.lastNameDictionary.Clear();
+            this.dateOfBirthDictionary.Clear();
+
+            foreach (FileCabinetRecord record in this.list)
+            {
+                this.AddRecordToFirstNameDictionary(record, record.FirstName);
+                this.AddRecordToLastNameDictionary(record, record.LastName);
+                dateOfBirthKey = $"{record.DateOfBirth.Year}-{record.DateOfBirth.Month}-{record.DateOfBirth.Day}";
+                this.AddRecordToDateOfBirthDictionary(record, dateOfBirthKey);
+            }
         }
 
         private void AddRecordToFirstNameDictionary(FileCabinetRecord record, string firstNameKey)

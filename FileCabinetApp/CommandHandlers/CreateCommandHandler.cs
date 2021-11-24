@@ -6,16 +6,43 @@ using System.Threading.Tasks;
 
 namespace FileCabinetApp.CommandHandlers
 {
+    /// <summary>
+    /// Handles create command.
+    /// </summary>
     public class CreateCommandHandler : CommandHandlerBase
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CreateCommandHandler"/> class.
+        /// </summary>
+        public CreateCommandHandler()
+        {
+            CreateRecordEvent += Program.fileCabinetService.CreateRecord;
+        }
+
         /// <summary>
         /// Create record handler
         /// </summary>
         private static event EventHandler<FileCabinetEventArgs> CreateRecordEvent;
 
-        public CreateCommandHandler()
+        /// <summary>
+        /// Calls method or next handler.
+        /// </summary>
+        /// <param name="request">Provides command and parameters.</param>
+        public override void Handle(AddCommandRequest request)
         {
-            CreateRecordEvent += Program.fileCabinetService.CreateRecord;
+            if (request is null)
+            {
+                throw new ArgumentNullException($"{request} is null");
+            }
+
+            if (request.Command.Equals("create", StringComparison.InvariantCultureIgnoreCase))
+            {
+                Create(request.Parameters);
+            }
+            else
+            {
+                this.NextHandler.Handle(request);
+            }
         }
 
         private static void Create(string parameters)
@@ -23,7 +50,6 @@ namespace FileCabinetApp.CommandHandlers
             if (parameters.Length > 0)
             {
                 Console.WriteLine("Unrecognized parameter after command 'create'");
-                
                 return;
             }
 
@@ -33,20 +59,6 @@ namespace FileCabinetApp.CommandHandlers
             FileCabinetEventArgs recordArgs = new FileCabinetEventArgs(record);
             CreateRecordEvent(null, recordArgs);
             Console.WriteLine($"Record #{record.Id} is created.");
-        }
-
-        public void Handle(AddCommandRequest request)
-        {
-            if (request is null)
-            {
-
-                return;
-            }
-
-            if (request.Command.Equals("create", StringComparison.InvariantCultureIgnoreCase))
-            {
-                Create(request.Parameters);
-            }
         }
     }
 }

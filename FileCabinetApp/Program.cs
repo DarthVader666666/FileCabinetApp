@@ -10,6 +10,12 @@ namespace FileCabinetApp
     /// </summary>
     public static class Program
     {
+        /// <summary>
+        /// file cabinet instance.
+        /// </summary>
+        public static IFileCabinetService fileCabinetService = new FileCabinetMemoryService(new DefaultValidator());
+        public static bool isRunning = true;
+
         private const string DeveloperName = "Vadzim Rumiantsau";
         private const string HintMessage = "Enter your command, or enter 'help' to get help.";
         private const string StorageDbFilePath = "cabinet-records.db";
@@ -19,10 +25,6 @@ namespace FileCabinetApp
         private const string MemoryStorageMessage = "Using memory storage.";
 
         private static IReadInputValidator readInputValidator = new DefaultValidator();
-
-        public static IFileCabinetService fileCabinetService = new FileCabinetMemoryService(new DefaultValidator());
-
-        public static bool isRunning = true;
 
         /// <summary>
         /// Provides user interface and calls command handlers.
@@ -35,8 +37,7 @@ namespace FileCabinetApp
                 throw new ArgumentNullException($"{args} is null");
             }
 
-            //args = new string[] { "-s", "file" };
-
+            // args = new string[] { "-s", "file" };
             if (args.Length == 1)
             {
                 args = args[0].Split('=');
@@ -82,6 +83,8 @@ namespace FileCabinetApp
             Console.WriteLine(HintMessage);
             Console.WriteLine();
 
+            var handler = CreateCommandHandlers();
+
             do
             {
                 Console.Write("> ");
@@ -98,12 +101,15 @@ namespace FileCabinetApp
                 const int parametersIndex = 1;
                 string parameters = inputs.Length > 1 ? inputs[parametersIndex] : string.Empty;
 
-                CommandHandlers.ExitCommandHandler handler = CreateCommandHandlers();
                 handler.Handle(new CommandHandlers.AddCommandRequest() { Command = command, Parameters = parameters });
             }
             while (isRunning);
         }
 
+        /// <summary>
+        /// Record parameters input.
+        /// </summary>
+        /// <param name="record">File record instance.</param>
         public static void InputRecordProperties(FileCabinetRecord record)
         {
             if (record is null)
@@ -156,19 +162,30 @@ namespace FileCabinetApp
 
         private static CommandHandlers.ICommandHandler CreateCommandHandlers()
         {
-            var createHandler = new CommandHandlers.CreateCommandHandler();
+            var helpHandler = new CommandHandlers.HelpCommandHandler();
+            var statHandler = new CommandHandlers.StatCommandHandler();
             var listHandler = new CommandHandlers.ListCommandHandler();
+            var createHandler = new CommandHandlers.CreateCommandHandler();
+            var findHandler = new CommandHandlers.FindCommandHandler();
+            var editHandler = new CommandHandlers.EditCommandHandler();
+            var importHandler = new CommandHandlers.ImportCommandHandler();
+            var exportHandler = new CommandHandlers.ExportCommandHandler();
+            var removeHandler = new CommandHandlers.RemoveCommandHandler();
+            var purgeHandler = new CommandHandlers.PurgeCommandHandler();
+            var exitHandler = new CommandHandlers.ExitCommandHandler();
 
+            helpHandler.SetNext(statHandler);
+            statHandler.SetNext(listHandler);
             listHandler.SetNext(createHandler);
-            createHandler.SetNext(listHandler);
+            createHandler.SetNext(findHandler);
+            findHandler.SetNext(editHandler);
+            editHandler.SetNext(importHandler);
+            importHandler.SetNext(exportHandler);
+            exportHandler.SetNext(removeHandler);
+            removeHandler.SetNext(purgeHandler);
+            purgeHandler.SetNext(exitHandler);
 
-            return null;
-        }
-
-        private static void PrintMissedCommandInfo(string command)
-        {
-            Console.WriteLine($"There is no '{command}' command.");
-            Console.WriteLine();
+            return helpHandler;
         }
 
         private static T ReadInput<T>(Func<string, Tuple<bool, string, T>> converter, Func<T, Tuple<bool, string>> validator)

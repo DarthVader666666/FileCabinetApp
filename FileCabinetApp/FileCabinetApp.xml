@@ -4,6 +4,207 @@
         <name>FileCabinetApp</name>
     </assembly>
     <members>
+        <member name="T:FileCabinetApp.CommandHandlers.AddCommandRequest">
+            <summary>
+            Provides command line command and parameters.
+            </summary>
+        </member>
+        <member name="P:FileCabinetApp.CommandHandlers.AddCommandRequest.Command">
+            <summary>
+            Gets or sets Command to execute.
+            </summary>
+            <value>
+            </value>
+        </member>
+        <member name="P:FileCabinetApp.CommandHandlers.AddCommandRequest.Parameters">
+            <summary>
+            Gets or sets parameters of the command.
+            </summary>
+            <value>
+            </value>
+        </member>
+        <member name="T:FileCabinetApp.CommandHandlers.CommandHandlerBase">
+            <summary>
+            CommandHandler Base Class.
+            </summary>
+        </member>
+        <member name="P:FileCabinetApp.CommandHandlers.CommandHandlerBase.NextHandler">
+            <summary>
+            Gets nextHandler.
+            </summary>
+            <value>
+            </value>
+        </member>
+        <member name="M:FileCabinetApp.CommandHandlers.CommandHandlerBase.SetNext(FileCabinetApp.CommandHandlers.ICommandHandler)">
+            <summary>
+            Sets next handler reference.
+            </summary>
+            <param name="handler">Next handler.</param>
+        </member>
+        <member name="M:FileCabinetApp.CommandHandlers.CommandHandlerBase.Handle(FileCabinetApp.CommandHandlers.AddCommandRequest)">
+            <summary>
+            Calls method or next handler.
+            </summary>
+            <param name="request">Provides command and parameters.</param>
+        </member>
+        <member name="T:FileCabinetApp.CommandHandlers.CreateCommandHandler">
+            <summary>
+            Handles create command.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.CommandHandlers.CreateCommandHandler.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:FileCabinetApp.CommandHandlers.CreateCommandHandler"/> class.
+            </summary>
+        </member>
+        <member name="E:FileCabinetApp.CommandHandlers.CreateCommandHandler.CreateRecordEvent">
+            <summary>
+            Create record handler
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.CommandHandlers.CreateCommandHandler.Handle(FileCabinetApp.CommandHandlers.AddCommandRequest)">
+            <summary>
+            Calls method or next handler.
+            </summary>
+            <param name="request">Provides command and parameters.</param>
+        </member>
+        <member name="T:FileCabinetApp.CommandHandlers.EditCommandHandler">
+            <summary>
+            Handles edit command.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.CommandHandlers.EditCommandHandler.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:FileCabinetApp.CommandHandlers.EditCommandHandler"/> class.
+            </summary>
+        </member>
+        <member name="E:FileCabinetApp.CommandHandlers.EditCommandHandler.EditRecordEvent">
+            <summary>
+            Edit record handler
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.CommandHandlers.EditCommandHandler.Handle(FileCabinetApp.CommandHandlers.AddCommandRequest)">
+            <summary>
+            Calls edit method or next handler.
+            </summary>
+            <param name="request">Provides command and parameters.</param>
+        </member>
+        <member name="T:FileCabinetApp.CommandHandlers.ExitCommandHandler">
+            <summary>
+            Handles exit command.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.CommandHandlers.ExitCommandHandler.Handle(FileCabinetApp.CommandHandlers.AddCommandRequest)">
+            <summary>
+            Calls exit method.
+            </summary>
+            <param name="request">Provides command and parameters.</param>
+        </member>
+        <member name="T:FileCabinetApp.CommandHandlers.ExportCommandHandler">
+            <summary>
+            Handles export command.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.CommandHandlers.ExportCommandHandler.Handle(FileCabinetApp.CommandHandlers.AddCommandRequest)">
+            <summary>
+            Calls export method or next handler.
+            </summary>
+            <param name="request">Provides command and parameters.</param>
+        </member>
+        <member name="T:FileCabinetApp.CommandHandlers.FindCommandHandler">
+            <summary>
+            Handles find command.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.CommandHandlers.FindCommandHandler.Handle(FileCabinetApp.CommandHandlers.AddCommandRequest)">
+            <summary>
+            Calls find method or next handler.
+            </summary>
+            <param name="request">Provides command and parameters.</param>
+        </member>
+        <member name="T:FileCabinetApp.CommandHandlers.HelpCommandHandler">
+            <summary>
+            Handles help command.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.CommandHandlers.HelpCommandHandler.Handle(FileCabinetApp.CommandHandlers.AddCommandRequest)">
+            <summary>
+            Calls method or next handler.
+            </summary>
+            <param name="request">Provides command and parameters.</param>
+        </member>
+        <member name="T:FileCabinetApp.CommandHandlers.ICommandHandler">
+            <summary>
+            Defines command handler methods.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.CommandHandlers.ICommandHandler.SetNext(FileCabinetApp.CommandHandlers.ICommandHandler)">
+            <summary>
+            Sets next command handler.
+            </summary>
+            <param name="handler">next handler.</param>
+        </member>
+        <member name="M:FileCabinetApp.CommandHandlers.ICommandHandler.Handle(FileCabinetApp.CommandHandlers.AddCommandRequest)">
+            <summary>
+            Calls method or next handler.
+            </summary>
+            <param name="request">Provides command and parameters.</param>
+        </member>
+        <member name="T:FileCabinetApp.CommandHandlers.ImportCommandHandler">
+            <summary>
+            Handles import command.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.CommandHandlers.ImportCommandHandler.Handle(FileCabinetApp.CommandHandlers.AddCommandRequest)">
+            <summary>
+            Calls import method or next handler.
+            </summary>
+            <param name="request">Provides command and parameters.</param>
+        </member>
+        <member name="T:FileCabinetApp.CommandHandlers.ListCommandHandler">
+            <summary>
+            Handles list command.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.CommandHandlers.ListCommandHandler.Handle(FileCabinetApp.CommandHandlers.AddCommandRequest)">
+            <summary>
+            Calls list method or next handler.
+            </summary>
+            <param name="request">Provides command and parameters.</param>
+        </member>
+        <member name="T:FileCabinetApp.CommandHandlers.PurgeCommandHandler">
+            <summary>
+            Handles purge command.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.CommandHandlers.PurgeCommandHandler.Handle(FileCabinetApp.CommandHandlers.AddCommandRequest)">
+            <summary>
+            Calls purge method or next handler.
+            </summary>
+            <param name="request">Provides command and parameters.</param>
+        </member>
+        <member name="T:FileCabinetApp.CommandHandlers.RemoveCommandHandler">
+            <summary>
+            Handles remove command.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.CommandHandlers.RemoveCommandHandler.Handle(FileCabinetApp.CommandHandlers.AddCommandRequest)">
+            <summary>
+            Calls remove method or next handler.
+            </summary>
+            <param name="request">Provides command and parameters.</param>
+        </member>
+        <member name="T:FileCabinetApp.CommandHandlers.StatCommandHandler">
+            <summary>
+            Handles stat command.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.CommandHandlers.StatCommandHandler.Handle(FileCabinetApp.CommandHandlers.AddCommandRequest)">
+            <summary>
+            Calls stat method or next handler.
+            </summary>
+            <param name="request">Provides command and parameters.</param>
+        </member>
         <member name="T:FileCabinetApp.CustomValidator">
             <summary>
             Class provides custom validation algorythm.
@@ -724,19 +925,9 @@
             Class which operates FileCabinetApp application.
             </summary>
         </member>
-        <member name="F:FileCabinetApp.Program.fileStream">
+        <member name="F:FileCabinetApp.Program.fileCabinetService">
             <summary>
-            Initializes FIleCabinetFilesystemService instance.
-            </summary>
-        </member>
-        <member name="E:FileCabinetApp.Program.CreateRecordEvent">
-            <summary>
-            Create record handler
-            </summary>
-        </member>
-        <member name="E:FileCabinetApp.Program.EditRecordEvent">
-            <summary>
-            Edit record handler
+            file cabinet instance.
             </summary>
         </member>
         <member name="M:FileCabinetApp.Program.Main(System.String[])">
@@ -744,6 +935,12 @@
             Provides user interface and calls command handlers.
             </summary>
             <param name="args">Command line args.</param>
+        </member>
+        <member name="M:FileCabinetApp.Program.InputRecordProperties(FileCabinetApp.FileCabinetRecord)">
+            <summary>
+            Record parameters input.
+            </summary>
+            <param name="record">File record instance.</param>
         </member>
     </members>
 </doc>
