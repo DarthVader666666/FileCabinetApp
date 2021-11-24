@@ -76,7 +76,7 @@ namespace FileCabinetApp
             FileCabinetRecord record = this.validator.ValidateParameters(e);
 
             FileStream fileStream = new FileStream(this.FilePath, FileMode.Append, FileAccess.Write);
-            this.WriteRecordToFile(record, fileStream);
+            WriteRecordToFile(record, fileStream);
             fileStream.Close();
 
             this.AddRecordToFirstNameDictionary(record, record.FirstName);
@@ -104,7 +104,7 @@ namespace FileCabinetApp
 
             while (fileStream.Position < fileStream.Length)
             {
-                if (!this.IsDeleted(fileStream.Position, fileStream))
+                if (!IsDeleted(fileStream.Position, fileStream))
                 {
                     fileStream.Seek(sizeof(short), SeekOrigin.Current);
                     record = new FileCabinetRecord();
@@ -206,14 +206,14 @@ namespace FileCabinetApp
             FileStream fileStream = new FileStream(this.FilePath, FileMode.Open, FileAccess.ReadWrite);
             long offset;
 
-            if ((offset = this.SeekRecordPosition(recordArgs.Id, fileStream)) == -1 || recordArgs.Id < 1)
+            if ((offset = SeekRecordPosition(recordArgs.Id, fileStream)) == -1 || recordArgs.Id < 1)
             {
                 Console.WriteLine($"Record #{recordArgs.Id} not found");
                 fileStream.Close();
                 return;
             }
 
-            if (this.IsDeleted(offset, fileStream))
+            if (IsDeleted(offset, fileStream))
             {
                 Console.WriteLine($"Record #{recordArgs.Id} marked as Deleted. Can't edit.");
                 fileStream.Close();
@@ -236,7 +236,7 @@ namespace FileCabinetApp
             oldRecord.Gender = record.Gender;
 
             fileStream.Seek(offset, SeekOrigin.Begin);
-            this.WriteRecordToFile(record, fileStream);
+            WriteRecordToFile(record, fileStream);
             fileStream.Close();
 
             this.AddRecordToFirstNameDictionary(record, record.FirstName);
@@ -340,7 +340,7 @@ namespace FileCabinetApp
 
             foreach (FileCabinetRecord record in this.list)
             {
-                if ((offset = this.SeekRecordPosition(record.Id, fileStream)) == -1)
+                if ((offset = SeekRecordPosition(record.Id, fileStream)) == -1)
                 {
                     fileStream.Seek(0, SeekOrigin.End);
                 }
@@ -349,7 +349,7 @@ namespace FileCabinetApp
                     fileStream.Seek(offset, SeekOrigin.Begin);
                 }
 
-                this.WriteRecordToFile(record, fileStream);
+                WriteRecordToFile(record, fileStream);
             }
 
             fileStream.Close();
@@ -364,7 +364,7 @@ namespace FileCabinetApp
         public void RemoveRecord(int id)
         {
             FileStream fileStream = new FileStream(this.FilePath, FileMode.Open, FileAccess.ReadWrite);
-            long position = this.SeekRecordPosition(id, fileStream);
+            long position = SeekRecordPosition(id, fileStream);
 
             if (position == -1)
             {
@@ -373,7 +373,7 @@ namespace FileCabinetApp
                 return;
             }
 
-            this.SetIsDeletedBit(position, fileStream);
+            SetIsDeletedBit(position, fileStream);
             fileStream.Close();
 
             FileCabinetRecord record = this.list.Find(i => i.Id.Equals(id));
@@ -412,7 +412,7 @@ namespace FileCabinetApp
 
             foreach (FileCabinetRecord record in this.list)
             {
-                this.WriteRecordToFile(record, fileStream);
+                WriteRecordToFile(record, fileStream);
             }
 
             fileStream.Close();
@@ -420,7 +420,7 @@ namespace FileCabinetApp
             Console.WriteLine($"Data file processing is completed: {deleted} of {this.RecordsCount} records were purged.");
         }
 
-        private bool IsDeleted(long position, FileStream fileStream)
+        private static bool IsDeleted(long position, FileStream fileStream)
         {
             fileStream.Position = position;
             byte[] buffer = new byte[1];
@@ -438,7 +438,7 @@ namespace FileCabinetApp
             return ((buffer[0] >> 2) & 1) == 1;
         }
 
-        private long SeekRecordPosition(int id, FileStream fileStream)
+        private static long SeekRecordPosition(int id, FileStream fileStream)
         {
             fileStream.Position = 0;
             byte[] buffer;
@@ -465,7 +465,7 @@ namespace FileCabinetApp
             return -1;
         }
 
-        private void SetIsDeletedBit(long position, FileStream fileStream)
+        private static void SetIsDeletedBit(long position, FileStream fileStream)
         {
             fileStream.Position = position;
             byte[] reserved = new byte[1];
@@ -475,28 +475,7 @@ namespace FileCabinetApp
             fileStream.Write(reserved);
         }
 
-        private int CountDeleted()
-        {
-            int count = 0;
-            FileStream fileStream = new FileStream(this.FilePath, FileMode.Open, FileAccess.Read);
-            fileStream.Seek(0, SeekOrigin.Begin);
-
-            while (fileStream.Position < fileStream.Length)
-            {
-                if (this.IsDeleted(fileStream.Position, fileStream))
-                {
-                    count++;
-                }
-
-                fileStream.Seek(BufferSize, SeekOrigin.Current);
-            }
-
-            fileStream.Close();
-
-            return count;
-        }
-
-        private void WriteRecordToFile(FileCabinetRecord record, FileStream fileStream)
+        private static void WriteRecordToFile(FileCabinetRecord record, FileStream fileStream)
         {
             Encoding unicode = Encoding.Unicode;
             byte[] byteArray = new byte[BufferSize];
@@ -549,6 +528,27 @@ namespace FileCabinetApp
                 fileStream.Close();
                 throw new ArgumentException("buffer overflown");
             }
+        }
+
+        private int CountDeleted()
+        {
+            int count = 0;
+            FileStream fileStream = new FileStream(this.FilePath, FileMode.Open, FileAccess.Read);
+            fileStream.Seek(0, SeekOrigin.Begin);
+
+            while (fileStream.Position < fileStream.Length)
+            {
+                if (IsDeleted(fileStream.Position, fileStream))
+                {
+                    count++;
+                }
+
+                fileStream.Seek(BufferSize, SeekOrigin.Current);
+            }
+
+            fileStream.Close();
+
+            return count;
         }
 
         private void FillAllDictionaries()
