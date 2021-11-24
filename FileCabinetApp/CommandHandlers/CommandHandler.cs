@@ -1,0 +1,526 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace FileCabinetApp.CommandHandlers
+{
+    public class CommandHandler: CommandHandlerBase
+    {
+        public void Handle(AppCommandRequest request)
+        { 
+            
+        }
+
+        private static void PrintHelp(string parameters)
+        {
+            if (!string.IsNullOrEmpty(parameters))
+            {
+                int index = Array.FindIndex(HelpMessages, 0, HelpMessages.Length, i => string.Equals(i[CommandHelpIndex], parameters, StringComparison.InvariantCultureIgnoreCase));
+                if (index >= 0)
+                {
+                    Console.WriteLine(HelpMessages[index][ExplanationHelpIndex]);
+                }
+                else
+                {
+                    Console.WriteLine($"There is no explanation for '{parameters}' command.");
+                }
+            }
+            else
+            {
+                Console.WriteLine("Available commands:");
+
+                foreach (string[] helpMessage in HelpMessages)
+                {
+                    Console.WriteLine("\t{0}\t- {1}", helpMessage[CommandHelpIndex], helpMessage[DescriptionHelpIndex]);
+                }
+            }
+
+            Console.WriteLine();
+        }
+
+        private static void Exit(string parameters)
+        {
+            Console.WriteLine("Exiting an application...");
+
+            if (fileStream != null)
+            {
+                fileStream.Close();
+            }
+
+            isRunning = false;
+        }
+
+        private static void Create(string parameters)
+        {
+            FileCabinetRecord record = new FileCabinetRecord();
+            InputRecordProperties(record);
+            record.Id = fileCabinetService.GetMaxId() + 1;
+            FileCabinetEventArgs recordArgs = new FileCabinetEventArgs(record);
+            CreateRecordEvent(null, recordArgs);
+            Console.WriteLine($"Record #{record.Id} is created.");
+        }
+
+        private static void List(string parameters)
+        {
+            ReadOnlyCollection<FileCabinetRecord> recordList = fileCabinetService.GetRecords();
+
+            if (recordList.Count == 0)
+            {
+                Console.WriteLine("Record list is empty.");
+                return;
+            }
+
+            foreach (FileCabinetRecord fileCabinetRecord in recordList)
+            {
+                Console.WriteLine($"#{fileCabinetRecord.Id}, {fileCabinetRecord.FirstName}, {fileCabinetRecord.LastName}, " +
+                    $"{fileCabinetRecord.DateOfBirth.Year}-{fileCabinetRecord.DateOfBirth.Month}-{fileCabinetRecord.DateOfBirth.Day}, " +
+                    $"{fileCabinetRecord.JobExperience}, " + string.Format(CultureInfo.InvariantCulture, "{0:F2}", fileCabinetRecord.MonthlyPay) +
+                    $", {fileCabinetRecord.Gender}");
+            }
+        }
+
+        private static void Edit(string parameters)
+        {
+            if (string.IsNullOrEmpty(parameters))
+            {
+                Console.WriteLine("No number input.");
+                return;
+            }
+
+            FileCabinetRecord record = new FileCabinetRecord();
+            record.Id = int.Parse(parameters, CultureInfo.InvariantCulture);
+            int listCount = fileCabinetService.GetStat().Item1;
+
+            if (record.Id > listCount || record.Id < 1)
+            {
+                Console.WriteLine($"#{record.Id} record not found");
+                return;
+            }
+
+            InputRecordProperties(record);
+            FileCabinetEventArgs recordArgs = new FileCabinetEventArgs(record);
+            EditRecordEvent(null, recordArgs);
+        }
+
+        private static void Find(string parameters)
+        {
+            if (parameters is null)
+            {
+                throw new ArgumentException("Parameters argument is null");
+            }
+
+            string[] searchArguments = parameters.Split(' ');
+            ReadOnlyCollection<FileCabinetRecord> fileCabinetRecords;
+            searchArguments[0] = searchArguments[0].ToUpperInvariant();
+
+            if (searchArguments[1][0] != '"' && searchArguments[1][^1] != '"')
+            {
+                Console.WriteLine("! Search value must be in quotes. Abort find command.");
+                return;
+            }
+
+            switch (searchArguments[0])
+            {
+                case "FIRSTNAME": fileCabinetRecords = fileCabinetService.FindByFirstName(searchArguments[1][1..^1]); break;
+                case "LASTNAME": fileCabinetRecords = fileCabinetService.FindByLastName(searchArguments[1][1..^1]); break;
+                case "DATEOFBIRTH": fileCabinetRecords = fileCabinetService.FindByDateOfBirth(searchArguments[1][1..^1]); break;
+                default: Console.WriteLine("! Wrong search parameter."); return;
+            }
+
+            foreach (FileCabinetRecord record in fileCabinetRecords)
+            {
+                Console.WriteLine($"#{record.Id}, {record.FirstName}, {record.LastName}, " +
+                    $"{record.DateOfBirth.Year}-{record.DateOfBirth.Month}-{record.DateOfBirth.Day}, " +
+                    $"{record.JobExperience}, {record.MonthlyPay}, {record.Gender}");
+            }
+        }
+
+        private static void Export(string parameters)
+        {
+            if (parameters is null)
+            {
+                throw new ArgumentException("Parameters argument is null");
+            }
+
+            string[] exportParams = parameters.Split(' ');
+            char unswer = ' ';
+            bool run;
+
+            if (File.Exists(exportParams[1]))
+            {
+                Console.WriteLine($"File exists - rewrite {exportParams[1]}? [Y/n]");
+                do
+                {
+                    try
+                    {
+                        unswer = char.ToUpper(char.Parse(Console.ReadLine()), CultureInfo.InvariantCulture);
+                    }
+                    catch (FormatException)
+                    {
+                        unswer = ' ';
+                    }
+
+                    if (!(unswer == 'Y' || unswer == 'N'))
+                    {
+                        Console.WriteLine("Type Y or N");
+                        run = true;
+                    }
+                    else
+                    {
+                        run = false;
+                    }
+                }
+                while (run);
+            }
+            else
+            {
+                StreamWriter stream = new StreamWriter(exportParams[1]);
+                stream.Close();
+            }
+
+            switch (unswer)
+            {
+                case 'Y': ExportToFile(exportParams[0], exportParams[1]); break;
+                case 'N': break;
+                default: ExportToFile(exportParams[0], exportParams[1]); break;
+            }
+        }
+
+        private static void ExportToFile(string format, string path)
+        {
+            FileStream file;
+            FileCabinetServiceSnapshot snapshot;
+            StreamWriter streamWriter;
+
+            try
+            {
+                file = new FileStream(path, FileMode.Open);
+                file.Dispose();
+                file.Close();
+            }
+            catch (UnauthorizedAccessException)
+            {
+                Console.WriteLine($"Export failed: can't open file {path}");
+                return;
+            }
+
+            switch (format.ToUpper(CultureInfo.InvariantCulture))
+            {
+                case "CSV":
+                    snapshot = fileCabinetService.MakeSnapshot();
+                    streamWriter = new StreamWriter(path);
+                    snapshot.SaveToCsv(streamWriter);
+                    streamWriter.Close();
+                    Console.WriteLine($"All records are exported to file {path}");
+                    break;
+                case "XML":
+                    snapshot = fileCabinetService.MakeSnapshot();
+                    streamWriter = new StreamWriter(path);
+                    snapshot.SaveToXml(streamWriter);
+                    streamWriter.Close();
+                    Console.WriteLine($"All records are exported to file {path}");
+                    break;
+                default: Console.WriteLine("Unsupported file format"); break;
+            }
+        }
+
+        private static void InputRecordProperties(FileCabinetRecord record)
+        {
+            if (record is null)
+            {
+                throw new ArgumentNullException(nameof(record), "Record is null");
+            }
+
+            Func<string, Tuple<bool, string, string>> stringConverter;
+            Func<string, Tuple<bool, string, DateTime>> dateTimeConverter;
+            Func<string, Tuple<bool, string, short>> shortConverter;
+            Func<string, Tuple<bool, string, decimal>> decimalConverter;
+            Func<string, Tuple<bool, string, char>> charConverter;
+            Func<string, Tuple<bool, string>> firstNameValidator;
+            Func<string, Tuple<bool, string>> lastNameValidator;
+            Func<DateTime, Tuple<bool, string>> dateOfBirthValidator;
+            Func<short, Tuple<bool, string>> jobExperienceValidator;
+            Func<decimal, Tuple<bool, string>> monthlyPayValidator;
+            Func<char, Tuple<bool, string>> genderValidator;
+
+            stringConverter = ConvertToString;
+            dateTimeConverter = ConvertToDateTime;
+            shortConverter = ConvertToShort;
+            decimalConverter = ConvertToDecimal;
+            charConverter = ConvertToChar;
+            firstNameValidator = readInputValidator.ValidateString;
+            lastNameValidator = readInputValidator.ValidateString;
+            dateOfBirthValidator = readInputValidator.ValidateDateTime;
+            jobExperienceValidator = readInputValidator.ValidateShort;
+            monthlyPayValidator = readInputValidator.ValidateDecimal;
+            genderValidator = readInputValidator.ValidateChar;
+
+            Console.Write("First name: ");
+            record.FirstName = ReadInput(stringConverter, firstNameValidator);
+
+            Console.Write("Last name: ");
+            record.LastName = ReadInput(stringConverter, lastNameValidator);
+
+            Console.Write("Date of birth: ");
+            record.DateOfBirth = ReadInput(dateTimeConverter, dateOfBirthValidator);
+
+            Console.Write("Job experience (yrs): ");
+            record.JobExperience = ReadInput(shortConverter, jobExperienceValidator);
+
+            Console.Write("Monthly pay ($): ");
+            record.MonthlyPay = ReadInput(decimalConverter, monthlyPayValidator);
+
+            Console.Write("Gender (M/F): ");
+            record.Gender = ReadInput(charConverter, genderValidator);
+        }
+
+        private static T ReadInput<T>(Func<string, Tuple<bool, string, T>> converter, Func<T, Tuple<bool, string>> validator)
+        {
+            do
+            {
+                T value;
+
+                var input = Console.ReadLine();
+                var conversionResult = converter(input);
+
+                if (!conversionResult.Item1)
+                {
+                    Console.WriteLine($"Conversion failed: {conversionResult.Item2}. Please, correct your input.");
+                    continue;
+                }
+
+                value = conversionResult.Item3;
+
+                var validationResult = validator(value);
+                if (!validationResult.Item1)
+                {
+                    Console.WriteLine($"Validation failed: {validationResult.Item2}. Please, correct your input.");
+                    continue;
+                }
+
+                return value;
+            }
+            while (true);
+        }
+
+        private static Tuple<bool, string, string> ConvertToString(string inputString)
+        {
+            bool successful = !string.IsNullOrEmpty(inputString);
+            string failureMessage = string.Empty;
+
+            if (!successful)
+            {
+                inputString = string.Empty;
+                failureMessage = "Input string is null or empty";
+            }
+
+            return new Tuple<bool, string, string>(successful, failureMessage, inputString);
+        }
+
+        private static Tuple<bool, string, DateTime> ConvertToDateTime(string inputString)
+        {
+            bool successful = true;
+            DateTime result;
+            string failureMessage = string.Empty;
+
+            try
+            {
+                result = DateTime.Parse(inputString, CultureInfo.InvariantCulture);
+            }
+            catch (FormatException)
+            {
+                successful = false;
+                result = new();
+                failureMessage = "DateTime format must be day/month/year";
+            }
+
+            return new Tuple<bool, string, DateTime>(successful, failureMessage, result);
+        }
+
+        private static Tuple<bool, string, short> ConvertToShort(string inputString)
+        {
+            bool successful = true;
+            short result = 0;
+            string failureMessage = string.Empty;
+
+            try
+            {
+                result = short.Parse(inputString, CultureInfo.InvariantCulture);
+            }
+            catch (FormatException)
+            {
+                failureMessage = "Short gets wrong number format";
+                successful = false;
+            }
+            catch (OverflowException)
+            {
+                failureMessage = "Short number is overflown";
+                successful = false;
+            }
+
+            return new Tuple<bool, string, short>(successful, failureMessage, result);
+        }
+
+        private static Tuple<bool, string, decimal> ConvertToDecimal(string inputString)
+        {
+            bool successful = true;
+            decimal result = 0;
+            string failureMessage = string.Empty;
+
+            try
+            {
+                result = decimal.Parse(inputString, CultureInfo.InvariantCulture);
+            }
+            catch (FormatException)
+            {
+                failureMessage = "Decimal gets wrong number format";
+                successful = false;
+            }
+            catch (OverflowException)
+            {
+                failureMessage = "Decimal is overflown";
+                successful = false;
+            }
+
+            return new Tuple<bool, string, decimal>(successful, failureMessage, result);
+        }
+
+        private static Tuple<bool, string, char> ConvertToChar(string inputString)
+        {
+            bool successful = true;
+            char result = ' ';
+            string failureMessage = string.Empty;
+
+            if (inputString.Length > 1 || inputString.Length == 0)
+            {
+                failureMessage = "Char gets more than one symbol ore none";
+                successful = false;
+            }
+            else
+            {
+                result = char.ToUpper(char.Parse(inputString), CultureInfo.InvariantCulture);
+            }
+
+            return new Tuple<bool, string, char>(successful, failureMessage, result);
+        }
+
+        private static void Import(string parameters)
+        {
+            if (parameters is null)
+            {
+                throw new ArgumentException("Parameters argument is null");
+            }
+
+            FileCabinetServiceSnapshot snapshot;
+            StreamReader streamReader;
+            string[] importArguments = parameters.Split(' ');
+            string dataType = importArguments[0];
+            string path = importArguments[1];
+
+            if (importArguments.Length < 2)
+            {
+                Console.WriteLine("Wrong data type or command format.");
+                return;
+            }
+
+            if (dataType.ToUpperInvariant() != "CSV" && dataType.ToUpperInvariant() != "XML")
+            {
+                Console.WriteLine("Wrong data type or command format.");
+                return;
+            }
+
+            if (!importArguments[0].ToUpperInvariant().Equals(path[(Array.FindIndex(path.ToCharArray(), i => i.Equals('.')) + 1)..].ToUpperInvariant()))
+            {
+                Console.WriteLine("Wrong import file extension.");
+                return;
+            }
+
+            if (!File.Exists(path))
+            {
+                Console.WriteLine("File doesn't exist.");
+                return;
+            }
+
+            try
+            {
+                fileStream = new FileStream(path, FileMode.Open, FileAccess.Read);
+
+                switch (dataType.ToUpperInvariant())
+                {
+                    case "CSV":
+                        snapshot = fileCabinetService.MakeSnapshot();
+                        streamReader = new StreamReader(fileStream);
+                        snapshot.LoadFromCsv(streamReader);
+                        fileCabinetService.Restore(snapshot);
+                        Console.WriteLine($"{snapshot.Records.Count} records were imported from {path}");
+                        streamReader.Close();
+                        break;
+                    case "XML":
+                        snapshot = fileCabinetService.MakeSnapshot();
+                        streamReader = new StreamReader(fileStream);
+                        snapshot.LoadFromXml(streamReader);
+                        fileCabinetService.Restore(snapshot);
+                        Console.WriteLine($"{snapshot.Records.Count} records were imported from {path}");
+                        streamReader.Close();
+                        break;
+                }
+
+                fileStream.Close();
+            }
+            catch (UnauthorizedAccessException)
+            {
+                Console.WriteLine($"Can't open file {path} due it's access limitations.");
+                fileStream.Close();
+            }
+        }
+
+        private static void Remove(string parameters)
+        {
+            if (parameters is null)
+            {
+                throw new ArgumentException("Parameters argument is null");
+            }
+
+            if (parameters.Length == 0)
+            {
+                Console.WriteLine("Type record's id.");
+                return;
+            }
+
+            int id;
+
+            if (!int.TryParse(parameters, out id))
+            {
+                Console.WriteLine("Unrecognized number.");
+                return;
+            }
+
+            fileCabinetService.RemoveRecord(id);
+        }
+
+        private static void Purge(string parameters)
+        {
+            if (parameters.Length > 0)
+            {
+                Console.WriteLine($"Unrecognized parameter {parameters}");
+                return;
+            }
+
+            fileCabinetService.PurgeFile();
+        }
+
+        private static void Stat(string parameters)
+        {
+            if (parameters.Length > 0)
+            {
+                Console.WriteLine($"Unrecognized parameter {parameters}");
+                return;
+            }
+
+            Tuple<int, int> countDeleted = fileCabinetService.GetStat();
+            Console.WriteLine($"{countDeleted.Item1} recods in list, {countDeleted.Item2} deleted.");
+        }
+    }
+}
