@@ -98,8 +98,8 @@ namespace FileCabinetApp
                 const int parametersIndex = 1;
                 string parameters = inputs.Length > 1 ? inputs[parametersIndex] : string.Empty;
 
-                CommandHandlers.CommandHandler handler = CreateCommandHandlers();
-                handler.Handle(new CommandHandlers.AppCommandRequest() { Command = command, Parameters = parameters });
+                CommandHandlers.ExitCommandHandler handler = CreateCommandHandlers();
+                handler.Handle(new CommandHandlers.AddCommandRequest() { Command = command, Parameters = parameters });
             }
             while (isRunning);
         }
@@ -154,9 +154,15 @@ namespace FileCabinetApp
             record.Gender = ReadInput(charConverter, genderValidator);
         }
 
-        private static CommandHandlers.CommandHandler CreateCommandHandlers()
+        private static CommandHandlers.ICommandHandler CreateCommandHandlers()
         {
-            return new CommandHandlers.CommandHandler();
+            var createHandler = new CommandHandlers.CreateCommandHandler();
+            var listHandler = new CommandHandlers.ListCommandHandler();
+
+            listHandler.SetNext(createHandler);
+            createHandler.SetNext(listHandler);
+
+            return null;
         }
 
         private static void PrintMissedCommandInfo(string command)

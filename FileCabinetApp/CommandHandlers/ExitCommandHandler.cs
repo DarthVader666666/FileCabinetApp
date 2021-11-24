@@ -5,29 +5,24 @@ using System.IO;
 
 namespace FileCabinetApp.CommandHandlers
 {
-    public class CommandHandler : CommandHandlerBase
+    public class ExitCommandHandler : CommandHandlerBase
     {
-        public CommandHandler()
+        public ExitCommandHandler()
         {
-            CreateRecordEvent += Program.fileCabinetService.CreateRecord;
+            
             EditRecordEvent += Program.fileCabinetService.EditRecord;
         }
 
-        public void Handle(AppCommandRequest request)
+        public void Handle(AddCommandRequest request)
         {
 
         }
-
-
 
         private const int CommandHelpIndex = 0;
         private const int DescriptionHelpIndex = 1;
         private const int ExplanationHelpIndex = 2;
 
-        /// <summary>
-        /// Create record handler
-        /// </summary>
-        private static event EventHandler<FileCabinetEventArgs> CreateRecordEvent;
+
 
         /// <summary>
         /// Edit record handler
@@ -81,34 +76,9 @@ namespace FileCabinetApp.CommandHandlers
             Program.isRunning = false;
         }
 
-        private static void Create(string parameters)
-        {
-            FileCabinetRecord record = new FileCabinetRecord();
-            Program.InputRecordProperties(record);
-            record.Id = Program.fileCabinetService.GetMaxId() + 1;
-            FileCabinetEventArgs recordArgs = new FileCabinetEventArgs(record);
-            CreateRecordEvent(null, recordArgs);
-            Console.WriteLine($"Record #{record.Id} is created.");
-        }
 
-        private static void List(string parameters)
-        {
-            ReadOnlyCollection<FileCabinetRecord> recordList = Program.fileCabinetService.GetRecords();
 
-            if (recordList.Count == 0)
-            {
-                Console.WriteLine("Record list is empty.");
-                return;
-            }
 
-            foreach (FileCabinetRecord fileCabinetRecord in recordList)
-            {
-                Console.WriteLine($"#{fileCabinetRecord.Id}, {fileCabinetRecord.FirstName}, {fileCabinetRecord.LastName}, " +
-                    $"{fileCabinetRecord.DateOfBirth.Year}-{fileCabinetRecord.DateOfBirth.Month}-{fileCabinetRecord.DateOfBirth.Day}, " +
-                    $"{fileCabinetRecord.JobExperience}, " + string.Format(CultureInfo.InvariantCulture, "{0:F2}", fileCabinetRecord.MonthlyPay) +
-                    $", {fileCabinetRecord.Gender}");
-            }
-        }
 
         private static void Edit(string parameters)
         {

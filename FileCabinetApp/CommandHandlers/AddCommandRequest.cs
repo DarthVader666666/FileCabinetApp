@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace FileCabinetApp.CommandHandlers
 {
-    public interface ICommandHandler
+    public class AddCommandRequest
     {
-        void SetNext(ICommandHandler handler);
+        public string Command { get; set; }
 
-        void Handle(AddCommandRequest request);
+        public string Parameters { get; set; }
     }
 }

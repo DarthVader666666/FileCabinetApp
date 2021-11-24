@@ -10,13 +10,14 @@ namespace FileCabinetApp.CommandHandlers
     {
         private ICommandHandler nextHandler;
 
+
+
         public void SetNext(ICommandHandler handler)
-        { 
+        {
         }
 
-        public void Handle(AppCommandRequest request)
+        public void Handle(AddCommandRequest request)
         { 
         }
-
     }
 }
