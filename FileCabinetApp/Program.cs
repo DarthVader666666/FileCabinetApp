@@ -8,12 +8,6 @@ namespace FileCabinetApp
     /// </summary>
     public static class Program
     {
-        /// <summary>
-        /// file cabinet instance.
-        /// </summary>
-        private static IFileCabinetService fileCabinetService = new FileCabinetMemoryService(new DefaultValidator());
-        public static bool isRunning = true;
-
         private const string DeveloperName = "Vadzim Rumiantsau";
         private const string HintMessage = "Enter your command, or enter 'help' to get help.";
         private const string StorageDbFilePath = "cabinet-records.db";
@@ -21,6 +15,13 @@ namespace FileCabinetApp
         private const string CustomValidationMessage = "Using custom validation rules.";
         private const string FileStorageMessage = "Using file storage.";
         private const string MemoryStorageMessage = "Using memory storage.";
+
+        /// <summary>
+        /// file cabinet instance.
+        /// </summary>
+        private static IFileCabinetService fileCabinetService = new FileCabinetMemoryService(new DefaultValidator());
+        private static bool isRunning = true;
+        private static Action<bool> breakAll = StopProgram;
 
         private static IReadInputValidator readInputValidator = new DefaultValidator();
 
@@ -170,7 +171,7 @@ namespace FileCabinetApp
             var exportHandler = new CommandHandlers.ExportCommandHandler(service);
             var removeHandler = new CommandHandlers.RemoveCommandHandler(service);
             var purgeHandler = new CommandHandlers.PurgeCommandHandler(service);
-            var exitHandler = new CommandHandlers.ExitCommandHandler();
+            var exitHandler = new CommandHandlers.ExitCommandHandler(breakAll);
 
             helpHandler.SetNext(statHandler);
             statHandler.SetNext(listHandler);
@@ -184,6 +185,11 @@ namespace FileCabinetApp
             purgeHandler.SetNext(exitHandler);
 
             return helpHandler;
+        }
+
+        private static void StopProgram(bool stop)
+        {
+            isRunning = stop;
         }
 
         private static T ReadInput<T>(Func<string, Tuple<bool, string, T>> converter, Func<T, Tuple<bool, string>> validator)

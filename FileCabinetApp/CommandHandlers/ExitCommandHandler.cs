@@ -10,6 +10,22 @@ namespace FileCabinetApp.CommandHandlers
     /// </summary>
     public class ExitCommandHandler : CommandHandlerBase
     {
+        private readonly Action<bool> stopProgram;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ExitCommandHandler"/> class.
+        /// </summary>
+        /// <param name="breakAll">Action delegate invokes stop program.</param>
+        public ExitCommandHandler(Action<bool> breakAll)
+        {
+            if (breakAll is null)
+            {
+                throw new ArgumentNullException($"{breakAll} is null");
+            }
+
+            this.stopProgram = breakAll;
+        }
+
         /// <summary>
         /// Calls exit method.
         /// </summary>
@@ -23,11 +39,11 @@ namespace FileCabinetApp.CommandHandlers
 
             if (request.Command.Equals("exit", StringComparison.InvariantCultureIgnoreCase))
             {
-                Exit(request.Parameters);
+                this.Exit(request.Parameters);
             }
         }
 
-        private static void Exit(string parameters)
+        private void Exit(string parameters)
         {
             if (parameters.Length > 0)
             {
@@ -36,7 +52,7 @@ namespace FileCabinetApp.CommandHandlers
             }
 
             Console.WriteLine("Exiting an application...");
-            Program.isRunning = false;
+            this.stopProgram.Invoke(false);
         }
     }
 }
