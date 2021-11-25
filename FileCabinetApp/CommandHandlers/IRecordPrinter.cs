@@ -11,7 +11,7 @@ namespace FileCabinetApp.CommandHandlers
         /// <summary>
         /// Defines Print records method.
         /// </summary>
-        /// <param name="recordList">Records to be printed.</param>
+        /// <param name="records">Records to be printed.</param>
         void Print(ReadOnlyCollection<FileCabinetRecord> records);
     }
 }

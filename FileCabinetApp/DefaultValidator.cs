@@ -5,169 +5,115 @@ namespace FileCabinetApp
     /// <summary>
     /// Class provides custom validation algorythm.
     /// </summary>
-    public sealed class DefaultValidator : IRecordValidator, IReadInputValidator
+    public sealed class DefaultValidator : IRecordValidator
     {
         /// <summary>
         /// File Record parameters default validator.
         /// </summary>
         /// <param name="recordArgs">File recordArgs which parameters shall be validated.</param>
         /// <returns>Validated file record.</returns>
-        FileCabinetRecord IRecordValidator.ValidateParameters(FileCabinetEventArgs recordArgs)
+        public FileCabinetRecord ValidateParameters(FileCabinetEventArgs recordArgs)
         {
             if (recordArgs is null)
             {
                 throw new ArgumentNullException(nameof(recordArgs), "recordArgs is null");
             }
 
-            if (string.IsNullOrWhiteSpace(recordArgs.FirstName) || recordArgs.FirstName.Length < 2 || recordArgs.FirstName.Length > 60)
+            FileCabinetRecord record = new FileCabinetRecord();
+
+            record.Id = recordArgs.Id;
+            record.FirstName = ValidateFirstName(recordArgs.FirstName);
+            record.LastName = ValidateLastName(recordArgs.LastName);
+            record.DateOfBirth = ValidateDateOfBirth(recordArgs.DateOfBirth);
+            record.JobExperience = ValidateJobExperience(recordArgs.JobExperience);
+            record.MonthlyPay = ValidateMonthlyPay(recordArgs.MonthlyPay);
+            record.Gender = ValidateGender(recordArgs.Gender);
+
+            return record;
+        }
+
+        private static string ValidateFirstName(string parameters)
+        {
+            if (string.IsNullOrWhiteSpace(parameters) || parameters.Length < 2 || parameters.Length > 60)
             {
-                if (recordArgs.FirstName is null)
+                if (parameters is null)
                 {
-                    throw new ArgumentNullException($"{recordArgs.FirstName} argument is null");
+                    throw new ArgumentNullException($"{parameters} argument is null");
                 }
                 else
                 {
-                    throw new ArgumentException("firstName is invalid");
+                    throw new ArgumentException("First Name is invalid");
                 }
             }
 
-            if (string.IsNullOrWhiteSpace(recordArgs.LastName) || recordArgs.LastName.Length < 2 || recordArgs.LastName.Length > 60)
+            if (Array.FindAll(parameters.ToCharArray(), i => char.IsWhiteSpace(i)).Length > 0)
             {
-                if (recordArgs.LastName is null)
+                throw new ArgumentException("First Name shouldn't contain white spaces.");
+            }
+
+            return parameters;
+        }
+
+        private static string ValidateLastName(string parameters)
+        {
+            if (string.IsNullOrWhiteSpace(parameters) || parameters.Length < 2 || parameters.Length > 60)
+            {
+                if (parameters is null)
                 {
-                    throw new ArgumentNullException($"{recordArgs.LastName} argument is null");
+                    throw new ArgumentNullException($"{parameters} argument is null");
                 }
                 else
                 {
-                    throw new ArgumentException("lastName is invalid");
+                    throw new ArgumentException("Last Name is invalid");
                 }
             }
 
-            if (recordArgs.DateOfBirth.CompareTo(new DateTime(1950, 1, 1)) < 0 || recordArgs.DateOfBirth.CompareTo(DateTime.Today) > 0)
+            if (Array.FindAll(parameters.ToCharArray(), i => char.IsWhiteSpace(i)).Length > 0)
             {
-                throw new ArgumentException("dateOfBirth is invalid");
+                throw new ArgumentException("Last Name shouldn't contain white spaces.");
             }
 
-            if (recordArgs.JobExperience < 0)
-            {
-                throw new ArgumentException("jobExperience is invalid");
-            }
-
-            if (recordArgs.MonthlyPay < 0)
-            {
-                throw new ArgumentException("mothlyPay is invalid");
-            }
-
-            if (!(recordArgs.Gender == 'M' || recordArgs.Gender == 'F' || recordArgs.Gender == 'm' || recordArgs.Gender == 'f'))
-            {
-                throw new ArgumentException("Invalid gender");
-            }
-
-            return new FileCabinetRecord()
-            {
-                Id = recordArgs.Id,
-                FirstName = recordArgs.FirstName,
-                LastName = recordArgs.LastName,
-                DateOfBirth = recordArgs.DateOfBirth,
-                JobExperience = recordArgs.JobExperience,
-                MonthlyPay = recordArgs.MonthlyPay,
-                Gender = char.ToUpper(recordArgs.Gender, System.Globalization.CultureInfo.InvariantCulture),
-            };
+            return parameters;
         }
 
-        /// <summary>
-        /// Validates input string.
-        /// </summary>
-        /// <param name="inputData">Input string.</param>
-        /// <returns>Validation result.</returns>
-        Tuple<bool, string> IReadInputValidator.ValidateString(string inputData)
+        private static DateTime ValidateDateOfBirth(DateTime parameters)
         {
-            bool successful = true;
-            string failureMessage = string.Empty;
-
-            if (Array.FindAll(inputData.ToCharArray(), i => char.IsWhiteSpace(i)).Length > 0)
+            if (parameters.CompareTo(new DateTime(1950, 1, 1)) < 0 || parameters.CompareTo(DateTime.Today) > 0)
             {
-                failureMessage = "Name should not contain white spaces";
-                successful = false;
+                throw new ArgumentException("Person is too old or from the future.");
             }
 
-            return new Tuple<bool, string>(successful, failureMessage);
+            return parameters;
         }
 
-        /// <summary>
-        /// Validates input DateTime.
-        /// </summary>
-        /// <param name="inputData">Input DateTime.</param>
-        /// <returns>Validation result.</returns>
-        Tuple<bool, string> IReadInputValidator.ValidateDateTime(DateTime inputData)
+        private static short ValidateJobExperience(short parameters)
         {
-            bool successful = true;
-            string failureMessage = string.Empty;
-
-            if (inputData.CompareTo(new DateTime(1950, 1, 1)) < 0 || inputData.CompareTo(DateTime.Today) > 0)
+            if (parameters < 2)
             {
-                failureMessage = "DateOfBirth is unoppropriate";
-                successful = false;
+                throw new ArgumentException("Job Experiens is too short.");
             }
 
-            return new Tuple<bool, string>(successful, failureMessage);
+            return parameters;
         }
 
-        /// <summary>
-        /// Validates input short.
-        /// </summary>
-        /// <param name="inputData">Input short.</param>
-        /// <returns>Validation result.</returns>
-        Tuple<bool, string> IReadInputValidator.ValidateShort(short inputData)
+        private static decimal ValidateMonthlyPay(decimal parameters)
         {
-            bool successful = true;
-            string failureMessage = string.Empty;
-
-            if (inputData < 0)
+            if (parameters == 0)
             {
-                failureMessage = "Number shouldn't be negative";
-                successful = false;
+                throw new ArgumentException("Person needs to get paid.");
             }
 
-            return new Tuple<bool, string>(successful, failureMessage);
+            return parameters;
         }
 
-        /// <summary>
-        /// Validates input decimal.
-        /// </summary>
-        /// <param name="inputData">Input decimal.</param>
-        /// <returns>Validation result.</returns>
-        Tuple<bool, string> IReadInputValidator.ValidateDecimal(decimal inputData)
+        private static char ValidateGender(char parameters)
         {
-            bool successful = true;
-            string failureMessage = string.Empty;
-
-            if (inputData < 0)
+            if (!char.IsLetter(parameters))
             {
-                failureMessage = "Number shouldn't be negative";
-                successful = false;
+                throw new ArgumentException("Gender parameter gets no letter.");
             }
 
-            return new Tuple<bool, string>(successful, failureMessage);
-        }
-
-        /// <summary>
-        /// Validates input char.
-        /// </summary>
-        /// <param name="inputData">Input char.</param>
-        /// <returns>Validation result.</returns>
-        Tuple<bool, string> IReadInputValidator.ValidateChar(char inputData)
-        {
-            bool successful = true;
-            string failureMessage = string.Empty;
-
-            if (!char.IsLetter(inputData))
-            {
-                failureMessage = "Please, print letter M or F";
-                successful = false;
-            }
-
-            return new Tuple<bool, string>(successful, failureMessage);
+            return parameters;
         }
     }
 }

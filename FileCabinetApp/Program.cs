@@ -24,7 +24,7 @@ namespace FileCabinetApp
         private static bool isRunning = true;
         private static Action<bool> breakAll = StopProgram;
         private static Action<ReadOnlyCollection<FileCabinetRecord>> printer = Defaultprinter;
-        private static IReadInputValidator readInputValidator = new DefaultValidator();
+        private static IRecordValidator readInputValidator = new DefaultValidator();
 
         /// <summary>
         /// Provides user interface and calls command handlers.
@@ -134,12 +134,12 @@ namespace FileCabinetApp
             shortConverter = ConvertToShort;
             decimalConverter = ConvertToDecimal;
             charConverter = ConvertToChar;
-            firstNameValidator = readInputValidator.ValidateString;
-            lastNameValidator = readInputValidator.ValidateString;
-            dateOfBirthValidator = readInputValidator.ValidateDateTime;
-            jobExperienceValidator = readInputValidator.ValidateShort;
-            monthlyPayValidator = readInputValidator.ValidateDecimal;
-            genderValidator = readInputValidator.ValidateChar;
+            firstNameValidator = ValidateString;
+            lastNameValidator = ValidateString;
+            dateOfBirthValidator = ValidateDateTime;
+            jobExperienceValidator = ValidateShort;
+            monthlyPayValidator = ValidateDecimal;
+            genderValidator = ValidateChar;
 
             Console.Write("First name: ");
             record.FirstName = ReadInput(stringConverter, firstNameValidator);
@@ -347,6 +347,76 @@ namespace FileCabinetApp
             }
 
             return new Tuple<bool, string, char>(successful, failureMessage, result);
+        }
+
+        private static Tuple<bool, string> ValidateString(string inputData)
+        {
+            bool successful = true;
+            string failureMessage = string.Empty;
+
+            if (inputData.Length == 0)
+            {
+                failureMessage = "Field shouldn't be empty.";
+                successful = false;
+            }
+
+            return new Tuple<bool, string>(successful, failureMessage);
+        }
+
+        private static Tuple<bool, string> ValidateDateTime(DateTime inputData)
+        {
+            bool successful = true;
+            string failureMessage = string.Empty;
+
+            if (inputData.CompareTo(DateTime.Today) > 0)
+            {
+                failureMessage = "This person is from the future.";
+                successful = false;
+            }
+
+            return new Tuple<bool, string>(successful, failureMessage);
+        }
+
+        private static Tuple<bool, string> ValidateShort(short inputData)
+        {
+            bool successful = true;
+            string failureMessage = string.Empty;
+
+            if (inputData < 0)
+            {
+                failureMessage = "Number shouldn't be negative";
+                successful = false;
+            }
+
+            return new Tuple<bool, string>(successful, failureMessage);
+        }
+
+        private static Tuple<bool, string> ValidateDecimal(decimal inputData)
+        {
+            bool successful = true;
+            string failureMessage = string.Empty;
+
+            if (inputData < 0)
+            {
+                failureMessage = "Number shouldn't be negative";
+                successful = false;
+            }
+
+            return new Tuple<bool, string>(successful, failureMessage);
+        }
+
+        private static Tuple<bool, string> ValidateChar(char inputData)
+        {
+            bool successful = true;
+            string failureMessage = string.Empty;
+
+            if (inputData != 'M' && inputData != 'F')
+            {
+                failureMessage = "Please, print letter M or F";
+                successful = false;
+            }
+
+            return new Tuple<bool, string>(successful, failureMessage);
         }
     }
 }

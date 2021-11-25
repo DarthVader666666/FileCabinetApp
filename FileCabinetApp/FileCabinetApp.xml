@@ -213,7 +213,7 @@
             <summary>
             Defines Print records method.
             </summary>
-            <param name="recordList">Records to be printed.</param>
+            <param name="records">Records to be printed.</param>
         </member>
         <member name="T:FileCabinetApp.CommandHandlers.ListCommandHandler">
             <summary>
@@ -317,87 +317,17 @@
             <param name="recordArgs">File recordArgs which parameters shall be validated.</param>
             <returns>Validated file record.</returns>
         </member>
-        <member name="M:FileCabinetApp.CustomValidator.FileCabinetApp#IReadInputValidator#ValidateString(System.String)">
-            <summary>
-            Validates input string.
-            </summary>
-            <param name="inputData">Input string.</param>
-            <returns>Validation result.</returns>
-        </member>
-        <member name="M:FileCabinetApp.CustomValidator.FileCabinetApp#IReadInputValidator#ValidateDateTime(System.DateTime)">
-            <summary>
-            Validates input DateTime.
-            </summary>
-            <param name="inputData">Input DateTime.</param>
-            <returns>Validation result.</returns>
-        </member>
-        <member name="M:FileCabinetApp.CustomValidator.FileCabinetApp#IReadInputValidator#ValidateShort(System.Int16)">
-            <summary>
-            Validates input short.
-            </summary>
-            <param name="inputData">Input short.</param>
-            <returns>Validation result.</returns>
-        </member>
-        <member name="M:FileCabinetApp.CustomValidator.FileCabinetApp#IReadInputValidator#ValidateDecimal(System.Decimal)">
-            <summary>
-            Validates input decimal.
-            </summary>
-            <param name="inputData">Input decimal.</param>
-            <returns>Validation result.</returns>
-        </member>
-        <member name="M:FileCabinetApp.CustomValidator.FileCabinetApp#IReadInputValidator#ValidateChar(System.Char)">
-            <summary>
-            Validates input char.
-            </summary>
-            <param name="inputData">Input char.</param>
-            <returns>Validation result.</returns>
-        </member>
         <member name="T:FileCabinetApp.DefaultValidator">
             <summary>
             Class provides custom validation algorythm.
             </summary>
         </member>
-        <member name="M:FileCabinetApp.DefaultValidator.FileCabinetApp#IRecordValidator#ValidateParameters(FileCabinetApp.FileCabinetEventArgs)">
+        <member name="M:FileCabinetApp.DefaultValidator.ValidateParameters(FileCabinetApp.FileCabinetEventArgs)">
             <summary>
             File Record parameters default validator.
             </summary>
             <param name="recordArgs">File recordArgs which parameters shall be validated.</param>
             <returns>Validated file record.</returns>
-        </member>
-        <member name="M:FileCabinetApp.DefaultValidator.FileCabinetApp#IReadInputValidator#ValidateString(System.String)">
-            <summary>
-            Validates input string.
-            </summary>
-            <param name="inputData">Input string.</param>
-            <returns>Validation result.</returns>
-        </member>
-        <member name="M:FileCabinetApp.DefaultValidator.FileCabinetApp#IReadInputValidator#ValidateDateTime(System.DateTime)">
-            <summary>
-            Validates input DateTime.
-            </summary>
-            <param name="inputData">Input DateTime.</param>
-            <returns>Validation result.</returns>
-        </member>
-        <member name="M:FileCabinetApp.DefaultValidator.FileCabinetApp#IReadInputValidator#ValidateShort(System.Int16)">
-            <summary>
-            Validates input short.
-            </summary>
-            <param name="inputData">Input short.</param>
-            <returns>Validation result.</returns>
-        </member>
-        <member name="M:FileCabinetApp.DefaultValidator.FileCabinetApp#IReadInputValidator#ValidateDecimal(System.Decimal)">
-            <summary>
-            Validates input decimal.
-            </summary>
-            <param name="inputData">Input decimal.</param>
-            <returns>Validation result.</returns>
-        </member>
-        <member name="M:FileCabinetApp.DefaultValidator.FileCabinetApp#IReadInputValidator#ValidateChar(System.Char)">
-            <summary>
-            Validates input char.
-            </summary>
-            <param name="inputData">Input char.</param>
-            <returns>Validation result.</returns>
         </member>
         <member name="T:FileCabinetApp.FileCabinetEventArgs">
             <summary>
@@ -950,46 +880,6 @@
             <summary>
             Deletes marked as IsDeleted from *.db file.
             </summary>
-        </member>
-        <member name="T:FileCabinetApp.IReadInputValidator">
-            <summary>
-            Interface which provides read input validation strategy.
-            </summary>
-        </member>
-        <member name="M:FileCabinetApp.IReadInputValidator.ValidateString(System.String)">
-            <summary>
-            Validates input string.
-            </summary>
-            <param name="inputData">Input string.</param>
-            <returns>Validation result.</returns>
-        </member>
-        <member name="M:FileCabinetApp.IReadInputValidator.ValidateDateTime(System.DateTime)">
-            <summary>
-            Validates input string.
-            </summary>
-            <param name="inputData">Input DateTime.</param>
-            <returns>Validation result.</returns>
-        </member>
-        <member name="M:FileCabinetApp.IReadInputValidator.ValidateShort(System.Int16)">
-            <summary>
-            Validates input string.
-            </summary>
-            <param name="inputData">Input short.</param>
-            <returns>Validation result.</returns>
-        </member>
-        <member name="M:FileCabinetApp.IReadInputValidator.ValidateDecimal(System.Decimal)">
-            <summary>
-            Validates input string.
-            </summary>
-            <param name="inputData">Input decimal.</param>
-            <returns>Validation result.</returns>
-        </member>
-        <member name="M:FileCabinetApp.IReadInputValidator.ValidateChar(System.Char)">
-            <summary>
-            Validates input string.
-            </summary>
-            <param name="inputData">Input char.</param>
-            <returns>Validation result.</returns>
         </member>
         <member name="T:FileCabinetApp.IRecordValidator">
             <summary>
