@@ -305,30 +305,6 @@
             </summary>
             <param name="request">Provides command and parameters.</param>
         </member>
-        <member name="T:FileCabinetApp.CustomValidator">
-            <summary>
-            Class provides custom validation algorythm.
-            </summary>
-        </member>
-        <member name="M:FileCabinetApp.CustomValidator.FileCabinetApp#IRecordValidator#ValidateParameters(FileCabinetApp.FileCabinetEventArgs)">
-            <summary>
-            File Record parameters default validator.
-            </summary>
-            <param name="recordArgs">File recordArgs which parameters shall be validated.</param>
-            <returns>Validated file record.</returns>
-        </member>
-        <member name="T:FileCabinetApp.DefaultValidator">
-            <summary>
-            Class provides custom validation algorythm.
-            </summary>
-        </member>
-        <member name="M:FileCabinetApp.DefaultValidator.ValidateParameters(FileCabinetApp.FileCabinetEventArgs)">
-            <summary>
-            File Record parameters default validator.
-            </summary>
-            <param name="recordArgs">File recordArgs which parameters shall be validated.</param>
-            <returns>Validated file record.</returns>
-        </member>
         <member name="T:FileCabinetApp.FileCabinetEventArgs">
             <summary>
             Class for Create and Edit record parameters.
@@ -474,7 +450,7 @@
             Class contains methods which handle the user commands.
             </summary>
         </member>
-        <member name="M:FileCabinetApp.FileCabinetMemoryService.#ctor(FileCabinetApp.IRecordValidator)">
+        <member name="M:FileCabinetApp.FileCabinetMemoryService.#ctor(FileCabinetApp.IRecordValidator{FileCabinetApp.FileCabinetEventArgs,FileCabinetApp.FileCabinetRecord})">
             <summary>
             Initializes a new instance of the <see cref="T:FileCabinetApp.FileCabinetMemoryService"/> class.
             </summary>
@@ -881,18 +857,6 @@
             Deletes marked as IsDeleted from *.db file.
             </summary>
         </member>
-        <member name="T:FileCabinetApp.IRecordValidator">
-            <summary>
-            Interface which provides record validation strategy.
-            </summary>
-        </member>
-        <member name="M:FileCabinetApp.IRecordValidator.ValidateParameters(FileCabinetApp.FileCabinetEventArgs)">
-            <summary>
-            File Record parameters validator.
-            </summary>
-            <param name="recordArgs">File recordArgs which parameters shall be validated.</param>
-            <returns>Validated file record.</returns>
-        </member>
         <member name="T:FileCabinetApp.NameClass">
             <summary>
             Contains first and last name.
@@ -937,6 +901,188 @@
             Implements Default Print method.
             </summary>
             <param name="records">File records to be printed.</param>
+        </member>
+        <member name="T:FileCabinetApp.CustomDateOfBirthValidator">
+            <summary>
+            CustomDateOfBirthValidator.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.CustomDateOfBirthValidator.ValidateParameters(System.DateTime)">
+            <summary>
+            Validates dateOfBirth.
+            </summary>
+            <param name="parameters">Date to be validated.</param>
+            <returns>Validated date.</returns>
+        </member>
+        <member name="T:FileCabinetApp.CustomFirstNameValidator">
+            <summary>
+            CustomFirstNameValidator.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.CustomFirstNameValidator.ValidateParameters(System.String)">
+            <summary>
+            Validates FirstName.
+            </summary>
+            <param name="parameters">String to be validated.</param>
+            <returns>Validated string.</returns>
+        </member>
+        <member name="T:FileCabinetApp.CustomGenderValidator">
+            <summary>
+            CustomGenderValidator.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.CustomGenderValidator.ValidateParameters(System.Char)">
+            <summary>
+            Validates gender.
+            </summary>
+            <param name="parameters">Char to be validated.</param>
+            <returns>Validated char.</returns>
+        </member>
+        <member name="T:FileCabinetApp.CustomJobExperienceValidator">
+            <summary>
+            CustomJobExperienceValidator
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.CustomJobExperienceValidator.ValidateParameters(System.Int16)">
+            <summary>
+            Validates job experience.
+            </summary>
+            <param name="parameters">Short int to be validated.</param>
+            <returns>Validated short int.</returns>
+        </member>
+        <member name="T:FileCabinetApp.CustomLastNameValidator">
+            <summary>
+            CustomLastNameValidator.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.CustomLastNameValidator.ValidateParameters(System.String)">
+            <summary>
+            Validates First Name.
+            </summary>
+            <param name="parameters">String to be validated.</param>
+            <returns>Validated string.</returns>
+        </member>
+        <member name="T:FileCabinetApp.CustomMonthlyPayValidator">
+            <summary>
+            CustomMonthlyPayValidator.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.CustomMonthlyPayValidator.ValidateParameters(System.Decimal)">
+            <summary>
+            Validates Monthly Pay.
+            </summary>
+            <param name="parameters">decimal to be validated.</param>
+            <returns>validated decimal.</returns>
+        </member>
+        <member name="T:FileCabinetApp.CustomValidator">
+            <summary>
+            Class provides custom validation algorythm.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.CustomValidator.ValidateParameters(FileCabinetApp.FileCabinetEventArgs)">
+            <summary>
+            File Record parameters default validator.
+            </summary>
+            <param name="recordArgs">File recordArgs which parameters shall be validated.</param>
+            <returns>Validated file record.</returns>
+        </member>
+        <member name="T:FileCabinetApp.DefaultDateOfBirthValidator">
+            <summary>
+            DefaultDateOfBirthValidator.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.DefaultDateOfBirthValidator.ValidateParameters(System.DateTime)">
+            <summary>
+            Validates Date of birth.
+            </summary>
+            <param name="parameters">DateTime to be validated.</param>
+            <returns>Validated DateTime.</returns>
+        </member>
+        <member name="T:FileCabinetApp.DefaultFirstNameValidator">
+            <summary>
+            DefaultFirstNameValidator.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.DefaultFirstNameValidator.ValidateParameters(System.String)">
+            <summary>
+            Validates First Name.
+            </summary>
+            <param name="parameters">String to be Validated.</param>
+            <returns>Validated String.</returns>
+        </member>
+        <member name="T:FileCabinetApp.DefaultGenderValidator">
+            <summary>
+            DefaultGenderValidator.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.DefaultGenderValidator.ValidateParameters(System.Char)">
+            <summary>
+            Validates gender.
+            </summary>
+            <param name="parameters">Char to be validated.</param>
+            <returns>Validated char.</returns>
+        </member>
+        <member name="T:FileCabinetApp.DefaultJobExperienceValidator">
+            <summary>
+            DefaultJobExperienceValidator.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.DefaultJobExperienceValidator.ValidateParameters(System.Int16)">
+            <summary>
+            Validates job experience.
+            </summary>
+            <param name="parameters">Short int to be validated.</param>
+            <returns>Validated short int.</returns>
+        </member>
+        <member name="T:FileCabinetApp.DefaultLastNameValidator">
+            <summary>
+            DefaultLastNameValidator.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.DefaultLastNameValidator.ValidateParameters(System.String)">
+            <summary>
+            Validates First Name.
+            </summary>
+            <param name="parameters">String to be validated.</param>
+            <returns>Validated string.</returns>
+        </member>
+        <member name="T:FileCabinetApp.DefaultMonthlyPayValidator">
+            <summary>
+            DefaultMonthlyPayValidator.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.DefaultMonthlyPayValidator.ValidateParameters(System.Decimal)">
+            <summary>
+            Validates Monthly Pay.
+            </summary>
+            <param name="parameters">decimal to be validated.</param>
+            <returns>validated decimal.</returns>
+        </member>
+        <member name="T:FileCabinetApp.DefaultValidator">
+            <summary>
+            Class provides custom validation algorythm.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.DefaultValidator.ValidateParameters(FileCabinetApp.FileCabinetEventArgs)">
+            <summary>
+            File Record parameters default validator.
+            </summary>
+            <param name="recordArgs">File recordArgs which parameters shall be validated.</param>
+            <returns>Validated file record.</returns>
+        </member>
+        <member name="T:FileCabinetApp.IRecordValidator`2">
+            <summary>
+            Interface which provides record validation strategy.
+            </summary>
+            <typeparam name="T1">Parameter to be validated.</typeparam>
+            <typeparam name="T2">Validated parameter to be returned.</typeparam>
+        </member>
+        <member name="M:FileCabinetApp.IRecordValidator`2.ValidateParameters(`0)">
+            <summary>
+            File Record parameters validator.
+            </summary>
+            <param name="parameters">Parameter to be validated.</param>
+            <returns>Validated parameter.</returns>
         </member>
     </members>
 </doc>

@@ -10,7 +10,7 @@ namespace FileCabinetApp
     public class FileCabinetMemoryService : IFileCabinetService
     {
         private readonly List<FileCabinetRecord> list = new List<FileCabinetRecord>();
-        private readonly IRecordValidator validator;
+        private readonly IRecordValidator<FileCabinetEventArgs, FileCabinetRecord> validator;
         private readonly Dictionary<string, List<FileCabinetRecord>> firstNameDictionary = new Dictionary<string, List<FileCabinetRecord>>();
         private readonly Dictionary<string, List<FileCabinetRecord>> lastNameDictionary = new Dictionary<string, List<FileCabinetRecord>>();
         private readonly Dictionary<string, List<FileCabinetRecord>> dateOfBirthDictionary = new Dictionary<string, List<FileCabinetRecord>>();
@@ -19,7 +19,7 @@ namespace FileCabinetApp
         /// Initializes a new instance of the <see cref="FileCabinetMemoryService"/> class.
         /// </summary>
         /// <param name="validator">Validator object to implement.</param>
-        public FileCabinetMemoryService(IRecordValidator validator)
+        public FileCabinetMemoryService(IRecordValidator<FileCabinetEventArgs, FileCabinetRecord> validator)
         {
             this.validator = validator;
         }

@@ -14,7 +14,7 @@ namespace FileCabinetApp
         private const int BufferSize = 278;
 
         private readonly List<FileCabinetRecord> list = new List<FileCabinetRecord>();
-        private readonly IRecordValidator validator = new DefaultValidator();
+        private readonly IRecordValidator<FileCabinetEventArgs, FileCabinetRecord> validator = new DefaultValidator();
         private readonly Dictionary<string, List<FileCabinetRecord>> firstNameDictionary = new Dictionary<string, List<FileCabinetRecord>>();
         private readonly Dictionary<string, List<FileCabinetRecord>> lastNameDictionary = new Dictionary<string, List<FileCabinetRecord>>();
         private readonly Dictionary<string, List<FileCabinetRecord>> dateOfBirthDictionary = new Dictionary<string, List<FileCabinetRecord>>();

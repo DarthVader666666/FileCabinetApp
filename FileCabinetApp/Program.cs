@@ -24,7 +24,6 @@ namespace FileCabinetApp
         private static bool isRunning = true;
         private static Action<bool> breakAll = StopProgram;
         private static Action<ReadOnlyCollection<FileCabinetRecord>> printer = Defaultprinter;
-        private static IRecordValidator readInputValidator = new DefaultValidator();
 
         /// <summary>
         /// Provides user interface and calls command handlers.
@@ -49,11 +48,9 @@ namespace FileCabinetApp
                 {
                     case "DEFAULT":
                         fileCabinetService = new FileCabinetMemoryService(new DefaultValidator());
-                        readInputValidator = new DefaultValidator();
                         Console.WriteLine(DefaultValidationMessage); break;
                     case "CUSTOM":
                         fileCabinetService = new FileCabinetMemoryService(new CustomValidator());
-                        readInputValidator = new CustomValidator();
                         Console.WriteLine(CustomValidationMessage); break;
                 }
             }
