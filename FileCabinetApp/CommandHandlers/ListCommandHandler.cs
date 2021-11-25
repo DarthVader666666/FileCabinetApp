@@ -10,12 +10,19 @@ namespace FileCabinetApp.CommandHandlers
     public class ListCommandHandler : ServiceCommandHandlerBase
     {
         /// <summary>
+        /// Record printer to be used in ListCommandHandler.
+        /// </summary>
+        private readonly IRecordPrinter printer;
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="ListCommandHandler"/> class.
         /// </summary>
         /// <param name="service">FileCabinetService instance.</param>
-        public ListCommandHandler(IFileCabinetService service)
+        /// <param name="printer">RecordPrinter instance injected.</param>
+        public ListCommandHandler(IFileCabinetService service, IRecordPrinter printer)
             : base(service)
         {
+            this.printer = printer;
         }
 
         /// <summary>
@@ -47,21 +54,7 @@ namespace FileCabinetApp.CommandHandlers
                 return;
             }
 
-            ReadOnlyCollection<FileCabinetRecord> recordList = this.fileCabinetService.GetRecords();
-
-            if (recordList.Count == 0)
-            {
-                Console.WriteLine("Record list is empty.");
-                return;
-            }
-
-            foreach (FileCabinetRecord fileCabinetRecord in recordList)
-            {
-                Console.WriteLine($"#{fileCabinetRecord.Id}, {fileCabinetRecord.FirstName}, {fileCabinetRecord.LastName}, " +
-                    $"{fileCabinetRecord.DateOfBirth.Year}-{fileCabinetRecord.DateOfBirth.Month}-{fileCabinetRecord.DateOfBirth.Day}, " +
-                    $"{fileCabinetRecord.JobExperience}, " + string.Format(CultureInfo.InvariantCulture, "{0:F2}", fileCabinetRecord.MonthlyPay) +
-                    $", {fileCabinetRecord.Gender}");
-            }
+            this.printer.Print(this.fileCabinetService.GetRecords());
         }
     }
 }

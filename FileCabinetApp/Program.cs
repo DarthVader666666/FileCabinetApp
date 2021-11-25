@@ -16,13 +16,14 @@ namespace FileCabinetApp
         private const string FileStorageMessage = "Using file storage.";
         private const string MemoryStorageMessage = "Using memory storage.";
 
+        private static readonly CommandHandlers.IRecordPrinter RecordPrinter = new CommandHandlers.DefaultRecordPrinter();
+
         /// <summary>
         /// file cabinet instance.
         /// </summary>
         private static IFileCabinetService fileCabinetService = new FileCabinetMemoryService(new DefaultValidator());
         private static bool isRunning = true;
         private static Action<bool> breakAll = StopProgram;
-
         private static IReadInputValidator readInputValidator = new DefaultValidator();
 
         /// <summary>
@@ -163,9 +164,9 @@ namespace FileCabinetApp
         {
             var helpHandler = new CommandHandlers.HelpCommandHandler();
             var statHandler = new CommandHandlers.StatCommandHandler(service);
-            var listHandler = new CommandHandlers.ListCommandHandler(service);
+            var listHandler = new CommandHandlers.ListCommandHandler(service, RecordPrinter);
             var createHandler = new CommandHandlers.CreateCommandHandler(service);
-            var findHandler = new CommandHandlers.FindCommandHandler(service);
+            var findHandler = new CommandHandlers.FindCommandHandler(service, RecordPrinter);
             var editHandler = new CommandHandlers.EditCommandHandler(service);
             var importHandler = new CommandHandlers.ImportCommandHandler(service);
             var exportHandler = new CommandHandlers.ExportCommandHandler(service);

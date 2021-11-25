@@ -9,12 +9,19 @@ namespace FileCabinetApp.CommandHandlers
     public class FindCommandHandler : ServiceCommandHandlerBase
     {
         /// <summary>
+        /// Record printer to be used in FindCommandHandler.
+        /// </summary>
+        private readonly IRecordPrinter printer;
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="FindCommandHandler"/> class.
         /// </summary>
         /// <param name="service">FileCabinetService instance.</param>
-        public FindCommandHandler(IFileCabinetService service)
+        /// <param name="printer">RecordPrinter instance injected.</param>
+        public FindCommandHandler(IFileCabinetService service, IRecordPrinter printer)
             : base(service)
         {
+            this.printer = printer;
         }
 
         /// <summary>
@@ -63,12 +70,7 @@ namespace FileCabinetApp.CommandHandlers
                 default: Console.WriteLine("! Wrong search parameter."); return;
             }
 
-            foreach (FileCabinetRecord record in fileCabinetRecords)
-            {
-                Console.WriteLine($"#{record.Id}, {record.FirstName}, {record.LastName}, " +
-                    $"{record.DateOfBirth.Year}-{record.DateOfBirth.Month}-{record.DateOfBirth.Day}, " +
-                    $"{record.JobExperience}, {record.MonthlyPay}, {record.Gender}");
-            }
+            this.printer.Print(fileCabinetRecords);
         }
     }
 }
