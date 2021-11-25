@@ -9,10 +9,6 @@ namespace FileCabinetApp.CommandHandlers
     /// </summary>
     public class DefaultRecordPrinter : IRecordPrinter
     {
-        public DefaultRecordPrinter()
-        { 
-        }
-
         /// <summary>
         /// Implements default Print method.
         /// </summary>

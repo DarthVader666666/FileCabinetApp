@@ -11,17 +11,22 @@ namespace FileCabinetApp.CommandHandlers
         /// <summary>
         /// Record printer to be used in FindCommandHandler.
         /// </summary>
-        private readonly IRecordPrinter printer;
+        private readonly Action<ReadOnlyCollection<FileCabinetRecord>> printer;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="FindCommandHandler"/> class.
         /// </summary>
         /// <param name="service">FileCabinetService instance.</param>
-        /// <param name="printer">RecordPrinter instance injected.</param>
-        public FindCommandHandler(IFileCabinetService service, IRecordPrinter printer)
+        /// <param name="defaultPrinter">Delegate which invokes Default Printer method.</param>
+        public FindCommandHandler(IFileCabinetService service, Action<ReadOnlyCollection<FileCabinetRecord>> defaultPrinter)
             : base(service)
         {
-            this.printer = printer;
+            if (defaultPrinter is null)
+            {
+                throw new ArgumentNullException($"{defaultPrinter} is null");
+            }
+
+            this.printer = defaultPrinter;
         }
 
         /// <summary>
@@ -70,7 +75,7 @@ namespace FileCabinetApp.CommandHandlers
                 default: Console.WriteLine("! Wrong search parameter."); return;
             }
 
-            this.printer.Print(fileCabinetRecords);
+            this.printer.Invoke(fileCabinetRecords);
         }
     }
 }

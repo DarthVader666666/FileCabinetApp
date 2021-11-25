@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.ObjectModel;
 using System.Globalization;
 
 namespace FileCabinetApp
@@ -16,14 +17,13 @@ namespace FileCabinetApp
         private const string FileStorageMessage = "Using file storage.";
         private const string MemoryStorageMessage = "Using memory storage.";
 
-        private static readonly CommandHandlers.IRecordPrinter RecordPrinter = new CommandHandlers.DefaultRecordPrinter();
-
         /// <summary>
         /// file cabinet instance.
         /// </summary>
         private static IFileCabinetService fileCabinetService = new FileCabinetMemoryService(new DefaultValidator());
         private static bool isRunning = true;
         private static Action<bool> breakAll = StopProgram;
+        private static Action<ReadOnlyCollection<FileCabinetRecord>> printer = Defaultprinter;
         private static IReadInputValidator readInputValidator = new DefaultValidator();
 
         /// <summary>
@@ -164,9 +164,9 @@ namespace FileCabinetApp
         {
             var helpHandler = new CommandHandlers.HelpCommandHandler();
             var statHandler = new CommandHandlers.StatCommandHandler(service);
-            var listHandler = new CommandHandlers.ListCommandHandler(service, RecordPrinter);
+            var listHandler = new CommandHandlers.ListCommandHandler(service, printer);
             var createHandler = new CommandHandlers.CreateCommandHandler(service);
-            var findHandler = new CommandHandlers.FindCommandHandler(service, RecordPrinter);
+            var findHandler = new CommandHandlers.FindCommandHandler(service, printer);
             var editHandler = new CommandHandlers.EditCommandHandler(service);
             var importHandler = new CommandHandlers.ImportCommandHandler(service);
             var exportHandler = new CommandHandlers.ExportCommandHandler(service);
@@ -191,6 +191,32 @@ namespace FileCabinetApp
         private static void StopProgram(bool stop)
         {
             isRunning = stop;
+        }
+
+        /// <summary>
+        /// Implements Default Print method.
+        /// </summary>
+        /// <param name="records">File records to be printed.</param>
+        private static void Defaultprinter(ReadOnlyCollection<FileCabinetRecord> records)
+        {
+            if (records is null)
+            {
+                throw new ArgumentNullException($"{records} is null");
+            }
+
+            if (records.Count == 0)
+            {
+                Console.WriteLine("Record list is empty.");
+                return;
+            }
+
+            foreach (FileCabinetRecord fileCabinetRecord in records)
+            {
+                Console.WriteLine($"#{fileCabinetRecord.Id}, {fileCabinetRecord.FirstName}, {fileCabinetRecord.LastName}, " +
+                    $"{fileCabinetRecord.DateOfBirth.Year}-{fileCabinetRecord.DateOfBirth.Month}-{fileCabinetRecord.DateOfBirth.Day}, " +
+                    $"{fileCabinetRecord.JobExperience}, " + string.Format(CultureInfo.InvariantCulture, "{0:F2}", fileCabinetRecord.MonthlyPay) +
+                    $", {fileCabinetRecord.Gender}");
+            }
         }
 
         private static T ReadInput<T>(Func<string, Tuple<bool, string, T>> converter, Func<T, Tuple<bool, string>> validator)

@@ -54,7 +54,7 @@ namespace FileCabinetApp.CommandHandlers
 
             FileCabinetRecord record = new FileCabinetRecord();
             record.Id = int.Parse(parameters, CultureInfo.InvariantCulture);
-            int listCount = base.fileCabinetService.GetStat().Item1;
+            int listCount = this.fileCabinetService.GetStat().Item1;
 
             if (record.Id > listCount || record.Id < 1)
             {
