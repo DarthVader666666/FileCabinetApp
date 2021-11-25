@@ -6,17 +6,15 @@ namespace FileCabinetApp.CommandHandlers
     /// <summary>
     /// Handles edit command.
     /// </summary>
-    public class EditCommandHandler : CommandHandlerBase
+    public class EditCommandHandler : ServiceCommandHandlerBase
     {
-        private readonly IFileCabinetService fileCabinetService;
-
         /// <summary>
         /// Initializes a new instance of the <see cref="EditCommandHandler"/> class.
         /// </summary>
         /// <param name="service">FileCabinetService instance.</param>
         public EditCommandHandler(IFileCabinetService service)
+            : base(service)
         {
-            this.fileCabinetService = service;
             EditRecordEvent += this.fileCabinetService.EditRecord;
         }
 
@@ -56,7 +54,7 @@ namespace FileCabinetApp.CommandHandlers
 
             FileCabinetRecord record = new FileCabinetRecord();
             record.Id = int.Parse(parameters, CultureInfo.InvariantCulture);
-            int listCount = this.fileCabinetService.GetStat().Item1;
+            int listCount = base.fileCabinetService.GetStat().Item1;
 
             if (record.Id > listCount || record.Id < 1)
             {

@@ -7,17 +7,15 @@ namespace FileCabinetApp.CommandHandlers
     /// <summary>
     /// Handles list command.
     /// </summary>
-    public class ListCommandHandler : CommandHandlerBase
+    public class ListCommandHandler : ServiceCommandHandlerBase
     {
-        private readonly IFileCabinetService fileCabinetService;
-
         /// <summary>
         /// Initializes a new instance of the <see cref="ListCommandHandler"/> class.
         /// </summary>
         /// <param name="service">FileCabinetService instance.</param>
         public ListCommandHandler(IFileCabinetService service)
+            : base(service)
         {
-            this.fileCabinetService = service;
         }
 
         /// <summary>

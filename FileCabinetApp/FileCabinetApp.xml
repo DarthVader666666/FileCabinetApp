@@ -56,7 +56,7 @@
             <summary>
             Initializes a new instance of the <see cref="T:FileCabinetApp.CommandHandlers.CreateCommandHandler"/> class.
             </summary>
-            <param name="service">FileCabinetService instance.</param>
+            <param name="service">FileCabinetServic instance.</param>
         </member>
         <member name="E:FileCabinetApp.CommandHandlers.CreateCommandHandler.CreateRecordEvent">
             <summary>
@@ -231,6 +231,22 @@
             Calls remove method or next handler.
             </summary>
             <param name="request">Provides command and parameters.</param>
+        </member>
+        <member name="T:FileCabinetApp.CommandHandlers.ServiceCommandHandlerBase">
+            <summary>
+            Command handlers common Seperclass.
+            </summary>
+        </member>
+        <member name="F:FileCabinetApp.CommandHandlers.ServiceCommandHandlerBase.fileCabinetService">
+            <summary>
+            Common File Service for command handlers.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.CommandHandlers.ServiceCommandHandlerBase.#ctor(FileCabinetApp.IFileCabinetService)">
+            <summary>
+            Initializes a new instance of the <see cref="T:FileCabinetApp.CommandHandlers.ServiceCommandHandlerBase"/> class.
+            </summary>
+            <param name="service">FileCabinetService instance.</param>
         </member>
         <member name="T:FileCabinetApp.CommandHandlers.StatCommandHandler">
             <summary>

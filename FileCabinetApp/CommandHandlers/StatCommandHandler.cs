@@ -5,17 +5,15 @@ namespace FileCabinetApp.CommandHandlers
     /// <summary>
     /// Handles stat command.
     /// </summary>
-    public class StatCommandHandler : CommandHandlerBase
+    public class StatCommandHandler : ServiceCommandHandlerBase
     {
-        private readonly IFileCabinetService fileCabinetService;
-
         /// <summary>
         /// Initializes a new instance of the <see cref="StatCommandHandler"/> class.
         /// </summary>
         /// <param name="service">FileCabinetServic instance.</param>
         public StatCommandHandler(IFileCabinetService service)
+            : base(service)
         {
-            this.fileCabinetService = service;
         }
 
         /// <summary>

@@ -5,17 +5,15 @@ namespace FileCabinetApp.CommandHandlers
     /// <summary>
     /// Handles purge command.
     /// </summary>
-    public class PurgeCommandHandler : CommandHandlerBase
+    public class PurgeCommandHandler : ServiceCommandHandlerBase
     {
-        private readonly IFileCabinetService fileCabinetService;
-
         /// <summary>
         /// Initializes a new instance of the <see cref="PurgeCommandHandler"/> class.
         /// </summary>
         /// <param name="service">FileCabinetService instance.</param>
         public PurgeCommandHandler(IFileCabinetService service)
+            : base(service)
         {
-            this.fileCabinetService = service;
         }
 
         /// <summary>

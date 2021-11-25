@@ -7,17 +7,16 @@ namespace FileCabinetApp.CommandHandlers
     /// <summary>
     /// Handles export command.
     /// </summary>
-    public class ExportCommandHandler : CommandHandlerBase
+    public class ExportCommandHandler : ServiceCommandHandlerBase
     {
-        private readonly IFileCabinetService fileCabinetService;
 
-        /// <summary>
+       /// <summary>
         /// Initializes a new instance of the <see cref="ExportCommandHandler"/> class.
         /// </summary>
         /// <param name="service">FileCabinetService instance.</param>
         public ExportCommandHandler(IFileCabinetService service)
+            : base(service)
         {
-            this.fileCabinetService = service;
         }
 
         /// <summary>
@@ -101,7 +100,6 @@ namespace FileCabinetApp.CommandHandlers
             try
             {
                 file = new FileStream(path, FileMode.Open);
-                file.Dispose();
                 file.Close();
             }
             catch (UnauthorizedAccessException)

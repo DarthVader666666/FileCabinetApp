@@ -1,25 +1,19 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace FileCabinetApp.CommandHandlers
 {
     /// <summary>
     /// Handles create command.
     /// </summary>
-    public class CreateCommandHandler : CommandHandlerBase
+    public class CreateCommandHandler : ServiceCommandHandlerBase
     {
-        private readonly IFileCabinetService fileCabinetService;
-
         /// <summary>
         /// Initializes a new instance of the <see cref="CreateCommandHandler"/> class.
         /// </summary>
-        /// <param name="service">FileCabinetService instance.</param>
+        /// <param name="service">FileCabinetServic instance.</param>
         public CreateCommandHandler(IFileCabinetService service)
+            : base(service)
         {
-            this.fileCabinetService = service;
             CreateRecordEvent += this.fileCabinetService.CreateRecord;
         }
 

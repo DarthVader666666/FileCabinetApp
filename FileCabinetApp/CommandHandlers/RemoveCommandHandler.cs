@@ -5,17 +5,15 @@ namespace FileCabinetApp.CommandHandlers
     /// <summary>
     /// Handles remove command.
     /// </summary>
-    public class RemoveCommandHandler : CommandHandlerBase
+    public class RemoveCommandHandler : ServiceCommandHandlerBase
     {
-        private readonly IFileCabinetService fileCabinetService;
-
         /// <summary>
         /// Initializes a new instance of the <see cref="RemoveCommandHandler"/> class.
         /// </summary>
         /// <param name="service">FileCabinetService instance.</param>
         public RemoveCommandHandler(IFileCabinetService service)
+            : base(service)
         {
-            this.fileCabinetService = service;
         }
 
         /// <summary>
