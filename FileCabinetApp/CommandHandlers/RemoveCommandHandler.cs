@@ -7,6 +7,17 @@ namespace FileCabinetApp.CommandHandlers
     /// </summary>
     public class RemoveCommandHandler : CommandHandlerBase
     {
+        private readonly IFileCabinetService fileCabinetService;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="RemoveCommandHandler"/> class.
+        /// </summary>
+        /// <param name="service">FileCabinetService instance.</param>
+        public RemoveCommandHandler(IFileCabinetService service)
+        {
+            this.fileCabinetService = service;
+        }
+
         /// <summary>
         /// Calls remove method or next handler.
         /// </summary>
@@ -20,7 +31,7 @@ namespace FileCabinetApp.CommandHandlers
 
             if (request.Command.Equals("remove", StringComparison.InvariantCultureIgnoreCase))
             {
-                Remove(request.Parameters);
+                this.Remove(request.Parameters);
             }
             else
             {
@@ -28,7 +39,7 @@ namespace FileCabinetApp.CommandHandlers
             }
         }
 
-        private static void Remove(string parameters)
+        private void Remove(string parameters)
         {
             if (parameters is null)
             {
@@ -49,7 +60,7 @@ namespace FileCabinetApp.CommandHandlers
                 return;
             }
 
-            Program.fileCabinetService.RemoveRecord(id);
+            this.fileCabinetService.RemoveRecord(id);
         }
     }
 }

@@ -8,12 +8,16 @@ namespace FileCabinetApp.CommandHandlers
     /// </summary>
     public class EditCommandHandler : CommandHandlerBase
     {
+        private readonly IFileCabinetService fileCabinetService;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="EditCommandHandler"/> class.
         /// </summary>
-        public EditCommandHandler()
+        /// <param name="service">FileCabinetService instance.</param>
+        public EditCommandHandler(IFileCabinetService service)
         {
-            EditRecordEvent += Program.fileCabinetService.EditRecord;
+            this.fileCabinetService = service;
+            EditRecordEvent += this.fileCabinetService.EditRecord;
         }
 
         /// <summary>
@@ -34,7 +38,7 @@ namespace FileCabinetApp.CommandHandlers
 
             if (request.Command.Equals("edit", StringComparison.InvariantCultureIgnoreCase))
             {
-                Edit(request.Parameters);
+                this.Edit(request.Parameters);
             }
             else
             {
@@ -42,7 +46,7 @@ namespace FileCabinetApp.CommandHandlers
             }
         }
 
-        private static void Edit(string parameters)
+        private void Edit(string parameters)
         {
             if (string.IsNullOrEmpty(parameters))
             {
@@ -52,7 +56,7 @@ namespace FileCabinetApp.CommandHandlers
 
             FileCabinetRecord record = new FileCabinetRecord();
             record.Id = int.Parse(parameters, CultureInfo.InvariantCulture);
-            int listCount = Program.fileCabinetService.GetStat().Item1;
+            int listCount = this.fileCabinetService.GetStat().Item1;
 
             if (record.Id > listCount || record.Id < 1)
             {

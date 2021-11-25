@@ -9,6 +9,17 @@ namespace FileCabinetApp.CommandHandlers
     /// </summary>
     public class ExportCommandHandler : CommandHandlerBase
     {
+        private readonly IFileCabinetService fileCabinetService;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ExportCommandHandler"/> class.
+        /// </summary>
+        /// <param name="service">FileCabinetService instance.</param>
+        public ExportCommandHandler(IFileCabinetService service)
+        {
+            this.fileCabinetService = service;
+        }
+
         /// <summary>
         /// Calls export method or next handler.
         /// </summary>
@@ -22,7 +33,7 @@ namespace FileCabinetApp.CommandHandlers
 
             if (request.Command.Equals("export", StringComparison.InvariantCultureIgnoreCase))
             {
-                Export(request.Parameters);
+                this.Export(request.Parameters);
             }
             else
             {
@@ -30,7 +41,7 @@ namespace FileCabinetApp.CommandHandlers
             }
         }
 
-        private static void Export(string parameters)
+        private void Export(string parameters)
         {
             if (parameters is null)
             {
@@ -75,13 +86,13 @@ namespace FileCabinetApp.CommandHandlers
 
             switch (unswer)
             {
-                case 'Y': ExportToFile(exportParams[0], exportParams[1]); break;
+                case 'Y': this.ExportToFile(exportParams[0], exportParams[1]); break;
                 case 'N': break;
-                default: ExportToFile(exportParams[0], exportParams[1]); break;
+                default: this.ExportToFile(exportParams[0], exportParams[1]); break;
             }
         }
 
-        private static void ExportToFile(string format, string path)
+        private void ExportToFile(string format, string path)
         {
             FileStream file;
             FileCabinetServiceSnapshot snapshot;
@@ -102,14 +113,14 @@ namespace FileCabinetApp.CommandHandlers
             switch (format.ToUpper(CultureInfo.InvariantCulture))
             {
                 case "CSV":
-                    snapshot = Program.fileCabinetService.MakeSnapshot();
+                    snapshot = this.fileCabinetService.MakeSnapshot();
                     streamWriter = new StreamWriter(path);
                     snapshot.SaveToCsv(streamWriter);
                     streamWriter.Close();
                     Console.WriteLine($"All records are exported to file {path}");
                     break;
                 case "XML":
-                    snapshot = Program.fileCabinetService.MakeSnapshot();
+                    snapshot = this.fileCabinetService.MakeSnapshot();
                     streamWriter = new StreamWriter(path);
                     snapshot.SaveToXml(streamWriter);
                     streamWriter.Close();

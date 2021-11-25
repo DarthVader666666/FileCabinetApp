@@ -7,6 +7,17 @@ namespace FileCabinetApp.CommandHandlers
     /// </summary>
     public class PurgeCommandHandler : CommandHandlerBase
     {
+        private readonly IFileCabinetService fileCabinetService;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="PurgeCommandHandler"/> class.
+        /// </summary>
+        /// <param name="service">FileCabinetService instance.</param>
+        public PurgeCommandHandler(IFileCabinetService service)
+        {
+            this.fileCabinetService = service;
+        }
+
         /// <summary>
         /// Calls purge method or next handler.
         /// </summary>
@@ -20,7 +31,7 @@ namespace FileCabinetApp.CommandHandlers
 
             if (request.Command.Equals("purge", StringComparison.InvariantCultureIgnoreCase))
             {
-                Purge(request.Parameters);
+                this.Purge(request.Parameters);
             }
             else
             {
@@ -28,7 +39,7 @@ namespace FileCabinetApp.CommandHandlers
             }
         }
 
-        private static void Purge(string parameters)
+        private void Purge(string parameters)
         {
             if (parameters.Length > 0)
             {
@@ -42,7 +53,7 @@ namespace FileCabinetApp.CommandHandlers
                 return;
             }
 
-            Program.fileCabinetService.PurgeFile();
+            this.fileCabinetService.PurgeFile();
         }
     }
 }

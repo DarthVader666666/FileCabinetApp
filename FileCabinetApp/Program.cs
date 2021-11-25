@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Globalization;
 
 namespace FileCabinetApp
@@ -13,7 +11,7 @@ namespace FileCabinetApp
         /// <summary>
         /// file cabinet instance.
         /// </summary>
-        public static IFileCabinetService fileCabinetService = new FileCabinetMemoryService(new DefaultValidator());
+        private static IFileCabinetService fileCabinetService = new FileCabinetMemoryService(new DefaultValidator());
         public static bool isRunning = true;
 
         private const string DeveloperName = "Vadzim Rumiantsau";
@@ -83,7 +81,7 @@ namespace FileCabinetApp
             Console.WriteLine(HintMessage);
             Console.WriteLine();
 
-            var handler = CreateCommandHandlers();
+            var handler = CreateCommandHandlers(fileCabinetService);
 
             do
             {
@@ -160,18 +158,18 @@ namespace FileCabinetApp
             record.Gender = ReadInput(charConverter, genderValidator);
         }
 
-        private static CommandHandlers.ICommandHandler CreateCommandHandlers()
+        private static CommandHandlers.ICommandHandler CreateCommandHandlers(IFileCabinetService service)
         {
             var helpHandler = new CommandHandlers.HelpCommandHandler();
-            var statHandler = new CommandHandlers.StatCommandHandler();
-            var listHandler = new CommandHandlers.ListCommandHandler();
-            var createHandler = new CommandHandlers.CreateCommandHandler();
-            var findHandler = new CommandHandlers.FindCommandHandler();
-            var editHandler = new CommandHandlers.EditCommandHandler();
-            var importHandler = new CommandHandlers.ImportCommandHandler();
-            var exportHandler = new CommandHandlers.ExportCommandHandler();
-            var removeHandler = new CommandHandlers.RemoveCommandHandler();
-            var purgeHandler = new CommandHandlers.PurgeCommandHandler();
+            var statHandler = new CommandHandlers.StatCommandHandler(service);
+            var listHandler = new CommandHandlers.ListCommandHandler(service);
+            var createHandler = new CommandHandlers.CreateCommandHandler(service);
+            var findHandler = new CommandHandlers.FindCommandHandler(service);
+            var editHandler = new CommandHandlers.EditCommandHandler(service);
+            var importHandler = new CommandHandlers.ImportCommandHandler(service);
+            var exportHandler = new CommandHandlers.ExportCommandHandler(service);
+            var removeHandler = new CommandHandlers.RemoveCommandHandler(service);
+            var purgeHandler = new CommandHandlers.PurgeCommandHandler(service);
             var exitHandler = new CommandHandlers.ExitCommandHandler();
 
             helpHandler.SetNext(statHandler);

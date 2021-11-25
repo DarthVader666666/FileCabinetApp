@@ -8,6 +8,17 @@ namespace FileCabinetApp.CommandHandlers
     /// </summary>
     public class FindCommandHandler : CommandHandlerBase
     {
+        private readonly IFileCabinetService fileCabinetService;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="FindCommandHandler"/> class.
+        /// </summary>
+        /// <param name="service">FileCabinetService instance.</param>
+        public FindCommandHandler(IFileCabinetService service)
+        {
+            this.fileCabinetService = service;
+        }
+
         /// <summary>
         /// Calls find method or next handler.
         /// </summary>
@@ -21,7 +32,7 @@ namespace FileCabinetApp.CommandHandlers
 
             if (request.Command.Equals("find", StringComparison.InvariantCultureIgnoreCase))
             {
-                Find(request.Parameters);
+                this.Find(request.Parameters);
             }
             else
             {
@@ -29,7 +40,7 @@ namespace FileCabinetApp.CommandHandlers
             }
         }
 
-        private static void Find(string parameters)
+        private void Find(string parameters)
         {
             if (parameters is null)
             {
@@ -48,9 +59,9 @@ namespace FileCabinetApp.CommandHandlers
 
             switch (searchArguments[0])
             {
-                case "FIRSTNAME": fileCabinetRecords = Program.fileCabinetService.FindByFirstName(searchArguments[1][1..^1]); break;
-                case "LASTNAME": fileCabinetRecords = Program.fileCabinetService.FindByLastName(searchArguments[1][1..^1]); break;
-                case "DATEOFBIRTH": fileCabinetRecords = Program.fileCabinetService.FindByDateOfBirth(searchArguments[1][1..^1]); break;
+                case "FIRSTNAME": fileCabinetRecords = this.fileCabinetService.FindByFirstName(searchArguments[1][1..^1]); break;
+                case "LASTNAME": fileCabinetRecords = this.fileCabinetService.FindByLastName(searchArguments[1][1..^1]); break;
+                case "DATEOFBIRTH": fileCabinetRecords = this.fileCabinetService.FindByDateOfBirth(searchArguments[1][1..^1]); break;
                 default: Console.WriteLine("! Wrong search parameter."); return;
             }
 

@@ -7,6 +7,17 @@ namespace FileCabinetApp.CommandHandlers
     /// </summary>
     public class StatCommandHandler : CommandHandlerBase
     {
+        private readonly IFileCabinetService fileCabinetService;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="StatCommandHandler"/> class.
+        /// </summary>
+        /// <param name="service">FileCabinetServic instance.</param>
+        public StatCommandHandler(IFileCabinetService service)
+        {
+            this.fileCabinetService = service;
+        }
+
         /// <summary>
         /// Calls stat method or next handler.
         /// </summary>
@@ -20,7 +31,7 @@ namespace FileCabinetApp.CommandHandlers
 
             if (request.Command.Equals("stat", StringComparison.InvariantCultureIgnoreCase))
             {
-                Stat(request.Parameters);
+                this.Stat(request.Parameters);
             }
             else
             {
@@ -28,7 +39,7 @@ namespace FileCabinetApp.CommandHandlers
             }
         }
 
-        private static void Stat(string parameters)
+        private void Stat(string parameters)
         {
             if (parameters.Length > 0)
             {
@@ -36,7 +47,7 @@ namespace FileCabinetApp.CommandHandlers
                 return;
             }
 
-            Tuple<int, int> countDeleted = Program.fileCabinetService.GetStat();
+            Tuple<int, int> countDeleted = this.fileCabinetService.GetStat();
             Console.WriteLine($"{countDeleted.Item1} recods in list, {countDeleted.Item2} deleted.");
         }
     }

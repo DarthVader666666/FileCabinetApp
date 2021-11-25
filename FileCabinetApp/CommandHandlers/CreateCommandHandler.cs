@@ -11,12 +11,16 @@ namespace FileCabinetApp.CommandHandlers
     /// </summary>
     public class CreateCommandHandler : CommandHandlerBase
     {
+        private readonly IFileCabinetService fileCabinetService;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="CreateCommandHandler"/> class.
         /// </summary>
-        public CreateCommandHandler()
+        /// <param name="service">FileCabinetService instance.</param>
+        public CreateCommandHandler(IFileCabinetService service)
         {
-            CreateRecordEvent += Program.fileCabinetService.CreateRecord;
+            this.fileCabinetService = service;
+            CreateRecordEvent += this.fileCabinetService.CreateRecord;
         }
 
         /// <summary>
@@ -37,7 +41,7 @@ namespace FileCabinetApp.CommandHandlers
 
             if (request.Command.Equals("create", StringComparison.InvariantCultureIgnoreCase))
             {
-                Create(request.Parameters);
+                this.Create(request.Parameters);
             }
             else
             {
@@ -45,7 +49,7 @@ namespace FileCabinetApp.CommandHandlers
             }
         }
 
-        private static void Create(string parameters)
+        private void Create(string parameters)
         {
             if (parameters.Length > 0)
             {
@@ -55,7 +59,7 @@ namespace FileCabinetApp.CommandHandlers
 
             FileCabinetRecord record = new FileCabinetRecord();
             Program.InputRecordProperties(record);
-            record.Id = Program.fileCabinetService.GetMaxId() + 1;
+            record.Id = this.fileCabinetService.GetMaxId() + 1;
             FileCabinetEventArgs recordArgs = new FileCabinetEventArgs(record);
             CreateRecordEvent(null, recordArgs);
             Console.WriteLine($"Record #{record.Id} is created.");
