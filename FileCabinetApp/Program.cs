@@ -64,7 +64,7 @@ namespace FileCabinetApp
                 switch (args[1].ToUpper(CultureInfo.InvariantCulture))
                 {
                     case "MEMORY":
-                        fileCabinetService = new FileCabinetMemoryService(new Validators.DefaultValidator());
+                        fileCabinetService = new FileCabinetMemoryService(new Validators.ValidatorBuilder().DefaultValidation().Create());
                         Console.WriteLine(MemoryStorageMessage); break;
                     case "FILE":
                         fileCabinetService = new FileCabinetFilesystemService(StorageDbFilePath);

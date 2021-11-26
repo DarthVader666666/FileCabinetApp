@@ -920,26 +920,6 @@
             <param name="parameters">Record to be validated.</param>
             <returns>Validated record.</returns>
         </member>
-        <member name="T:FileCabinetApp.Validators.CustomValidator">
-            <summary>
-            Class provides custom validation algorythm.
-            </summary>
-        </member>
-        <member name="M:FileCabinetApp.Validators.CustomValidator.#ctor">
-            <summary>
-            Initializes a new instance of the <see cref="T:FileCabinetApp.Validators.CustomValidator"/> class.
-            </summary>
-        </member>
-        <member name="T:FileCabinetApp.Validators.DefaultValidator">
-            <summary>
-            Class provides custom validation algorythm.
-            </summary>
-        </member>
-        <member name="M:FileCabinetApp.Validators.DefaultValidator.#ctor">
-            <summary>
-            Initializes a new instance of the <see cref="T:FileCabinetApp.Validators.DefaultValidator"/> class.
-            </summary>
-        </member>
         <member name="T:FileCabinetApp.Validators.ValidatorBuilder">
             <summary>
             Builds adjustible Composite Validator.
