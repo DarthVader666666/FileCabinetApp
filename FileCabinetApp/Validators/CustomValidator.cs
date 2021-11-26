@@ -22,12 +22,12 @@ namespace FileCabinetApp
             FileCabinetRecord record = new FileCabinetRecord();
 
             record.Id = recordArgs.Id;
-            record.FirstName = new CustomFirstNameValidator().ValidateParameters(recordArgs.FirstName);
-            record.LastName = new CustomLastNameValidator().ValidateParameters(recordArgs.LastName);
-            record.DateOfBirth = new CustomDateOfBirthValidator().ValidateParameters(recordArgs.DateOfBirth);
-            record.JobExperience = new CustomJobExperienceValidator().ValidateParameters(recordArgs.JobExperience);
-            record.MonthlyPay = new CustomMonthlyPayValidator().ValidateParameters(recordArgs.MonthlyPay);
-            record.Gender = new CustomGenderValidator().ValidateParameters(recordArgs.Gender);
+            record.FirstName = new FirstNameValidator(1, 60).ValidateParameters(recordArgs.FirstName);
+            record.LastName = new LastNameValidator(1, 60).ValidateParameters(recordArgs.LastName);
+            record.DateOfBirth = new DateOfBirthValidator(1950, 2000).ValidateParameters(recordArgs.DateOfBirth);
+            record.JobExperience = new JobExperienceValidator(1, 20).ValidateParameters(recordArgs.JobExperience);
+            record.MonthlyPay = new MonthlyPayValidator(0, 1000).ValidateParameters(recordArgs.MonthlyPay);
+            record.Gender = new GenderValidator('M', 'F').ValidateParameters(recordArgs.Gender);
 
             return record;
         }

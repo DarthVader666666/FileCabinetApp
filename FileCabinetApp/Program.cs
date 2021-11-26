@@ -351,9 +351,9 @@ namespace FileCabinetApp
             bool successful = true;
             string failureMessage = string.Empty;
 
-            if (inputData.Length == 0)
+            if (inputData.Length == 0 || Array.FindIndex(inputData.ToCharArray(), i => char.IsDigit(i)) >= 0)
             {
-                failureMessage = "Field shouldn't be empty.";
+                failureMessage = "Field shouldn't be empty or contain digits.";
                 successful = false;
             }
 

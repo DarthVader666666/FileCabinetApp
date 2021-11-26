@@ -902,78 +902,6 @@
             </summary>
             <param name="records">File records to be printed.</param>
         </member>
-        <member name="T:FileCabinetApp.CustomDateOfBirthValidator">
-            <summary>
-            CustomDateOfBirthValidator.
-            </summary>
-        </member>
-        <member name="M:FileCabinetApp.CustomDateOfBirthValidator.ValidateParameters(System.DateTime)">
-            <summary>
-            Validates dateOfBirth.
-            </summary>
-            <param name="parameters">Date to be validated.</param>
-            <returns>Validated date.</returns>
-        </member>
-        <member name="T:FileCabinetApp.CustomFirstNameValidator">
-            <summary>
-            CustomFirstNameValidator.
-            </summary>
-        </member>
-        <member name="M:FileCabinetApp.CustomFirstNameValidator.ValidateParameters(System.String)">
-            <summary>
-            Validates FirstName.
-            </summary>
-            <param name="parameters">String to be validated.</param>
-            <returns>Validated string.</returns>
-        </member>
-        <member name="T:FileCabinetApp.CustomGenderValidator">
-            <summary>
-            CustomGenderValidator.
-            </summary>
-        </member>
-        <member name="M:FileCabinetApp.CustomGenderValidator.ValidateParameters(System.Char)">
-            <summary>
-            Validates gender.
-            </summary>
-            <param name="parameters">Char to be validated.</param>
-            <returns>Validated char.</returns>
-        </member>
-        <member name="T:FileCabinetApp.CustomJobExperienceValidator">
-            <summary>
-            CustomJobExperienceValidator
-            </summary>
-        </member>
-        <member name="M:FileCabinetApp.CustomJobExperienceValidator.ValidateParameters(System.Int16)">
-            <summary>
-            Validates job experience.
-            </summary>
-            <param name="parameters">Short int to be validated.</param>
-            <returns>Validated short int.</returns>
-        </member>
-        <member name="T:FileCabinetApp.CustomLastNameValidator">
-            <summary>
-            CustomLastNameValidator.
-            </summary>
-        </member>
-        <member name="M:FileCabinetApp.CustomLastNameValidator.ValidateParameters(System.String)">
-            <summary>
-            Validates First Name.
-            </summary>
-            <param name="parameters">String to be validated.</param>
-            <returns>Validated string.</returns>
-        </member>
-        <member name="T:FileCabinetApp.CustomMonthlyPayValidator">
-            <summary>
-            CustomMonthlyPayValidator.
-            </summary>
-        </member>
-        <member name="M:FileCabinetApp.CustomMonthlyPayValidator.ValidateParameters(System.Decimal)">
-            <summary>
-            Validates Monthly Pay.
-            </summary>
-            <param name="parameters">decimal to be validated.</param>
-            <returns>validated decimal.</returns>
-        </member>
         <member name="T:FileCabinetApp.CustomValidator">
             <summary>
             Class provides custom validation algorythm.
@@ -986,77 +914,24 @@
             <param name="recordArgs">File recordArgs which parameters shall be validated.</param>
             <returns>Validated file record.</returns>
         </member>
-        <member name="T:FileCabinetApp.DefaultDateOfBirthValidator">
+        <member name="T:FileCabinetApp.DateOfBirthValidator">
             <summary>
-            DefaultDateOfBirthValidator.
+            CustomDateOfBirthValidator.
             </summary>
         </member>
-        <member name="M:FileCabinetApp.DefaultDateOfBirthValidator.ValidateParameters(System.DateTime)">
+        <member name="M:FileCabinetApp.DateOfBirthValidator.#ctor(System.Int32,System.Int32)">
             <summary>
-            Validates Date of birth.
+            Initializes a new instance of the <see cref="T:FileCabinetApp.DateOfBirthValidator"/> class.
             </summary>
-            <param name="parameters">DateTime to be validated.</param>
-            <returns>Validated DateTime.</returns>
+            <param name="from">Min year of birth.</param>
+            <param name="to">Max year of birth.</param>
         </member>
-        <member name="T:FileCabinetApp.DefaultFirstNameValidator">
+        <member name="M:FileCabinetApp.DateOfBirthValidator.ValidateParameters(System.DateTime)">
             <summary>
-            DefaultFirstNameValidator.
+            Validates dateOfBirth.
             </summary>
-        </member>
-        <member name="M:FileCabinetApp.DefaultFirstNameValidator.ValidateParameters(System.String)">
-            <summary>
-            Validates First Name.
-            </summary>
-            <param name="parameters">String to be Validated.</param>
-            <returns>Validated String.</returns>
-        </member>
-        <member name="T:FileCabinetApp.DefaultGenderValidator">
-            <summary>
-            DefaultGenderValidator.
-            </summary>
-        </member>
-        <member name="M:FileCabinetApp.DefaultGenderValidator.ValidateParameters(System.Char)">
-            <summary>
-            Validates gender.
-            </summary>
-            <param name="parameters">Char to be validated.</param>
-            <returns>Validated char.</returns>
-        </member>
-        <member name="T:FileCabinetApp.DefaultJobExperienceValidator">
-            <summary>
-            DefaultJobExperienceValidator.
-            </summary>
-        </member>
-        <member name="M:FileCabinetApp.DefaultJobExperienceValidator.ValidateParameters(System.Int16)">
-            <summary>
-            Validates job experience.
-            </summary>
-            <param name="parameters">Short int to be validated.</param>
-            <returns>Validated short int.</returns>
-        </member>
-        <member name="T:FileCabinetApp.DefaultLastNameValidator">
-            <summary>
-            DefaultLastNameValidator.
-            </summary>
-        </member>
-        <member name="M:FileCabinetApp.DefaultLastNameValidator.ValidateParameters(System.String)">
-            <summary>
-            Validates First Name.
-            </summary>
-            <param name="parameters">String to be validated.</param>
-            <returns>Validated string.</returns>
-        </member>
-        <member name="T:FileCabinetApp.DefaultMonthlyPayValidator">
-            <summary>
-            DefaultMonthlyPayValidator.
-            </summary>
-        </member>
-        <member name="M:FileCabinetApp.DefaultMonthlyPayValidator.ValidateParameters(System.Decimal)">
-            <summary>
-            Validates Monthly Pay.
-            </summary>
-            <param name="parameters">decimal to be validated.</param>
-            <returns>validated decimal.</returns>
+            <param name="parameters">Date to be validated.</param>
+            <returns>Validated date.</returns>
         </member>
         <member name="T:FileCabinetApp.DefaultValidator">
             <summary>
@@ -1069,6 +944,44 @@
             </summary>
             <param name="recordArgs">File recordArgs which parameters shall be validated.</param>
             <returns>Validated file record.</returns>
+        </member>
+        <member name="T:FileCabinetApp.FirstNameValidator">
+            <summary>
+            CustomFirstNameValidator.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.FirstNameValidator.#ctor(System.Int32,System.Int32)">
+            <summary>
+            Initializes a new instance of the <see cref="T:FileCabinetApp.FirstNameValidator"/> class.
+            </summary>
+            <param name="min">Min count of letters in First Name.</param>
+            <param name="max">Max count of lettes in FIrst Name.</param>
+        </member>
+        <member name="M:FileCabinetApp.FirstNameValidator.ValidateParameters(System.String)">
+            <summary>
+            Validates FirstName.
+            </summary>
+            <param name="parameters">String to be validated.</param>
+            <returns>Validated string.</returns>
+        </member>
+        <member name="T:FileCabinetApp.GenderValidator">
+            <summary>
+            CustomGenderValidator.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.GenderValidator.#ctor(System.Char,System.Char)">
+            <summary>
+            Initializes a new instance of the <see cref="T:FileCabinetApp.GenderValidator"/> class.
+            </summary>
+            <param name="male">Male letter.</param>
+            <param name="female">Female letter.</param>
+        </member>
+        <member name="M:FileCabinetApp.GenderValidator.ValidateParameters(System.Char)">
+            <summary>
+            Validates gender.
+            </summary>
+            <param name="parameters">Char to be validated.</param>
+            <returns>Validated char.</returns>
         </member>
         <member name="T:FileCabinetApp.IRecordValidator`2">
             <summary>
@@ -1083,6 +996,63 @@
             </summary>
             <param name="parameters">Parameter to be validated.</param>
             <returns>Validated parameter.</returns>
+        </member>
+        <member name="T:FileCabinetApp.JobExperienceValidator">
+            <summary>
+            CustomJobExperienceValidator.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.JobExperienceValidator.#ctor(System.Int16,System.Int16)">
+            <summary>
+            Initializes a new instance of the <see cref="T:FileCabinetApp.JobExperienceValidator"/> class.
+            </summary>
+            <param name="min">Min job experience.</param>
+            <param name="max">Max job experience.</param>
+        </member>
+        <member name="M:FileCabinetApp.JobExperienceValidator.ValidateParameters(System.Int16)">
+            <summary>
+            Validates job experience.
+            </summary>
+            <param name="parameters">Short int to be validated.</param>
+            <returns>Validated short int.</returns>
+        </member>
+        <member name="T:FileCabinetApp.LastNameValidator">
+            <summary>
+            CustomLastNameValidator.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.LastNameValidator.#ctor(System.Int32,System.Int32)">
+            <summary>
+            Initializes a new instance of the <see cref="T:FileCabinetApp.LastNameValidator"/> class.
+            </summary>
+            <param name="min">Min count of letters in Last Name.</param>
+            <param name="max">Max count of lettes in Last Name.</param>
+        </member>
+        <member name="M:FileCabinetApp.LastNameValidator.ValidateParameters(System.String)">
+            <summary>
+            Validates Last Name.
+            </summary>
+            <param name="parameters">String to be validated.</param>
+            <returns>Validated string.</returns>
+        </member>
+        <member name="T:FileCabinetApp.MonthlyPayValidator">
+            <summary>
+            CustomMonthlyPayValidator.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.MonthlyPayValidator.#ctor(System.Decimal,System.Decimal)">
+            <summary>
+            Initializes a new instance of the <see cref="T:FileCabinetApp.MonthlyPayValidator"/> class.
+            </summary>
+            <param name="min">Min monthly pay.</param>
+            <param name="max">Max monthly pay.</param>
+        </member>
+        <member name="M:FileCabinetApp.MonthlyPayValidator.ValidateParameters(System.Decimal)">
+            <summary>
+            Validates Monthly Pay.
+            </summary>
+            <param name="parameters">decimal to be validated.</param>
+            <returns>validated decimal.</returns>
         </member>
     </members>
 </doc>

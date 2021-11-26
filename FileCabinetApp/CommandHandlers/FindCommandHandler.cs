@@ -63,7 +63,7 @@ namespace FileCabinetApp.CommandHandlers
 
             if (searchArguments[1][0] != '"' && searchArguments[1][^1] != '"')
             {
-                Console.WriteLine("! Search value must be in quotes. Abort find command.");
+                Console.WriteLine("! Search value must be in quotes (\"value\"). Abort find command.");
                 return;
             }
 

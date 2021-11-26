@@ -5,8 +5,23 @@ namespace FileCabinetApp
     /// <summary>
     /// CustomFirstNameValidator.
     /// </summary>
-    public class CustomFirstNameValidator : IRecordValidator<string, string>
+    public class FirstNameValidator : IRecordValidator<string, string>
     {
+        private readonly int min;
+
+        private readonly int max;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="FirstNameValidator"/> class.
+        /// </summary>
+        /// <param name="min">Min count of letters in First Name.</param>
+        /// <param name="max">Max count of lettes in FIrst Name.</param>
+        public FirstNameValidator(int min, int max)
+        {
+            this.min = min;
+            this.max = max;
+        }
+
         /// <summary>
         /// Validates FirstName.
         /// </summary>
@@ -14,7 +29,7 @@ namespace FileCabinetApp
         /// <returns>Validated string.</returns>
         public string ValidateParameters(string parameters)
         {
-            if (string.IsNullOrWhiteSpace(parameters) || parameters.Length < 2 || parameters.Length > 60)
+            if (string.IsNullOrWhiteSpace(parameters) || parameters.Length < this.min || parameters.Length > this.max)
             {
                 if (parameters is null)
                 {
@@ -24,11 +39,6 @@ namespace FileCabinetApp
                 {
                     throw new ArgumentException("First Name is invalid");
                 }
-            }
-
-            if (Array.FindIndex(parameters.ToCharArray(), i => char.IsDigit(i)) >= 0)
-            {
-                throw new ArgumentException("First Name contains digits");
             }
 
             return parameters;
