@@ -10,7 +10,7 @@ namespace FileCabinetApp
     public class FileCabinetMemoryService : IFileCabinetService
     {
         private readonly List<FileCabinetRecord> list = new List<FileCabinetRecord>();
-        private readonly IRecordValidator validator;
+        private readonly Validators.CompositeValidator validator;
         private readonly Dictionary<string, List<FileCabinetRecord>> firstNameDictionary = new Dictionary<string, List<FileCabinetRecord>>();
         private readonly Dictionary<string, List<FileCabinetRecord>> lastNameDictionary = new Dictionary<string, List<FileCabinetRecord>>();
         private readonly Dictionary<string, List<FileCabinetRecord>> dateOfBirthDictionary = new Dictionary<string, List<FileCabinetRecord>>();
@@ -19,7 +19,7 @@ namespace FileCabinetApp
         /// Initializes a new instance of the <see cref="FileCabinetMemoryService"/> class.
         /// </summary>
         /// <param name="validator">Validator object to implement.</param>
-        public FileCabinetMemoryService(IRecordValidator validator)
+        public FileCabinetMemoryService(Validators.CompositeValidator validator)
         {
             this.validator = validator;
         }
@@ -39,6 +39,11 @@ namespace FileCabinetApp
         /// <returns>Last record's id.</returns>
         public int GetMaxId()
         {
+            if (this.list.Count == 0)
+            {
+                return 0;
+            }
+
             int maxId = this.list[0].Id;
 
             foreach (var record in this.list)
@@ -61,7 +66,7 @@ namespace FileCabinetApp
                 throw new ArgumentNullException(nameof(e), "Record argument is null");
             }
 
-            FileCabinetRecord record = this.validator.ValidateParameters(e);
+            FileCabinetRecord record = (FileCabinetRecord)this.validator.ValidateParameters(e);
             this.list.Add(record);
 
             var dateOfBirthKey = $"{record.DateOfBirth.Year}-{record.DateOfBirth.Month}-{record.DateOfBirth.Day}";
@@ -106,7 +111,7 @@ namespace FileCabinetApp
                 throw new ArgumentException("No such record");
             }
 
-            FileCabinetRecord record = this.validator.ValidateParameters(recordArgs);
+            FileCabinetRecord record = (FileCabinetRecord)this.validator.ValidateParameters(recordArgs);
 
             var oldRecord = this.list[record.Id - 1];
             var dateOfBirthKey = $"{oldRecord.DateOfBirth.Year}-{oldRecord.DateOfBirth.Month}-{oldRecord.DateOfBirth.Day}";
@@ -199,6 +204,8 @@ namespace FileCabinetApp
                 throw new ArgumentNullException($"{snapshot} is null.");
             }
 
+            this.GetRecords();
+
             int index = -1;
 
             foreach (FileCabinetRecord record in snapshot.Records)
@@ -214,6 +221,8 @@ namespace FileCabinetApp
                     this.list.Add(record);
                 }
             }
+
+            this.FillAllDictionaries();
         }
 
         /// <summary>
@@ -223,8 +232,9 @@ namespace FileCabinetApp
         public void RemoveRecord(int id)
         {
             FileCabinetRecord record;
+            record = this.list.Find(i => i.Id.Equals(id));
 
-            if ((record = this.list.Find(i => i.Id.Equals(id))) is null)
+            if (record is null)
             {
                 Console.WriteLine("Specified record doesn't exist. Can't remove.");
                 return;
@@ -256,6 +266,22 @@ namespace FileCabinetApp
         public void PurgeFile()
         {
             // Method intentionally left empty.
+        }
+
+        private void FillAllDictionaries()
+        {
+            string dateOfBirthKey;
+            this.firstNameDictionary.Clear();
+            this.lastNameDictionary.Clear();
+            this.dateOfBirthDictionary.Clear();
+
+            foreach (FileCabinetRecord record in this.list)
+            {
+                this.AddRecordToFirstNameDictionary(record, record.FirstName);
+                this.AddRecordToLastNameDictionary(record, record.LastName);
+                dateOfBirthKey = $"{record.DateOfBirth.Year}-{record.DateOfBirth.Month}-{record.DateOfBirth.Day}";
+                this.AddRecordToDateOfBirthDictionary(record, dateOfBirthKey);
+            }
         }
 
         private void AddRecordToFirstNameDictionary(FileCabinetRecord record, string firstNameKey)

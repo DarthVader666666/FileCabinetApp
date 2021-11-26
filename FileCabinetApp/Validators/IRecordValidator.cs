@@ -10,8 +10,8 @@ namespace FileCabinetApp
         /// <summary>
         /// File Record parameters validator.
         /// </summary>
-        /// <param name="recordArgs">File recordArgs which parameters shall be validated.</param>
-        /// <returns>Validated file record.</returns>
-        public FileCabinetRecord ValidateParameters(FileCabinetEventArgs recordArgs);
+        /// <param name="parameters">Parameter to be validated.</param>
+        /// <returns>Validated parameter.</returns>
+        public object ValidateParameters(FileCabinetEventArgs parameters);
     }
 }

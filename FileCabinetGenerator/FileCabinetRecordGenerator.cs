@@ -7,7 +7,6 @@ namespace FileCabinetGenerator
     using System;
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
-    using System.Globalization;
     using System.IO;
     using System.Xml.Serialization;
     using FileCabinetApp;
@@ -17,7 +16,7 @@ namespace FileCabinetGenerator
     /// </summary>
     public class FileCabinetRecordGenerator
     {
-        private readonly IRecordValidator validator;
+        private readonly FileCabinetApp.Validators.CompositeValidator validator;
 
         private readonly List<FileCabinetRecord> list = new List<FileCabinetRecord>();
 
@@ -26,7 +25,7 @@ namespace FileCabinetGenerator
         /// </summary>
         public FileCabinetRecordGenerator()
         {
-            this.validator = new FileCabinetApp.DefaultValidator();
+            this.validator = new FileCabinetApp.Validators.ValidatorBuilder().CreateDefault();
         }
 
         /// <summary>
@@ -46,7 +45,7 @@ namespace FileCabinetGenerator
         {
             FileCabinetRecord record;
             Random random = new Random();
-            char[] genderChars = new char[] { 'F', 'M' };
+            char[] genderChars = new char[] { 'F', 'M', 'f', 'm' };
             bool running;
             this.list.Clear();
 
@@ -64,9 +63,9 @@ namespace FileCabinetGenerator
                         record.FirstName = GenerateString();
                         record.LastName = GenerateString();
                         record.DateOfBirth = GenerateDateTime();
-                        record.JobExperience = (short)random.Next(0, 40);
-                        record.MonthlyPay = (decimal)random.Next(30000, 300000) / 100;
-                        record.Gender = genderChars[random.Next(2)];
+                        record.JobExperience = (short)random.Next(0, 30);
+                        record.MonthlyPay = (decimal)random.Next(1000, 300000) / 100;
+                        record.Gender = genderChars[random.Next(4)];
 
                         this.validator.ValidateParameters(new FileCabinetEventArgs(record));
 

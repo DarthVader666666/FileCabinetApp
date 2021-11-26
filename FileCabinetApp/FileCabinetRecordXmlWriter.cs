@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Globalization;
 using System.Xml;
+using System.Xml.Serialization;
 
 namespace FileCabinetApp
 {
@@ -37,8 +38,12 @@ namespace FileCabinetApp
             {
                 this.xmlWriter.WriteStartElement("record");
                 this.xmlWriter.WriteAttributeString("id", $"{record.Id}");
-                this.xmlWriter.WriteElementString("firstName", record.FirstName);
-                this.xmlWriter.WriteElementString("lastName", record.LastName);
+
+                this.xmlWriter.WriteStartElement("name");
+                this.xmlWriter.WriteAttributeString("last", record.LastName);
+                this.xmlWriter.WriteAttributeString("first", record.FirstName);
+                this.xmlWriter.WriteEndElement();
+
                 this.xmlWriter.WriteElementString("dateOfBirth", $"{record.DateOfBirth.Day:D2}/{record.DateOfBirth.Month:D2}/{record.DateOfBirth.Year}");
                 this.xmlWriter.WriteElementString("jobExperience", $"{record.JobExperience}");
                 this.xmlWriter.WriteElementString("monthlyPay", string.Format(CultureInfo.CreateSpecificCulture("en-US"), "{0:F2}", record.MonthlyPay));
