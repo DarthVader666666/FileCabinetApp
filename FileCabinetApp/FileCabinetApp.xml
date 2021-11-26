@@ -945,13 +945,30 @@
             Builds adjustible Composite Validator.
             </summary>
         </member>
+        <member name="M:FileCabinetApp.Validators.ValidatorBuilder.DefaultValidation">
+            <summary>
+            Fills validators List with default validators.
+            </summary>
+            <returns>ValidatorBuilder instance.</returns>
+        </member>
+        <member name="M:FileCabinetApp.Validators.ValidatorBuilder.CustomValidation">
+            <summary>
+            Fills validators List with custom validators.
+            </summary>
+            <returns>ValidatorBuilder instance.</returns>
+        </member>
+        <member name="M:FileCabinetApp.Validators.ValidatorBuilder.Create">
+            <summary>
+            Creates new Composite Validator.
+            </summary>
+            <returns>CompositeValidator.</returns>
+        </member>
         <member name="M:FileCabinetApp.Validators.ValidatorBuilder.ValidateFirstName(System.Int32,System.Int32)">
             <summary>
             Adds FirstNameValidator to validators List.
             </summary>
             <param name="min">Min string Length.</param>
             <param name="max">Max string Length.</param>
-            <returns>VaAlidatorBuilder instance.</returns>
         </member>
         <member name="M:FileCabinetApp.Validators.ValidatorBuilder.ValidateLastName(System.Int32,System.Int32)">
             <summary>
@@ -959,7 +976,6 @@
             </summary>
             <param name="min">Min string Length.</param>
             <param name="max">Max string Length.</param>
-            <returns>VaAlidatorBuilder instance.</returns>
         </member>
         <member name="M:FileCabinetApp.Validators.ValidatorBuilder.ValidateDateOfBirth(System.Int32,System.Int32)">
             <summary>
@@ -967,7 +983,6 @@
             </summary>
             <param name="from">Min year of birth.</param>
             <param name="to">Max year of birth.</param>
-            <returns>VaAlidatorBuilder instance.</returns>
         </member>
         <member name="M:FileCabinetApp.Validators.ValidatorBuilder.ValidateJobExperience(System.Int16,System.Int16)">
             <summary>
@@ -975,7 +990,6 @@
             </summary>
             <param name="min">Min years of experience.</param>
             <param name="max">Max years of experience.</param>
-            <returns>VaAlidatorBuilder instance.</returns>
         </member>
         <member name="M:FileCabinetApp.Validators.ValidatorBuilder.ValidateMonthlyPay(System.Decimal,System.Decimal)">
             <summary>
@@ -983,7 +997,6 @@
             </summary>
             <param name="min">Min pay.</param>
             <param name="max">Max pay.</param>
-            <returns>VaAlidatorBuilder instance.</returns>
         </member>
         <member name="M:FileCabinetApp.Validators.ValidatorBuilder.ValidateGender(System.Char,System.Char)">
             <summary>
@@ -991,13 +1004,6 @@
             </summary>
             <param name="male">Male definding symbol.</param>
             <param name="female">Female definding symbol.</param>
-            <returns>VaAlidatorBuilder instance.</returns>
-        </member>
-        <member name="M:FileCabinetApp.Validators.ValidatorBuilder.Create">
-            <summary>
-            Creates new Composite Validator.
-            </summary>
-            <returns>CompositeValidator.</returns>
         </member>
         <member name="T:FileCabinetApp.DateOfBirthValidator">
             <summary>

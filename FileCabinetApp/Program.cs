@@ -20,7 +20,7 @@ namespace FileCabinetApp
         /// <summary>
         /// file cabinet instance.
         /// </summary>
-        private static IFileCabinetService fileCabinetService = new FileCabinetMemoryService(new Validators.DefaultValidator());
+        private static IFileCabinetService fileCabinetService = new FileCabinetMemoryService(new Validators.ValidatorBuilder().DefaultValidation().Create());
         private static bool isRunning = true;
         private static Action<bool> breakAll = StopProgram;
         private static Action<ReadOnlyCollection<FileCabinetRecord>> printer = Defaultprinter;
@@ -47,10 +47,10 @@ namespace FileCabinetApp
                 switch (args[1].ToUpper(CultureInfo.InvariantCulture))
                 {
                     case "DEFAULT":
-                        fileCabinetService = new FileCabinetMemoryService(new Validators.DefaultValidator());
+                        fileCabinetService = new FileCabinetMemoryService(new Validators.ValidatorBuilder().DefaultValidation().Create());
                         Console.WriteLine(DefaultValidationMessage); break;
                     case "CUSTOM":
-                        fileCabinetService = new FileCabinetMemoryService(new Validators.CustomValidator());
+                        fileCabinetService = new FileCabinetMemoryService(new Validators.ValidatorBuilder().CustomValidation().Create());
                         Console.WriteLine(CustomValidationMessage); break;
                 }
             }

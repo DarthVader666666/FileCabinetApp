@@ -25,7 +25,7 @@ namespace FileCabinetGenerator
         /// </summary>
         public FileCabinetRecordGenerator()
         {
-            this.validator = new FileCabinetApp.Validators.DefaultValidator();
+            this.validator = new FileCabinetApp.Validators.ValidatorBuilder().DefaultValidation().Create();
         }
 
         /// <summary>
