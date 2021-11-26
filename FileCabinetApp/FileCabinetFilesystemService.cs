@@ -14,7 +14,7 @@ namespace FileCabinetApp
         private const int BufferSize = 278;
 
         private readonly List<FileCabinetRecord> list = new List<FileCabinetRecord>();
-        private readonly Validators.CompositeValidator validator = new Validators.ValidatorBuilder().DefaultValidation().Create();
+        private readonly Validators.CompositeValidator validator = new Validators.ValidatorBuilder().CreateDefault();
         private readonly Dictionary<string, List<FileCabinetRecord>> firstNameDictionary = new Dictionary<string, List<FileCabinetRecord>>();
         private readonly Dictionary<string, List<FileCabinetRecord>> lastNameDictionary = new Dictionary<string, List<FileCabinetRecord>>();
         private readonly Dictionary<string, List<FileCabinetRecord>> dateOfBirthDictionary = new Dictionary<string, List<FileCabinetRecord>>();

@@ -12,8 +12,8 @@ namespace FileCabinetApp.Validators
         /// <summary>
         /// Fills validators List with default validators.
         /// </summary>
-        /// <returns>ValidatorBuilder instance.</returns>
-        public ValidatorBuilder DefaultValidation()
+        /// <returns>CompositeValidator instance.</returns>
+        public CompositeValidator CreateDefault()
         {
             this.ValidateFirstName(2, 50);
             this.ValidateLastName(2, 50);
@@ -22,14 +22,14 @@ namespace FileCabinetApp.Validators
             this.ValidateMonthlyPay(20, 5000);
             this.ValidateGender('m', 'f');
 
-            return this;
+            return new CompositeValidator(this.validators);
         }
 
         /// <summary>
         /// Fills validators List with custom validators.
         /// </summary>
-        /// <returns>ValidatorBuilder instance.</returns>
-        public ValidatorBuilder CustomValidation()
+        /// <returns>CompositeValidator instance.</returns>
+        public CompositeValidator CreateCustom()
         {
             this.ValidateFirstName(1, 60);
             this.ValidateLastName(1, 60);
@@ -38,15 +38,6 @@ namespace FileCabinetApp.Validators
             this.ValidateMonthlyPay(0, 4000);
             this.ValidateGender('M', 'F');
 
-            return this;
-        }
-
-        /// <summary>
-        /// Creates new Composite Validator.
-        /// </summary>
-        /// <returns>CompositeValidator.</returns>
-        public CompositeValidator Create()
-        {
             return new CompositeValidator(this.validators);
         }
 

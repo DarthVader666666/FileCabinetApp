@@ -925,23 +925,17 @@
             Builds adjustible Composite Validator.
             </summary>
         </member>
-        <member name="M:FileCabinetApp.Validators.ValidatorBuilder.DefaultValidation">
+        <member name="M:FileCabinetApp.Validators.ValidatorBuilder.CreateDefault">
             <summary>
             Fills validators List with default validators.
             </summary>
-            <returns>ValidatorBuilder instance.</returns>
+            <returns>CompositeValidator instance.</returns>
         </member>
-        <member name="M:FileCabinetApp.Validators.ValidatorBuilder.CustomValidation">
+        <member name="M:FileCabinetApp.Validators.ValidatorBuilder.CreateCustom">
             <summary>
             Fills validators List with custom validators.
             </summary>
-            <returns>ValidatorBuilder instance.</returns>
-        </member>
-        <member name="M:FileCabinetApp.Validators.ValidatorBuilder.Create">
-            <summary>
-            Creates new Composite Validator.
-            </summary>
-            <returns>CompositeValidator.</returns>
+            <returns>CompositeValidator instance.</returns>
         </member>
         <member name="M:FileCabinetApp.Validators.ValidatorBuilder.ValidateFirstName(System.Int32,System.Int32)">
             <summary>
