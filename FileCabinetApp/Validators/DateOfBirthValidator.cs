@@ -5,7 +5,7 @@ namespace FileCabinetApp
     /// <summary>
     /// CustomDateOfBirthValidator.
     /// </summary>
-    public class DateOfBirthValidator : IRecordValidator<DateTime, DateTime>
+    public class DateOfBirthValidator : IRecordValidator<FileCabinetEventArgs, object>
     {
         private readonly int from;
 
@@ -27,14 +27,19 @@ namespace FileCabinetApp
         /// </summary>
         /// <param name="parameters">Date to be validated.</param>
         /// <returns>Validated date.</returns>
-        public DateTime ValidateParameters(DateTime parameters)
+        public object ValidateParameters(FileCabinetEventArgs parameters)
         {
-            if (parameters.Year < this.from || parameters.Year > this.to)
+            if (parameters is null)
+            {
+                throw new ArgumentNullException($"{parameters} argument is null");
+            }
+
+            if (parameters.DateOfBirth.Year < this.from || parameters.DateOfBirth.Year > this.to)
             {
                 throw new ArgumentException("Person's age unappropriate.");
             }
 
-            return parameters;
+            return parameters.DateOfBirth;
         }
     }
 }

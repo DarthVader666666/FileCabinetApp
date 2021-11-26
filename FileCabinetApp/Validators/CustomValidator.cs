@@ -1,35 +1,27 @@
 ﻿using System;
+using System.Collections.Generic;
 
-namespace FileCabinetApp
+namespace FileCabinetApp.Validators
 {
     /// <summary>
     /// Class provides custom validation algorythm.
     /// </summary>
-    public sealed class CustomValidator : IRecordValidator<FileCabinetEventArgs, FileCabinetRecord>
+    public sealed class CustomValidator : CompositeValidator
     {
         /// <summary>
-        /// File Record parameters default validator.
+        /// Initializes a new instance of the <see cref="CustomValidator"/> class.
         /// </summary>
-        /// <param name="recordArgs">File recordArgs which parameters shall be validated.</param>
-        /// <returns>Validated file record.</returns>
-        public FileCabinetRecord ValidateParameters(FileCabinetEventArgs recordArgs)
-        {
-            if (recordArgs is null)
+        public CustomValidator()
+            : base(new List<IRecordValidator<FileCabinetEventArgs, object>>()
             {
-                throw new ArgumentNullException(nameof(recordArgs), "recordArgs is null");
-            }
-
-            FileCabinetRecord record = new FileCabinetRecord();
-
-            record.Id = recordArgs.Id;
-            record.FirstName = new FirstNameValidator(1, 60).ValidateParameters(recordArgs.FirstName);
-            record.LastName = new LastNameValidator(1, 60).ValidateParameters(recordArgs.LastName);
-            record.DateOfBirth = new DateOfBirthValidator(1950, 2000).ValidateParameters(recordArgs.DateOfBirth);
-            record.JobExperience = new JobExperienceValidator(1, 20).ValidateParameters(recordArgs.JobExperience);
-            record.MonthlyPay = new MonthlyPayValidator(0, 1000).ValidateParameters(recordArgs.MonthlyPay);
-            record.Gender = new GenderValidator('M', 'F').ValidateParameters(recordArgs.Gender);
-
-            return record;
+                new FirstNameValidator(1, 60),
+                new LastNameValidator(1, 60),
+                new DateOfBirthValidator(1950, 2000),
+                new JobExperienceValidator(1, 30),
+                new MonthlyPayValidator(0, 4000),
+                new GenderValidator('M', 'F'),
+            })
+        {
         }
     }
 }

@@ -5,7 +5,7 @@ namespace FileCabinetApp
     /// <summary>
     /// CustomFirstNameValidator.
     /// </summary>
-    public class FirstNameValidator : IRecordValidator<string, string>
+    public class FirstNameValidator : IRecordValidator<FileCabinetEventArgs, string>
     {
         private readonly int min;
 
@@ -27,21 +27,19 @@ namespace FileCabinetApp
         /// </summary>
         /// <param name="parameters">String to be validated.</param>
         /// <returns>Validated string.</returns>
-        public string ValidateParameters(string parameters)
+        public string ValidateParameters(FileCabinetEventArgs parameters)
         {
-            if (string.IsNullOrWhiteSpace(parameters) || parameters.Length < this.min || parameters.Length > this.max)
+            if (parameters is null)
             {
-                if (parameters is null)
-                {
-                    throw new ArgumentNullException($"{parameters} argument is null");
-                }
-                else
-                {
-                    throw new ArgumentException("First Name is invalid");
-                }
+                throw new ArgumentNullException($"{parameters} argument is null");
             }
 
-            return parameters;
+            if (string.IsNullOrWhiteSpace(parameters.FirstName) || parameters.FirstName.Length < this.min || parameters.FirstName.Length > this.max)
+            {
+                throw new ArgumentException("First Name is invalid");
+            }
+
+            return parameters.FirstName;
         }
     }
 }

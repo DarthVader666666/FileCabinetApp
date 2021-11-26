@@ -10,7 +10,7 @@ namespace FileCabinetApp
     public class FileCabinetMemoryService : IFileCabinetService
     {
         private readonly List<FileCabinetRecord> list = new List<FileCabinetRecord>();
-        private readonly IRecordValidator<FileCabinetEventArgs, FileCabinetRecord> validator;
+        private readonly Validators.CompositeValidator validator;
         private readonly Dictionary<string, List<FileCabinetRecord>> firstNameDictionary = new Dictionary<string, List<FileCabinetRecord>>();
         private readonly Dictionary<string, List<FileCabinetRecord>> lastNameDictionary = new Dictionary<string, List<FileCabinetRecord>>();
         private readonly Dictionary<string, List<FileCabinetRecord>> dateOfBirthDictionary = new Dictionary<string, List<FileCabinetRecord>>();
@@ -19,7 +19,7 @@ namespace FileCabinetApp
         /// Initializes a new instance of the <see cref="FileCabinetMemoryService"/> class.
         /// </summary>
         /// <param name="validator">Validator object to implement.</param>
-        public FileCabinetMemoryService(IRecordValidator<FileCabinetEventArgs, FileCabinetRecord> validator)
+        public FileCabinetMemoryService(Validators.CompositeValidator validator)
         {
             this.validator = validator;
         }
@@ -66,7 +66,7 @@ namespace FileCabinetApp
                 throw new ArgumentNullException(nameof(e), "Record argument is null");
             }
 
-            FileCabinetRecord record = this.validator.ValidateParameters(e);
+            FileCabinetRecord record = (FileCabinetRecord)this.validator.ValidateParameters(e);
             this.list.Add(record);
 
             var dateOfBirthKey = $"{record.DateOfBirth.Year}-{record.DateOfBirth.Month}-{record.DateOfBirth.Day}";
@@ -111,7 +111,7 @@ namespace FileCabinetApp
                 throw new ArgumentException("No such record");
             }
 
-            FileCabinetRecord record = this.validator.ValidateParameters(recordArgs);
+            FileCabinetRecord record = (FileCabinetRecord)this.validator.ValidateParameters(recordArgs);
 
             var oldRecord = this.list[record.Id - 1];
             var dateOfBirthKey = $"{oldRecord.DateOfBirth.Year}-{oldRecord.DateOfBirth.Month}-{oldRecord.DateOfBirth.Day}";

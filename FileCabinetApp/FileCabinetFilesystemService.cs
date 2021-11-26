@@ -14,7 +14,7 @@ namespace FileCabinetApp
         private const int BufferSize = 278;
 
         private readonly List<FileCabinetRecord> list = new List<FileCabinetRecord>();
-        private readonly IRecordValidator<FileCabinetEventArgs, FileCabinetRecord> validator = new DefaultValidator();
+        private readonly Validators.CompositeValidator validator = new Validators.DefaultValidator();
         private readonly Dictionary<string, List<FileCabinetRecord>> firstNameDictionary = new Dictionary<string, List<FileCabinetRecord>>();
         private readonly Dictionary<string, List<FileCabinetRecord>> lastNameDictionary = new Dictionary<string, List<FileCabinetRecord>>();
         private readonly Dictionary<string, List<FileCabinetRecord>> dateOfBirthDictionary = new Dictionary<string, List<FileCabinetRecord>>();
@@ -73,7 +73,7 @@ namespace FileCabinetApp
                 throw new ArgumentNullException($"{e} argument is null.");
             }
 
-            FileCabinetRecord record = this.validator.ValidateParameters(e);
+            FileCabinetRecord record = (FileCabinetRecord)this.validator.ValidateParameters(e);
 
             FileStream fileStream = new FileStream(this.FilePath, FileMode.Append, FileAccess.Write);
             WriteRecordToFile(record, fileStream);
@@ -220,7 +220,7 @@ namespace FileCabinetApp
                 return;
             }
 
-            FileCabinetRecord record = this.validator.ValidateParameters(recordArgs);
+            FileCabinetRecord record = (FileCabinetRecord)this.validator.ValidateParameters(recordArgs);
             var oldRecord = this.list[record.Id - 1];
             string dateOfBirthKey = $"{oldRecord.DateOfBirth.Year}-{oldRecord.DateOfBirth.Month}-{oldRecord.DateOfBirth.Day}";
 

@@ -20,7 +20,7 @@ namespace FileCabinetApp
         /// <summary>
         /// file cabinet instance.
         /// </summary>
-        private static IFileCabinetService fileCabinetService = new FileCabinetMemoryService(new DefaultValidator());
+        private static IFileCabinetService fileCabinetService = new FileCabinetMemoryService(new Validators.DefaultValidator());
         private static bool isRunning = true;
         private static Action<bool> breakAll = StopProgram;
         private static Action<ReadOnlyCollection<FileCabinetRecord>> printer = Defaultprinter;
@@ -47,10 +47,10 @@ namespace FileCabinetApp
                 switch (args[1].ToUpper(CultureInfo.InvariantCulture))
                 {
                     case "DEFAULT":
-                        fileCabinetService = new FileCabinetMemoryService(new DefaultValidator());
+                        fileCabinetService = new FileCabinetMemoryService(new Validators.DefaultValidator());
                         Console.WriteLine(DefaultValidationMessage); break;
                     case "CUSTOM":
-                        fileCabinetService = new FileCabinetMemoryService(new CustomValidator());
+                        fileCabinetService = new FileCabinetMemoryService(new Validators.CustomValidator());
                         Console.WriteLine(CustomValidationMessage); break;
                 }
             }
@@ -64,7 +64,7 @@ namespace FileCabinetApp
                 switch (args[1].ToUpper(CultureInfo.InvariantCulture))
                 {
                     case "MEMORY":
-                        fileCabinetService = new FileCabinetMemoryService(new DefaultValidator());
+                        fileCabinetService = new FileCabinetMemoryService(new Validators.DefaultValidator());
                         Console.WriteLine(MemoryStorageMessage); break;
                     case "FILE":
                         fileCabinetService = new FileCabinetFilesystemService(StorageDbFilePath);
@@ -340,7 +340,7 @@ namespace FileCabinetApp
             }
             else
             {
-                result = char.ToUpper(char.Parse(inputString), CultureInfo.InvariantCulture);
+                result = char.Parse(inputString);
             }
 
             return new Tuple<bool, string, char>(successful, failureMessage, result);
@@ -407,7 +407,7 @@ namespace FileCabinetApp
             bool successful = true;
             string failureMessage = string.Empty;
 
-            if (inputData != 'M' && inputData != 'F')
+            if (char.ToUpper(inputData, CultureInfo.InvariantCulture) != 'M' && char.ToUpper(inputData, CultureInfo.InvariantCulture) != 'F')
             {
                 failureMessage = "Please, print letter M or F";
                 successful = false;

@@ -5,7 +5,7 @@ namespace FileCabinetApp
     /// <summary>
     /// CustomMonthlyPayValidator.
     /// </summary>
-    public class MonthlyPayValidator : IRecordValidator<decimal, decimal>
+    public class MonthlyPayValidator : IRecordValidator<FileCabinetEventArgs, object>
     {
         private readonly decimal min;
 
@@ -27,14 +27,19 @@ namespace FileCabinetApp
         /// </summary>
         /// <param name="parameters">decimal to be validated.</param>
         /// <returns>validated decimal.</returns>
-        public decimal ValidateParameters(decimal parameters)
+        public object ValidateParameters(FileCabinetEventArgs parameters)
         {
-            if (parameters < this.min || parameters > this.max)
+            if (parameters is null)
+            {
+                throw new ArgumentNullException($"{parameters} argument is null");
+            }
+
+            if (parameters.MonthlyPay < this.min || parameters.MonthlyPay > this.max)
             {
                 throw new ArgumentException("Person's pay doesn't fit conditions.");
             }
 
-            return parameters;
+            return parameters.MonthlyPay;
         }
     }
 }

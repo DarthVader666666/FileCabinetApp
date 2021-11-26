@@ -1,12 +1,11 @@
 ﻿using System;
 
-
 namespace FileCabinetApp
 {
     /// <summary>
     /// CustomJobExperienceValidator.
     /// </summary>
-    public class JobExperienceValidator : IRecordValidator<short, short>
+    public class JobExperienceValidator : IRecordValidator<FileCabinetEventArgs, object>
     {
         private readonly short min;
         private readonly short max;
@@ -27,14 +26,19 @@ namespace FileCabinetApp
         /// </summary>
         /// <param name="parameters">Short int to be validated.</param>
         /// <returns>Validated short int.</returns>
-        public short ValidateParameters(short parameters)
+        public object ValidateParameters(FileCabinetEventArgs parameters)
         {
-            if (parameters < this.min || parameters > this.max)
+            if (parameters is null)
+            {
+                throw new ArgumentNullException($"{parameters} argument is null");
+            }
+
+            if (parameters.JobExperience < this.min || parameters.JobExperience > this.max)
             {
                 throw new ArgumentException("Person's ready to retire");
             }
 
-            return parameters;
+            return parameters.JobExperience;
         }
     }
 }

@@ -450,7 +450,7 @@
             Class contains methods which handle the user commands.
             </summary>
         </member>
-        <member name="M:FileCabinetApp.FileCabinetMemoryService.#ctor(FileCabinetApp.IRecordValidator{FileCabinetApp.FileCabinetEventArgs,FileCabinetApp.FileCabinetRecord})">
+        <member name="M:FileCabinetApp.FileCabinetMemoryService.#ctor(FileCabinetApp.Validators.CompositeValidator)">
             <summary>
             Initializes a new instance of the <see cref="T:FileCabinetApp.FileCabinetMemoryService"/> class.
             </summary>
@@ -902,17 +902,43 @@
             </summary>
             <param name="records">File records to be printed.</param>
         </member>
-        <member name="T:FileCabinetApp.CustomValidator">
+        <member name="T:FileCabinetApp.Validators.CompositeValidator">
+            <summary>
+            Composite Validator. Contains Default and Custom.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.Validators.CompositeValidator.#ctor(System.Collections.Generic.List{FileCabinetApp.IRecordValidator{FileCabinetApp.FileCabinetEventArgs,System.Object}})">
+            <summary>
+            Initializes a new instance of the <see cref="T:FileCabinetApp.Validators.CompositeValidator"/> class.
+            </summary>
+            <param name="validators">Validators to be used for records.</param>
+        </member>
+        <member name="M:FileCabinetApp.Validators.CompositeValidator.ValidateParameters(FileCabinetApp.FileCabinetEventArgs)">
+            <summary>
+            Validates file record.
+            </summary>
+            <param name="parameters">Record to be validated.</param>
+            <returns>Validated record.</returns>
+        </member>
+        <member name="T:FileCabinetApp.Validators.CustomValidator">
             <summary>
             Class provides custom validation algorythm.
             </summary>
         </member>
-        <member name="M:FileCabinetApp.CustomValidator.ValidateParameters(FileCabinetApp.FileCabinetEventArgs)">
+        <member name="M:FileCabinetApp.Validators.CustomValidator.#ctor">
             <summary>
-            File Record parameters default validator.
+            Initializes a new instance of the <see cref="T:FileCabinetApp.Validators.CustomValidator"/> class.
             </summary>
-            <param name="recordArgs">File recordArgs which parameters shall be validated.</param>
-            <returns>Validated file record.</returns>
+        </member>
+        <member name="T:FileCabinetApp.Validators.DefaultValidator">
+            <summary>
+            Class provides custom validation algorythm.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.Validators.DefaultValidator.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:FileCabinetApp.Validators.DefaultValidator"/> class.
+            </summary>
         </member>
         <member name="T:FileCabinetApp.DateOfBirthValidator">
             <summary>
@@ -926,24 +952,12 @@
             <param name="from">Min year of birth.</param>
             <param name="to">Max year of birth.</param>
         </member>
-        <member name="M:FileCabinetApp.DateOfBirthValidator.ValidateParameters(System.DateTime)">
+        <member name="M:FileCabinetApp.DateOfBirthValidator.ValidateParameters(FileCabinetApp.FileCabinetEventArgs)">
             <summary>
             Validates dateOfBirth.
             </summary>
             <param name="parameters">Date to be validated.</param>
             <returns>Validated date.</returns>
-        </member>
-        <member name="T:FileCabinetApp.DefaultValidator">
-            <summary>
-            Class provides custom validation algorythm.
-            </summary>
-        </member>
-        <member name="M:FileCabinetApp.DefaultValidator.ValidateParameters(FileCabinetApp.FileCabinetEventArgs)">
-            <summary>
-            File Record parameters default validator.
-            </summary>
-            <param name="recordArgs">File recordArgs which parameters shall be validated.</param>
-            <returns>Validated file record.</returns>
         </member>
         <member name="T:FileCabinetApp.FirstNameValidator">
             <summary>
@@ -957,7 +971,7 @@
             <param name="min">Min count of letters in First Name.</param>
             <param name="max">Max count of lettes in FIrst Name.</param>
         </member>
-        <member name="M:FileCabinetApp.FirstNameValidator.ValidateParameters(System.String)">
+        <member name="M:FileCabinetApp.FirstNameValidator.ValidateParameters(FileCabinetApp.FileCabinetEventArgs)">
             <summary>
             Validates FirstName.
             </summary>
@@ -976,7 +990,7 @@
             <param name="male">Male letter.</param>
             <param name="female">Female letter.</param>
         </member>
-        <member name="M:FileCabinetApp.GenderValidator.ValidateParameters(System.Char)">
+        <member name="M:FileCabinetApp.GenderValidator.ValidateParameters(FileCabinetApp.FileCabinetEventArgs)">
             <summary>
             Validates gender.
             </summary>
@@ -1009,7 +1023,7 @@
             <param name="min">Min job experience.</param>
             <param name="max">Max job experience.</param>
         </member>
-        <member name="M:FileCabinetApp.JobExperienceValidator.ValidateParameters(System.Int16)">
+        <member name="M:FileCabinetApp.JobExperienceValidator.ValidateParameters(FileCabinetApp.FileCabinetEventArgs)">
             <summary>
             Validates job experience.
             </summary>
@@ -1028,7 +1042,7 @@
             <param name="min">Min count of letters in Last Name.</param>
             <param name="max">Max count of lettes in Last Name.</param>
         </member>
-        <member name="M:FileCabinetApp.LastNameValidator.ValidateParameters(System.String)">
+        <member name="M:FileCabinetApp.LastNameValidator.ValidateParameters(FileCabinetApp.FileCabinetEventArgs)">
             <summary>
             Validates Last Name.
             </summary>
@@ -1047,7 +1061,7 @@
             <param name="min">Min monthly pay.</param>
             <param name="max">Max monthly pay.</param>
         </member>
-        <member name="M:FileCabinetApp.MonthlyPayValidator.ValidateParameters(System.Decimal)">
+        <member name="M:FileCabinetApp.MonthlyPayValidator.ValidateParameters(FileCabinetApp.FileCabinetEventArgs)">
             <summary>
             Validates Monthly Pay.
             </summary>

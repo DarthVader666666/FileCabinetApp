@@ -5,7 +5,7 @@ namespace FileCabinetApp
     /// <summary>
     /// CustomGenderValidator.
     /// </summary>
-    public class GenderValidator : IRecordValidator<char, char>
+    public class GenderValidator : IRecordValidator<FileCabinetEventArgs, object>
     {
         private readonly char male;
 
@@ -27,14 +27,19 @@ namespace FileCabinetApp
         /// </summary>
         /// <param name="parameters">Char to be validated.</param>
         /// <returns>Validated char.</returns>
-        public char ValidateParameters(char parameters)
+        public object ValidateParameters(FileCabinetEventArgs parameters)
         {
-            if (parameters != this.male || parameters != this.female)
+            if (parameters is null)
+            {
+                throw new ArgumentNullException($"{parameters} argument is null");
+            }
+
+            if (parameters.Gender != this.male && parameters.Gender != this.female)
             {
                 throw new ArgumentException("Person's gender unrecognized");
             }
 
-            return parameters;
+            return parameters.Gender;
         }
     }
 }
