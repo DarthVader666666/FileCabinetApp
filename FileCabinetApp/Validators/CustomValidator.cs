@@ -12,7 +12,7 @@ namespace FileCabinetApp.Validators
         /// Initializes a new instance of the <see cref="CustomValidator"/> class.
         /// </summary>
         public CustomValidator()
-            : base(new List<IRecordValidator<FileCabinetEventArgs, object>>()
+            : base(new List<IRecordValidator>()
             {
                 new FirstNameValidator(1, 60),
                 new LastNameValidator(1, 60),

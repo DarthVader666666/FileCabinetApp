@@ -5,7 +5,7 @@ namespace FileCabinetApp
     /// <summary>
     /// CustomGenderValidator.
     /// </summary>
-    public class GenderValidator : IRecordValidator<FileCabinetEventArgs, object>
+    public class GenderValidator : IRecordValidator
     {
         private readonly char male;
 

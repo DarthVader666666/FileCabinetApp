@@ -5,7 +5,7 @@ namespace FileCabinetApp
     /// <summary>
     /// CustomJobExperienceValidator.
     /// </summary>
-    public class JobExperienceValidator : IRecordValidator<FileCabinetEventArgs, object>
+    public class JobExperienceValidator : IRecordValidator
     {
         private readonly short min;
         private readonly short max;

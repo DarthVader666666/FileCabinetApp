@@ -5,7 +5,7 @@ namespace FileCabinetApp
     /// <summary>
     /// CustomDateOfBirthValidator.
     /// </summary>
-    public class DateOfBirthValidator : IRecordValidator<FileCabinetEventArgs, object>
+    public class DateOfBirthValidator : IRecordValidator
     {
         private readonly int from;
 

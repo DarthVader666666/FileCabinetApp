@@ -907,7 +907,7 @@
             Composite Validator. Contains Default and Custom.
             </summary>
         </member>
-        <member name="M:FileCabinetApp.Validators.CompositeValidator.#ctor(System.Collections.Generic.List{FileCabinetApp.IRecordValidator{FileCabinetApp.FileCabinetEventArgs,System.Object}})">
+        <member name="M:FileCabinetApp.Validators.CompositeValidator.#ctor(System.Collections.Generic.List{FileCabinetApp.IRecordValidator})">
             <summary>
             Initializes a new instance of the <see cref="T:FileCabinetApp.Validators.CompositeValidator"/> class.
             </summary>
@@ -939,6 +939,65 @@
             <summary>
             Initializes a new instance of the <see cref="T:FileCabinetApp.Validators.DefaultValidator"/> class.
             </summary>
+        </member>
+        <member name="T:FileCabinetApp.Validators.ValidatorBuilder">
+            <summary>
+            Builds adjustible Composite Validator.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.Validators.ValidatorBuilder.ValidateFirstName(System.Int32,System.Int32)">
+            <summary>
+            Adds FirstNameValidator to validators List.
+            </summary>
+            <param name="min">Min string Length.</param>
+            <param name="max">Max string Length.</param>
+            <returns>VaAlidatorBuilder instance.</returns>
+        </member>
+        <member name="M:FileCabinetApp.Validators.ValidatorBuilder.ValidateLastName(System.Int32,System.Int32)">
+            <summary>
+            Adds LastNameValidator to validators List.
+            </summary>
+            <param name="min">Min string Length.</param>
+            <param name="max">Max string Length.</param>
+            <returns>VaAlidatorBuilder instance.</returns>
+        </member>
+        <member name="M:FileCabinetApp.Validators.ValidatorBuilder.ValidateDateOfBirth(System.Int32,System.Int32)">
+            <summary>
+            Adds DateOfBirthValidator to validators List.
+            </summary>
+            <param name="from">Min year of birth.</param>
+            <param name="to">Max year of birth.</param>
+            <returns>VaAlidatorBuilder instance.</returns>
+        </member>
+        <member name="M:FileCabinetApp.Validators.ValidatorBuilder.ValidateJobExperience(System.Int16,System.Int16)">
+            <summary>
+            Adds JobExperienceValidator to validators List.
+            </summary>
+            <param name="min">Min years of experience.</param>
+            <param name="max">Max years of experience.</param>
+            <returns>VaAlidatorBuilder instance.</returns>
+        </member>
+        <member name="M:FileCabinetApp.Validators.ValidatorBuilder.ValidateMonthlyPay(System.Decimal,System.Decimal)">
+            <summary>
+            Adds MonthlyPayValidator to validators List.
+            </summary>
+            <param name="min">Min pay.</param>
+            <param name="max">Max pay.</param>
+            <returns>VaAlidatorBuilder instance.</returns>
+        </member>
+        <member name="M:FileCabinetApp.Validators.ValidatorBuilder.ValidateGender(System.Char,System.Char)">
+            <summary>
+            Adds GenderValidator to validators List.
+            </summary>
+            <param name="male">Male definding symbol.</param>
+            <param name="female">Female definding symbol.</param>
+            <returns>VaAlidatorBuilder instance.</returns>
+        </member>
+        <member name="M:FileCabinetApp.Validators.ValidatorBuilder.Create">
+            <summary>
+            Creates new Composite Validator.
+            </summary>
+            <returns>CompositeValidator.</returns>
         </member>
         <member name="T:FileCabinetApp.DateOfBirthValidator">
             <summary>
@@ -997,14 +1056,12 @@
             <param name="parameters">Char to be validated.</param>
             <returns>Validated char.</returns>
         </member>
-        <member name="T:FileCabinetApp.IRecordValidator`2">
+        <member name="T:FileCabinetApp.IRecordValidator">
             <summary>
             Interface which provides record validation strategy.
             </summary>
-            <typeparam name="T1">Parameter to be validated.</typeparam>
-            <typeparam name="T2">Validated parameter to be returned.</typeparam>
         </member>
-        <member name="M:FileCabinetApp.IRecordValidator`2.ValidateParameters(`0)">
+        <member name="M:FileCabinetApp.IRecordValidator.ValidateParameters(FileCabinetApp.FileCabinetEventArgs)">
             <summary>
             File Record parameters validator.
             </summary>

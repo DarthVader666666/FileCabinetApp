@@ -6,15 +6,15 @@ namespace FileCabinetApp.Validators
     /// <summary>
     /// Composite Validator. Contains Default and Custom.
     /// </summary>
-    public abstract class CompositeValidator : IRecordValidator<FileCabinetEventArgs, object>
+    public class CompositeValidator : IRecordValidator
     {
-        private readonly List<IRecordValidator<FileCabinetEventArgs, object>> validators;
+        private readonly List<IRecordValidator> validators;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CompositeValidator"/> class.
         /// </summary>
         /// <param name="validators">Validators to be used for records.</param>
-        protected CompositeValidator(List<IRecordValidator<FileCabinetEventArgs, object>> validators)
+        public CompositeValidator(List<IRecordValidator> validators)
         {
             this.validators = validators;
         }

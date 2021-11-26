@@ -5,7 +5,7 @@ namespace FileCabinetApp
     /// <summary>
     /// CustomMonthlyPayValidator.
     /// </summary>
-    public class MonthlyPayValidator : IRecordValidator<FileCabinetEventArgs, object>
+    public class MonthlyPayValidator : IRecordValidator
     {
         private readonly decimal min;
 

@@ -5,7 +5,7 @@ namespace FileCabinetApp
     /// <summary>
     /// CustomFirstNameValidator.
     /// </summary>
-    public class FirstNameValidator : IRecordValidator<FileCabinetEventArgs, string>
+    public class FirstNameValidator : IRecordValidator
     {
         private readonly int min;
 
@@ -27,7 +27,7 @@ namespace FileCabinetApp
         /// </summary>
         /// <param name="parameters">String to be validated.</param>
         /// <returns>Validated string.</returns>
-        public string ValidateParameters(FileCabinetEventArgs parameters)
+        public object ValidateParameters(FileCabinetEventArgs parameters)
         {
             if (parameters is null)
             {
