@@ -56,7 +56,6 @@ namespace FileCabinetApp.CommandHandlers
             record.Id = this.fileCabinetService.GetMaxId() + 1;
             FileCabinetEventArgs recordArgs = new FileCabinetEventArgs(record);
             CreateRecordEvent(null, recordArgs);
-            Console.WriteLine($"Record #{record.Id} is created.");
         }
     }
 }

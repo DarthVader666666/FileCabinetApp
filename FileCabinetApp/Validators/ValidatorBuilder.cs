@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using Microsoft.Extensions.Configuration;
 
 namespace FileCabinetApp.Validators
 {
@@ -8,6 +10,7 @@ namespace FileCabinetApp.Validators
     public class ValidatorBuilder
     {
         private readonly List<IRecordValidator> validators = new List<IRecordValidator>();
+        private readonly IConfiguration configBuilder = new ConfigurationBuilder().AddJsonFile("validation-rules.json", true, true).Build();
 
         /// <summary>
         /// Fills validators List with default validators.
@@ -15,12 +18,14 @@ namespace FileCabinetApp.Validators
         /// <returns>CompositeValidator instance.</returns>
         public CompositeValidator CreateDefault()
         {
-            this.ValidateFirstName(2, 50);
-            this.ValidateLastName(2, 50);
-            this.ValidateDateOfBirth(1960, 1990);
-            this.ValidateJobExperience(0, 20);
-            this.ValidateMonthlyPay(20, 5000);
-            this.ValidateGender('m', 'f');
+            var defaultSetting = this.configBuilder.GetSection("default").Get<ValidationSettings.DefaultSettings>();
+
+            this.ValidateFirstName(defaultSetting.FirstName.Min, defaultSetting.FirstName.Max);
+            this.ValidateLastName(defaultSetting.LastName.Min, defaultSetting.LastName.Max);
+            this.ValidateDateOfBirth(defaultSetting.DateOfBirth.From, defaultSetting.DateOfBirth.To);
+            this.ValidateJobExperience(defaultSetting.JobExperience.Min, defaultSetting.JobExperience.Max);
+            this.ValidateMonthlyPay(defaultSetting.MonthlyPay.Min, defaultSetting.MonthlyPay.Max);
+            this.ValidateGender(defaultSetting.Gender.Male, defaultSetting.Gender.Female);
 
             return new CompositeValidator(this.validators);
         }
@@ -31,12 +36,14 @@ namespace FileCabinetApp.Validators
         /// <returns>CompositeValidator instance.</returns>
         public CompositeValidator CreateCustom()
         {
-            this.ValidateFirstName(1, 60);
-            this.ValidateLastName(1, 60);
-            this.ValidateDateOfBirth(1950, 2000);
-            this.ValidateJobExperience(1, 30);
-            this.ValidateMonthlyPay(0, 4000);
-            this.ValidateGender('M', 'F');
+            var customSetting = this.configBuilder.GetSection("custom").Get<ValidationSettings.CustomSettings>();
+
+            this.ValidateFirstName(customSetting.FirstName.Min, customSetting.FirstName.Max);
+            this.ValidateLastName(customSetting.LastName.Min, customSetting.LastName.Max);
+            this.ValidateDateOfBirth(customSetting.DateOfBirth.From, customSetting.DateOfBirth.To);
+            this.ValidateJobExperience(customSetting.JobExperience.Min, customSetting.JobExperience.Max);
+            this.ValidateMonthlyPay(customSetting.MonthlyPay.Min, customSetting.MonthlyPay.Max);
+            this.ValidateGender(customSetting.Gender.Male, customSetting.Gender.Female);
 
             return new CompositeValidator(this.validators);
         }
@@ -66,7 +73,7 @@ namespace FileCabinetApp.Validators
         /// </summary>
         /// <param name="from">Min year of birth.</param>
         /// <param name="to">Max year of birth.</param>
-        private void ValidateDateOfBirth(int from, int to)
+        private void ValidateDateOfBirth(string from, string to)
         {
             this.validators.Add(new DateOfBirthValidator(from, to));
         }

@@ -375,6 +375,13 @@
             </summary>
             <returns>Last record's id.</returns>
         </member>
+        <member name="M:FileCabinetApp.FileCabinetFilesystemService.RecordExists(System.Int32)">
+            <summary>
+            Finds out if record exists in file servise list.
+            </summary>
+            <param name="id">User input id.</param>
+            <returns>true - record exists, false - record doesn't exist.</returns>
+        </member>
         <member name="M:FileCabinetApp.FileCabinetFilesystemService.MakeSnapshot">
             <summary>
             Gets snapshot entity.
@@ -467,6 +474,13 @@
             Gets max record's id.
             </summary>
             <returns>Last record's id.</returns>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetMemoryService.RecordExists(System.Int32)">
+            <summary>
+            Finds out if record exists in file servise list.
+            </summary>
+            <param name="id">User input id.</param>
+            <returns>true - record exists, false - record doesn't exist.</returns>
         </member>
         <member name="M:FileCabinetApp.FileCabinetMemoryService.CreateRecord(System.Object,FileCabinetApp.FileCabinetEventArgs)">
             <summary>
@@ -857,6 +871,13 @@
             Deletes marked as IsDeleted from *.db file.
             </summary>
         </member>
+        <member name="M:FileCabinetApp.IFileCabinetService.RecordExists(System.Int32)">
+            <summary>
+            Finds out if record exists in file servise list.
+            </summary>
+            <param name="id">User input id.</param>
+            <returns>true - record exists, false - record doesn't exist.</returns>
+        </member>
         <member name="T:FileCabinetApp.NameClass">
             <summary>
             Contains first and last name.
@@ -901,6 +922,378 @@
             Implements Default Print method.
             </summary>
             <param name="records">File records to be printed.</param>
+        </member>
+        <member name="T:FileCabinetApp.ServiceLogger">
+            <summary>
+            Writes statistics to the log file.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.ServiceLogger.#ctor(FileCabinetApp.IFileCabinetService)">
+            <summary>
+            Initializes a new instance of the <see cref="T:FileCabinetApp.ServiceLogger"/> class.
+            </summary>
+            <param name="service">FileCabinetService instance.</param>
+        </member>
+        <member name="M:FileCabinetApp.ServiceLogger.CreateRecord(System.Object,FileCabinetApp.FileCabinetEventArgs)">
+            <summary>
+            Creates new file record.
+            </summary>
+            <param name="sender">Object that sends the arguments is null.</param>
+            <param name="e">File record arguments.</param>
+        </member>
+        <member name="M:FileCabinetApp.ServiceLogger.GetRecords">
+            <summary>
+            Wraps local FileCabinetRecord List into ReadonlyCollection.
+            </summary>
+            <returns>ReadonlyCollection of file records.</returns>
+        </member>
+        <member name="M:FileCabinetApp.ServiceLogger.GetStat">
+            <summary>
+            Gets total count of file records.
+            </summary>
+            <returns>Number of file records.</returns>
+        </member>
+        <member name="M:FileCabinetApp.ServiceLogger.EditRecord(System.Object,FileCabinetApp.FileCabinetEventArgs)">
+            <summary>
+            Edits file record.
+            </summary>
+            <param name="sender">Object that sends the arguments is null.</param>
+            <param name="recordArgs">File record arguments.</param>
+        </member>
+        <member name="M:FileCabinetApp.ServiceLogger.FindByFirstName(System.String)">
+            <summary>
+            Finds record by First Name.
+            </summary>
+            <param name="firstName">Person's first name.</param>
+            <returns>ReadonlyCollection of file records found.</returns>
+        </member>
+        <member name="M:FileCabinetApp.ServiceLogger.FindByLastName(System.String)">
+            <summary>
+            Finds record by Last Name.
+            </summary>
+            <param name="lastName">Person's last name.</param>
+            <returns>ReadonlyCollection of file records found.</returns>
+        </member>
+        <member name="M:FileCabinetApp.ServiceLogger.FindByDateOfBirth(System.String)">
+            <summary>
+            Finds record by dateOfBirth.
+            </summary>
+            <param name="dateOfBirth">Person's dateOfBirth.</param>
+            <returns>ReadonlyCollection of file records found.</returns>
+        </member>
+        <member name="M:FileCabinetApp.ServiceLogger.MakeSnapshot">
+            <summary>
+            Makes snapshot of FileCabinetService list of records.
+            </summary>
+            <returns>Object of snapshot instance with file records.</returns>
+        </member>
+        <member name="M:FileCabinetApp.ServiceLogger.Restore(FileCabinetApp.FileCabinetServiceSnapshot)">
+            <summary>
+            Restores FileCabinetMemoryService record list with imported records.
+            </summary>
+            <param name="snapshot">FileCabinetMemoryService snapshot.</param>
+        </member>
+        <member name="M:FileCabinetApp.ServiceLogger.GetMaxId">
+            <summary>
+            Gets last record's id.
+            </summary>
+            <returns>Last record's id.</returns>
+        </member>
+        <member name="M:FileCabinetApp.ServiceLogger.RemoveRecord(System.Int32)">
+            <summary>
+            Removes specified record from FileCabinetService data storage.
+            </summary>
+            <param name="id">Number of record.</param>
+        </member>
+        <member name="M:FileCabinetApp.ServiceLogger.PurgeFile">
+            <summary>
+            Deletes marked as IsDeleted from *.db file.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.ServiceLogger.RecordExists(System.Int32)">
+            <summary>
+            Finds out if record exists in file servise list.
+            </summary>
+            <param name="id">User input id.</param>
+            <returns>true - record exists, false - record doesn't exist.</returns>
+        </member>
+        <member name="T:FileCabinetApp.ServiceMeter">
+            <summary>
+            Decorator class for FileCabinetService.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.ServiceMeter.#ctor(FileCabinetApp.IFileCabinetService)">
+            <summary>
+            Initializes a new instance of the <see cref="T:FileCabinetApp.ServiceMeter"/> class.
+            </summary>
+            <param name="service">FileCabinetService instance.</param>
+        </member>
+        <member name="M:FileCabinetApp.ServiceMeter.CreateRecord(System.Object,FileCabinetApp.FileCabinetEventArgs)">
+            <summary>
+            Creates new file record.
+            </summary>
+            <param name="sender">Object that sends the arguments is null.</param>
+            <param name="e">File record arguments.</param>
+        </member>
+        <member name="M:FileCabinetApp.ServiceMeter.GetRecords">
+            <summary>
+            Wraps local FileCabinetRecord List into ReadonlyCollection.
+            </summary>
+            <returns>ReadonlyCollection of file records.</returns>
+        </member>
+        <member name="M:FileCabinetApp.ServiceMeter.GetStat">
+            <summary>
+            Gets total count of file records.
+            </summary>
+            <returns>Number of file records.</returns>
+        </member>
+        <member name="M:FileCabinetApp.ServiceMeter.EditRecord(System.Object,FileCabinetApp.FileCabinetEventArgs)">
+            <summary>
+            Edits file record.
+            </summary>
+            <param name="sender">Object that sends the arguments is null.</param>
+            <param name="recordArgs">File record arguments.</param>
+        </member>
+        <member name="M:FileCabinetApp.ServiceMeter.FindByFirstName(System.String)">
+            <summary>
+            Finds record by First Name.
+            </summary>
+            <param name="firstName">Person's first name.</param>
+            <returns>ReadonlyCollection of file records found.</returns>
+        </member>
+        <member name="M:FileCabinetApp.ServiceMeter.FindByLastName(System.String)">
+            <summary>
+            Finds record by Last Name.
+            </summary>
+            <param name="lastName">Person's last name.</param>
+            <returns>ReadonlyCollection of file records found.</returns>
+        </member>
+        <member name="M:FileCabinetApp.ServiceMeter.FindByDateOfBirth(System.String)">
+            <summary>
+            Finds record by dateOfBirth.
+            </summary>
+            <param name="dateOfBirth">Person's dateOfBirth.</param>
+            <returns>ReadonlyCollection of file records found.</returns>
+        </member>
+        <member name="M:FileCabinetApp.ServiceMeter.MakeSnapshot">
+            <summary>
+            Makes snapshot of FileCabinetService list of records.
+            </summary>
+            <returns>Object of snapshot instance with file records.</returns>
+        </member>
+        <member name="M:FileCabinetApp.ServiceMeter.Restore(FileCabinetApp.FileCabinetServiceSnapshot)">
+            <summary>
+            Restores FileCabinetMemoryService record list with imported records.
+            </summary>
+            <param name="snapshot">FileCabinetMemoryService snapshot.</param>
+        </member>
+        <member name="M:FileCabinetApp.ServiceMeter.GetMaxId">
+            <summary>
+            Gets last record's id.
+            </summary>
+            <returns>Last record's id.</returns>
+        </member>
+        <member name="M:FileCabinetApp.ServiceMeter.RemoveRecord(System.Int32)">
+            <summary>
+            Removes specified record from FileCabinetService data storage.
+            </summary>
+            <param name="id">Number of record.</param>
+        </member>
+        <member name="M:FileCabinetApp.ServiceMeter.PurgeFile">
+            <summary>
+            Deletes marked as IsDeleted from *.db file.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.ServiceMeter.RecordExists(System.Int32)">
+            <summary>
+            Finds out if record exists in file servise list.
+            </summary>
+            <param name="id">User input id.</param>
+            <returns>true - record exists, false - record doesn't exist.</returns>
+        </member>
+        <member name="T:FileCabinetApp.ValidationSettings.CustomSettings">
+            <summary>
+            Contains custom validation rules.
+            </summary>
+        </member>
+        <member name="P:FileCabinetApp.ValidationSettings.CustomSettings.FirstName">
+            <summary>
+            Gets or sets FirstNameSettings value.
+            </summary>
+            <value></value>
+        </member>
+        <member name="P:FileCabinetApp.ValidationSettings.CustomSettings.LastName">
+            <summary>
+            Gets or sets LastNameSettings value.
+            </summary>
+            <value></value>
+        </member>
+        <member name="P:FileCabinetApp.ValidationSettings.CustomSettings.DateOfBirth">
+            <summary>
+            Gets or sets DateOfBirthSettings value.
+            </summary>
+            <value></value>
+        </member>
+        <member name="P:FileCabinetApp.ValidationSettings.CustomSettings.JobExperience">
+            <summary>
+            Gets or sets JobExperienceSettings value.
+            </summary>
+            <value></value>
+        </member>
+        <member name="P:FileCabinetApp.ValidationSettings.CustomSettings.MonthlyPay">
+            <summary>
+            Gets or sets MonthlyPaySettings value.
+            </summary>
+            <value></value>
+        </member>
+        <member name="P:FileCabinetApp.ValidationSettings.CustomSettings.Gender">
+            <summary>
+            Gets or sets GenderSettings value.
+            </summary>
+            <value></value>
+        </member>
+        <member name="T:FileCabinetApp.ValidationSettings.DateOfBirthSettings">
+            <summary>
+            Contains dateOfBirth validation settings.
+            </summary>
+        </member>
+        <member name="P:FileCabinetApp.ValidationSettings.DateOfBirthSettings.From">
+            <summary>
+            Gets or sets min date.
+            </summary>
+            <value></value>
+        </member>
+        <member name="P:FileCabinetApp.ValidationSettings.DateOfBirthSettings.To">
+            <summary>
+            Gets or sets max date.
+            </summary>
+            <value></value>
+        </member>
+        <member name="T:FileCabinetApp.ValidationSettings.DefaultSettings">
+            <summary>
+            Contains default validation rules.
+            </summary>
+        </member>
+        <member name="P:FileCabinetApp.ValidationSettings.DefaultSettings.FirstName">
+            <summary>
+            Gets or sets FirstNameSettings value.
+            </summary>
+            <value></value>
+        </member>
+        <member name="P:FileCabinetApp.ValidationSettings.DefaultSettings.LastName">
+            <summary>
+            Gets or sets LastNameSettings value.
+            </summary>
+            <value></value>
+        </member>
+        <member name="P:FileCabinetApp.ValidationSettings.DefaultSettings.DateOfBirth">
+            <summary>
+            Gets or sets DateOfBirthSettings value.
+            </summary>
+            <value></value>
+        </member>
+        <member name="P:FileCabinetApp.ValidationSettings.DefaultSettings.JobExperience">
+            <summary>
+            Gets or sets JobExperienceSettings value.
+            </summary>
+            <value></value>
+        </member>
+        <member name="P:FileCabinetApp.ValidationSettings.DefaultSettings.MonthlyPay">
+            <summary>
+            Gets or sets MonthlyPaySettings value.
+            </summary>
+            <value></value>
+        </member>
+        <member name="P:FileCabinetApp.ValidationSettings.DefaultSettings.Gender">
+            <summary>
+            Gets or sets GenderSettings value.
+            </summary>
+            <value></value>
+        </member>
+        <member name="T:FileCabinetApp.ValidationSettings.FirstNameSettings">
+            <summary>
+            Contains First Name validation settings.
+            </summary>
+        </member>
+        <member name="P:FileCabinetApp.ValidationSettings.FirstNameSettings.Min">
+            <summary>
+            Gets or sets min firstName length.
+            </summary>
+            <value></value>
+        </member>
+        <member name="P:FileCabinetApp.ValidationSettings.FirstNameSettings.Max">
+            <summary>
+            Gets or sets max firstName length.
+            </summary>
+            <value></value>
+        </member>
+        <member name="T:FileCabinetApp.ValidationSettings.GenderSettings">
+            <summary>
+            Contaons gender validation settings.
+            </summary>
+        </member>
+        <member name="P:FileCabinetApp.ValidationSettings.GenderSettings.Male">
+            <summary>
+            Gets or sets male symbol.
+            </summary>
+            <value></value>
+        </member>
+        <member name="P:FileCabinetApp.ValidationSettings.GenderSettings.Female">
+            <summary>
+            Gets or sets female symbol.
+            </summary>
+            <value></value>
+        </member>
+        <member name="T:FileCabinetApp.ValidationSettings.JobExperienceSettings">
+            <summary>
+            Contains jobExperience validation settings.
+            </summary>
+        </member>
+        <member name="P:FileCabinetApp.ValidationSettings.JobExperienceSettings.Min">
+            <summary>
+            Gets or sets min short value.
+            </summary>
+            <value></value>
+        </member>
+        <member name="P:FileCabinetApp.ValidationSettings.JobExperienceSettings.Max">
+            <summary>
+            Gets or sets max short value.
+            </summary>
+            <value></value>
+        </member>
+        <member name="T:FileCabinetApp.ValidationSettings.LastNameSettings">
+            <summary>
+            Contains Last Name validation settings.
+            </summary>
+        </member>
+        <member name="P:FileCabinetApp.ValidationSettings.LastNameSettings.Min">
+            <summary>
+            Gets or sets min lastName length.
+            </summary>
+            <value></value>
+        </member>
+        <member name="P:FileCabinetApp.ValidationSettings.LastNameSettings.Max">
+            <summary>
+            Gets or sets min lastName length.
+            </summary>
+            <value></value>
+        </member>
+        <member name="T:FileCabinetApp.ValidationSettings.MonthlyPaySettings">
+            <summary>
+            Conatains monthlyPay validation settings.
+            </summary>
+        </member>
+        <member name="P:FileCabinetApp.ValidationSettings.MonthlyPaySettings.Min">
+            <summary>
+            Gets or sets min decimal value.
+            </summary>
+            <value></value>
+        </member>
+        <member name="P:FileCabinetApp.ValidationSettings.MonthlyPaySettings.Max">
+            <summary>
+            Gets or sets max decimal value.
+            </summary>
+            <value></value>
         </member>
         <member name="T:FileCabinetApp.Validators.CompositeValidator">
             <summary>
@@ -951,7 +1344,7 @@
             <param name="min">Min string Length.</param>
             <param name="max">Max string Length.</param>
         </member>
-        <member name="M:FileCabinetApp.Validators.ValidatorBuilder.ValidateDateOfBirth(System.Int32,System.Int32)">
+        <member name="M:FileCabinetApp.Validators.ValidatorBuilder.ValidateDateOfBirth(System.String,System.String)">
             <summary>
             Adds DateOfBirthValidator to validators List.
             </summary>
@@ -984,7 +1377,7 @@
             CustomDateOfBirthValidator.
             </summary>
         </member>
-        <member name="M:FileCabinetApp.DateOfBirthValidator.#ctor(System.Int32,System.Int32)">
+        <member name="M:FileCabinetApp.DateOfBirthValidator.#ctor(System.String,System.String)">
             <summary>
             Initializes a new instance of the <see cref="T:FileCabinetApp.DateOfBirthValidator"/> class.
             </summary>

@@ -53,14 +53,15 @@ namespace FileCabinetApp.CommandHandlers
             }
 
             FileCabinetRecord record = new FileCabinetRecord();
-            record.Id = int.Parse(parameters, CultureInfo.InvariantCulture);
-            int listCount = this.fileCabinetService.GetStat().Item1;
+            int id = int.Parse(parameters, CultureInfo.InvariantCulture);
 
-            if (record.Id > listCount || record.Id < 1)
+            if (!this.fileCabinetService.RecordExists(id))
             {
-                Console.WriteLine($"#{record.Id} record not found");
+                Console.WriteLine($"#{id} record not found");
                 return;
             }
+
+            record.Id = id;
 
             Program.InputRecordProperties(record);
             FileCabinetEventArgs recordArgs = new FileCabinetEventArgs(record);

@@ -55,6 +55,23 @@ namespace FileCabinetApp
         }
 
         /// <summary>
+        /// Finds out if record exists in file servise list.
+        /// </summary>
+        /// <param name="id">User input id.</param>
+        /// <returns>true - record exists, false - record doesn't exist.</returns>
+        public bool RecordExists(int id)
+        {
+            if (this.list.Find(i => i.Id.Equals(id)) is null)
+            {
+                return false;
+            }
+            else
+            {
+                return true;
+            }
+        }
+
+        /// <summary>
         /// Creates a record about a person.
         /// </summary>
         /// <param name="sender">Sender object is null.</param>
@@ -74,6 +91,8 @@ namespace FileCabinetApp
             this.AddRecordToFirstNameDictionary(record, record.FirstName);
             this.AddRecordToLastNameDictionary(record, record.LastName);
             this.AddRecordToDateOfBirthDictionary(record, dateOfBirthKey);
+
+            Console.WriteLine($"Record #{record.Id} is created.");
         }
 
         /// <summary>

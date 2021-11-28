@@ -84,5 +84,12 @@ namespace FileCabinetApp
         /// Deletes marked as IsDeleted from *.db file.
         /// </summary>
         void PurgeFile();
+
+        /// <summary>
+        /// Finds out if record exists in file servise list.
+        /// </summary>
+        /// <param name="id">User input id.</param>
+        /// <returns>true - record exists, false - record doesn't exist.</returns>
+        bool RecordExists(int id);
     }
 }

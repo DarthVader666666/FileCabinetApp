@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 
 namespace FileCabinetApp
 {
@@ -7,19 +8,19 @@ namespace FileCabinetApp
     /// </summary>
     public class DateOfBirthValidator : IRecordValidator
     {
-        private readonly int from;
+        private readonly DateTime from;
 
-        private readonly int to;
+        private readonly DateTime to;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="DateOfBirthValidator"/> class.
         /// </summary>
         /// <param name="from">Min year of birth.</param>
         /// <param name="to">Max year of birth.</param>
-        public DateOfBirthValidator(int from, int to)
+        public DateOfBirthValidator(string from, string to)
         {
-            this.from = from;
-            this.to = to;
+            this.from = DateTime.Parse(from, CultureInfo.CreateSpecificCulture("en-GB"));
+            this.to = DateTime.Parse(to, CultureInfo.CreateSpecificCulture("en-GB"));
         }
 
         /// <summary>
@@ -34,7 +35,7 @@ namespace FileCabinetApp
                 throw new ArgumentNullException($"{parameters} argument is null");
             }
 
-            if (parameters.DateOfBirth.Year < this.from || parameters.DateOfBirth.Year > this.to)
+            if (DateTime.Compare(parameters.DateOfBirth, this.from) < 0 || DateTime.Compare(parameters.DateOfBirth, this.to) > 0)
             {
                 throw new ArgumentException("Person's age unappropriate.");
             }

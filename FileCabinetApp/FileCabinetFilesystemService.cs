@@ -53,6 +53,23 @@ namespace FileCabinetApp
         }
 
         /// <summary>
+        /// Finds out if record exists in file servise list.
+        /// </summary>
+        /// <param name="id">User input id.</param>
+        /// <returns>true - record exists, false - record doesn't exist.</returns>
+        public bool RecordExists(int id)
+        {
+            if (this.list.Find(i => i.Id.Equals(id)) is null)
+            {
+                return false;
+            }
+            else
+            {
+                return true;
+            }
+        }
+
+        /// <summary>
         /// Gets snapshot entity.
         /// </summary>
         /// <returns>Snapshot object.</returns>

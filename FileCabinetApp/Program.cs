@@ -37,12 +37,13 @@ namespace FileCabinetApp
             }
 
             // args = new string[] { "-s", "file" };
+
             if (args.Length == 1)
             {
                 args = args[0].Split('=');
             }
 
-            if (args.Length == 2 && args[1].Length > 0 && (args[0] == "--validation-rule" || args[0] == "-v"))
+            if (args.Length >= 2 && args[1].Length > 0 && (args[0] == "--validation-rule" || args[0] == "-v"))
             {
                 switch (args[1].ToUpper(CultureInfo.InvariantCulture))
                 {
@@ -59,7 +60,7 @@ namespace FileCabinetApp
                 Console.WriteLine(DefaultValidationMessage);
             }
 
-            if (args.Length == 2 && args[1].Length > 0 && (args[0] == "--storage" || args[0] == "-s"))
+            if (args.Length >= 2 && args[1].Length > 0 && (args[0] == "--storage" || args[0] == "-s"))
             {
                 switch (args[1].ToUpper(CultureInfo.InvariantCulture))
                 {
@@ -74,6 +75,18 @@ namespace FileCabinetApp
             else
             {
                 Console.WriteLine(MemoryStorageMessage);
+            }
+
+            if (Array.Find(args, i => i.Equals("-use-stopwatch")) != null)
+            {
+                fileCabinetService = new ServiceMeter(fileCabinetService);
+                Console.WriteLine("Methods execution duration mesurement enabled.");
+            }
+
+            if (Array.Find(args, i => i.Equals("-use-logger")) != null)
+            {
+                fileCabinetService = new ServiceLogger(fileCabinetService);
+                Console.WriteLine("Methods execution logging enabled.");
             }
 
             Console.WriteLine($"File Cabinet Application, developed by {DeveloperName}");

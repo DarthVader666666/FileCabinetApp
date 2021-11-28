@@ -1,0 +1,54 @@
+{
+  "default": {
+    "firstName": {
+      "min": 2,
+      "max": 50
+    },
+    "lastName": {
+      "min": 2,
+      "max": 50
+    },
+    "dateOfBirth": {
+      "from": "1/1/1950",
+      "to": "1/1/1990"
+    },
+    "jobExperience": {
+      "min": 0,
+      "max": 20
+    },
+    "monthlyPay": {
+      "min": 20,
+      "max": 5000
+    },
+    "gender": {
+      "male": "m",
+      "female": "f"
+    }
+  },
+  "custom": {
+    "firstName": {
+      "min": 1,
+      "max": 60
+    },
+    "lastName": {
+      "min": 1,
+      "max": 60
+    },
+    "dateOfBirth": {
+      "from": "1/1/1960",
+      "to": "1/1/2000"
+    },
+    "jobExperience": {
+      "min": 1,
+      "max": 30
+    },
+    "monthlyPay": {
+      "min": 0,
+      "max": 4000
+    },
+    "gender": {
+      "male": "M",
+      "female": "F"
+    }
+  }
+}
