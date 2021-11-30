@@ -185,35 +185,43 @@ namespace FileCabinetApp
         /// </summary>
         /// <param name="firstName">Person's first name.</param>
         /// <returns>ReadonlyCollection of file records found.</returns>
-        public ReadOnlyCollection<FileCabinetRecord> FindByFirstName(string firstName)
+        public IEnumerable<FileCabinetRecord> FindByFirstName(string firstName)
         {
-            ReadOnlyCollection<FileCabinetRecord> record;
+            IEnumerable<FileCabinetRecord> recordsFound;
+
             CreateStreams();
 
             try
             {
                 logger.WriteLine(GetNowDateTime() + $"Calling FindByFirstName() with key = '{firstName}'.");
-                record = this.service.FindByFirstName(firstName);
+                recordsFound = this.service.FindByFirstName(firstName);
             }
             catch (ArgumentNullException message)
             {
                 logger.WriteLine(GetNowDateTime() + message);
                 DisposeStreams();
                 Console.WriteLine(message);
-                return new List<FileCabinetRecord>().AsReadOnly();
+                return new List<FileCabinetRecord>();
             }
             catch (ArgumentException message)
             {
                 logger.WriteLine(GetNowDateTime() + message);
                 DisposeStreams();
                 Console.WriteLine(message);
-                return new List<FileCabinetRecord>().AsReadOnly();
+                return new List<FileCabinetRecord>();
             }
 
-            logger.WriteLine(GetNowDateTime() + $"FindByFirstName() returned {record.Count} records which match key = '{firstName}'.");
+            if (((List<FileCabinetRecord>)recordsFound).Count == 0)
+            {
+                logger.WriteLine(GetNowDateTime() + $"FindByFirstName() found no match with key = '{firstName}' and returned null.");
+                DisposeStreams();
+                return recordsFound;
+            }
+
+            logger.WriteLine(GetNowDateTime() + $"FindByFirstName() returned IRecordIterator which match key = '{firstName}'.");
             DisposeStreams();
 
-            return record;
+            return recordsFound;
         }
 
         /// <summary>
@@ -221,35 +229,43 @@ namespace FileCabinetApp
         /// </summary>
         /// <param name="lastName">Person's last name.</param>
         /// <returns>ReadonlyCollection of file records found.</returns>
-        public ReadOnlyCollection<FileCabinetRecord> FindByLastName(string lastName)
+        public IEnumerable<FileCabinetRecord> FindByLastName(string lastName)
         {
-            ReadOnlyCollection<FileCabinetRecord> record;
+            IEnumerable<FileCabinetRecord> recordsFound;
+
             CreateStreams();
 
             try
             {
                 logger.WriteLine(GetNowDateTime() + $"Calling FindByLastName() with key = '{lastName}'.");
-                record = this.service.FindByFirstName(lastName);
+                recordsFound = this.service.FindByLastName(lastName);
             }
             catch (ArgumentNullException message)
             {
                 logger.WriteLine(GetNowDateTime() + message);
                 DisposeStreams();
                 Console.WriteLine(message);
-                return new List<FileCabinetRecord>().AsReadOnly();
+                return new List<FileCabinetRecord>();
             }
             catch (ArgumentException message)
             {
                 logger.WriteLine(GetNowDateTime() + message);
                 DisposeStreams();
                 Console.WriteLine(message);
-                return new List<FileCabinetRecord>().AsReadOnly();
+                return new List<FileCabinetRecord>();
             }
 
-            logger.WriteLine(GetNowDateTime() + $"FindByLastName() returned {record.Count} records which match key = '{lastName}'.");
+            if (((List<FileCabinetRecord>)recordsFound).Count == 0)
+            {
+                logger.WriteLine(GetNowDateTime() + $"FindByFirstName() found no match with key = '{lastName}' and returned null.");
+                DisposeStreams();
+                return recordsFound;
+            }
+
+            logger.WriteLine(GetNowDateTime() + $"FindByLastName() returned IRecordIterator which match key = '{lastName}'.");
             DisposeStreams();
 
-            return record;
+            return recordsFound;
         }
 
         /// <summary>
@@ -257,35 +273,43 @@ namespace FileCabinetApp
         /// </summary>
         /// <param name="dateOfBirth">Person's dateOfBirth.</param>
         /// <returns>ReadonlyCollection of file records found.</returns>
-        public ReadOnlyCollection<FileCabinetRecord> FindByDateOfBirth(string dateOfBirth)
+        public IEnumerable<FileCabinetRecord> FindByDateOfBirth(string dateOfBirth)
         {
-            ReadOnlyCollection<FileCabinetRecord> record;
+            IEnumerable<FileCabinetRecord> recordsFound;
+
             CreateStreams();
 
             try
             {
                 logger.WriteLine(GetNowDateTime() + $"Calling FindByDateOfBirth() with key = '{dateOfBirth}'.");
-                record = this.service.FindByFirstName(dateOfBirth);
+                recordsFound = this.service.FindByDateOfBirth(dateOfBirth);
             }
             catch (ArgumentNullException message)
             {
                 logger.WriteLine(GetNowDateTime() + message);
                 DisposeStreams();
                 Console.WriteLine(message);
-                return new List<FileCabinetRecord>().AsReadOnly();
+                return new List<FileCabinetRecord>();
             }
             catch (ArgumentException message)
             {
                 logger.WriteLine(GetNowDateTime() + message);
                 DisposeStreams();
                 Console.WriteLine(message);
-                return new List<FileCabinetRecord>().AsReadOnly();
+                return new List<FileCabinetRecord>();
             }
 
-            logger.WriteLine(GetNowDateTime() + $"FindByDateOfBirth() returned {record.Count} records which match key = '{dateOfBirth}'.");
+            if (recordsFound is null)
+            {
+                logger.WriteLine(GetNowDateTime() + $"FindByFirstName() found no match with key = '{dateOfBirth}' and returned null.");
+                DisposeStreams();
+                return recordsFound;
+            }
+
+            logger.WriteLine(GetNowDateTime() + $"FindByDateOfBirth() returned IRecordIterator which match key = '{dateOfBirth}'.");
             DisposeStreams();
 
-            return record;
+            return recordsFound;
         }
 
         /// <summary>

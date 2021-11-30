@@ -416,21 +416,21 @@
         </member>
         <member name="M:FileCabinetApp.FileCabinetFilesystemService.FindByFirstName(System.String)">
             <summary>
-            Finds a record about a person.
+            Gets iterator based on firstName key.
             </summary>
             <param name="firstName">Person's first name which record should be found with.</param>
             <returns>Records which fit search requirements.</returns>
         </member>
         <member name="M:FileCabinetApp.FileCabinetFilesystemService.FindByLastName(System.String)">
             <summary>
-            Finds a record about a person.
+            Gets iterator based on lastName key.
             </summary>
             <param name="lastName">Person's last name which record should be found with.</param>
             <returns>Records which fit search requirements.</returns>
         </member>
         <member name="M:FileCabinetApp.FileCabinetFilesystemService.FindByDateOfBirth(System.String)">
             <summary>
-            Finds a record about a person.
+            Gets iterator based on dateOfBirth key.
             </summary>
             <param name="dateOfBirth">Person's date of birth which record should be found with.</param>
             <returns>Records which fit search requirements.</returns>
@@ -510,21 +510,21 @@
         </member>
         <member name="M:FileCabinetApp.FileCabinetMemoryService.FindByFirstName(System.String)">
             <summary>
-            Edits a record about a person.
+            Finds a records by FirstName.
             </summary>
             <param name="firstName">Person's first name which record should be found with.</param>
             <returns>Records which fit search requirements.</returns>
         </member>
         <member name="M:FileCabinetApp.FileCabinetMemoryService.FindByLastName(System.String)">
             <summary>
-            Edits a record about a person.
+            Finds a records by LastName.
             </summary>
             <param name="lastName">Person's last name which record should be found with.</param>
             <returns>Records which fit search requirements.</returns>
         </member>
         <member name="M:FileCabinetApp.FileCabinetMemoryService.FindByDateOfBirth(System.String)">
             <summary>
-            Edits a record about a person.
+            Finds a records by dateOfBirth.
             </summary>
             <param name="dateOfBirth">Person's date of birth which record should be found with.</param>
             <returns>Records which fit search requirements.</returns>
@@ -790,6 +790,30 @@
             </summary>
             <value>Person's gender.</value>
         </member>
+        <member name="T:FileCabinetApp.FilesystemIterator">
+            <summary>
+            Provides FilesystemIterator.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.FilesystemIterator.#ctor(System.Collections.Generic.List{System.Int64},System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:FileCabinetApp.FilesystemIterator"/> class.
+            </summary>
+            <param name="positions">List of record position which contain specific key.</param>
+            <param name="path">Path to the file of recods.</param>
+        </member>
+        <member name="M:FileCabinetApp.FilesystemIterator.GetNext">
+            <summary>
+            Gets record of specific position.
+            </summary>
+            <returns>FileCabinetRecord.</returns>
+        </member>
+        <member name="M:FileCabinetApp.FilesystemIterator.HasMore">
+            <summary>
+            Finds out if there are more positions in list.
+            </summary>
+            <returns>bool.</returns>
+        </member>
         <member name="T:FileCabinetApp.IFileCabinetService">
             <summary>
             Interface for File service functionality extraction.
@@ -878,6 +902,46 @@
             <param name="id">User input id.</param>
             <returns>true - record exists, false - record doesn't exist.</returns>
         </member>
+        <member name="T:FileCabinetApp.IRecordIterator">
+            <summary>
+            Provides File Records iterator.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.IRecordIterator.GetNext">
+            <summary>
+            Gets next file record.
+            </summary>
+            <returns>FileCabinetRecord</returns>
+        </member>
+        <member name="M:FileCabinetApp.IRecordIterator.HasMore">
+            <summary>
+            Finds out if there are more positions in list.
+            </summary>
+            <returns>bool.</returns>
+        </member>
+        <member name="T:FileCabinetApp.MemoryIterator">
+            <summary>
+            Provides MemoryIterator.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.MemoryIterator.#ctor(System.Collections.Generic.List{FileCabinetApp.FileCabinetRecord})">
+            <summary>
+            Initializes a new instance of the <see cref="T:FileCabinetApp.MemoryIterator"/> class.
+            </summary>
+            <param name="list">List of key specified records.</param>
+        </member>
+        <member name="M:FileCabinetApp.MemoryIterator.GetNext">
+            <summary>
+            Gets record of specific position.
+            </summary>
+            <returns>FileCabinetRecord.</returns>
+        </member>
+        <member name="M:FileCabinetApp.MemoryIterator.HasMore">
+            <summary>
+            Finds out if there are more positions in list.
+            </summary>
+            <returns>bool.</returns>
+        </member>
         <member name="T:FileCabinetApp.NameClass">
             <summary>
             Contains first and last name.
@@ -922,6 +986,29 @@
             Implements Default Print method.
             </summary>
             <param name="records">File records to be printed.</param>
+        </member>
+        <member name="T:FileCabinetApp.RecordsFound">
+            <summary>
+            Provides class for records found enumeration.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.RecordsFound.#ctor(FileCabinetApp.IRecordIterator)">
+            <summary>
+            Initializes a new instance of the <see cref="T:FileCabinetApp.RecordsFound"/> class.
+            </summary>
+            <param name="iterator">Iterator to fill records found collection.</param>
+        </member>
+        <member name="M:FileCabinetApp.RecordsFound.System#Collections#IEnumerable#GetEnumerator">
+            <summary>
+            Implements IEnumerable GetEnumerator() method.
+            </summary>
+            <returns>IEnumerator.</returns>
+        </member>
+        <member name="M:FileCabinetApp.RecordsFound.GetEnumerator">
+            <summary>
+            Gets Found Recors enumerator.
+            </summary>
+            <returns>RecordsFoundEnum.</returns>
         </member>
         <member name="T:FileCabinetApp.ServiceLogger">
             <summary>

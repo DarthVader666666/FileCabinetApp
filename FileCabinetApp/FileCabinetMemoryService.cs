@@ -156,60 +156,60 @@ namespace FileCabinetApp
         }
 
         /// <summary>
-        /// Edits a record about a person.
+        /// Finds a records by FirstName.
         /// </summary>
         /// <param name="firstName">Person's first name which record should be found with.</param>
         /// <returns>Records which fit search requirements.</returns>
-        public ReadOnlyCollection<FileCabinetRecord> FindByFirstName(string firstName)
+        public IEnumerable<FileCabinetRecord> FindByFirstName(string firstName)
         {
             if (!(firstName is null) && this.firstNameDictionary.ContainsKey(firstName.ToUpperInvariant()))
             {
-                return new ReadOnlyCollection<FileCabinetRecord>(this.firstNameDictionary[firstName.ToUpperInvariant()]);
+                return new RecordsFound(new MemoryIterator(this.firstNameDictionary[firstName.ToUpperInvariant()]));
             }
             else
             {
                 Console.WriteLine("! No matches found");
             }
 
-            return new List<FileCabinetRecord>().AsReadOnly();
+            return new List<FileCabinetRecord>();
         }
 
         /// <summary>
-        /// Edits a record about a person.
+        /// Finds a records by LastName.
         /// </summary>
         /// <param name="lastName">Person's last name which record should be found with.</param>
         /// <returns>Records which fit search requirements.</returns>
-        public ReadOnlyCollection<FileCabinetRecord> FindByLastName(string lastName)
+        public IEnumerable<FileCabinetRecord> FindByLastName(string lastName)
         {
             if (!(lastName is null) && this.lastNameDictionary.ContainsKey(lastName.ToUpperInvariant()))
             {
-                return new ReadOnlyCollection<FileCabinetRecord>(this.lastNameDictionary[lastName.ToUpperInvariant()]);
+                return new RecordsFound(new MemoryIterator(this.lastNameDictionary[lastName.ToUpperInvariant()]));
             }
             else
             {
                 Console.WriteLine("! No matches found");
             }
 
-            return new List<FileCabinetRecord>().AsReadOnly();
+            return new List<FileCabinetRecord>();
         }
 
         /// <summary>
-        /// Edits a record about a person.
+        /// Finds a records by dateOfBirth.
         /// </summary>
         /// <param name="dateOfBirth">Person's date of birth which record should be found with.</param>
         /// <returns>Records which fit search requirements.</returns>
-        public ReadOnlyCollection<FileCabinetRecord> FindByDateOfBirth(string dateOfBirth)
+        public IEnumerable<FileCabinetRecord> FindByDateOfBirth(string dateOfBirth)
         {
-            if (this.dateOfBirthDictionary.ContainsKey(dateOfBirth))
+            if (!(dateOfBirth is null) && this.dateOfBirthDictionary.ContainsKey(dateOfBirth))
             {
-                return new ReadOnlyCollection<FileCabinetRecord>(this.dateOfBirthDictionary[dateOfBirth]);
+                return new RecordsFound(new MemoryIterator(this.dateOfBirthDictionary[dateOfBirth]));
             }
             else
             {
                 Console.WriteLine("! No matches found");
             }
 
-            return new List<FileCabinetRecord>().AsReadOnly();
+            return new List<FileCabinetRecord>();
         }
 
         /// <summary>

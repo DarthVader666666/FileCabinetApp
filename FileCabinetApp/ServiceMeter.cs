@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 
@@ -83,7 +84,7 @@ namespace FileCabinetApp
         /// </summary>
         /// <param name="firstName">Person's first name.</param>
         /// <returns>ReadonlyCollection of file records found.</returns>
-        public ReadOnlyCollection<FileCabinetRecord> FindByFirstName(string firstName)
+        public IEnumerable<FileCabinetRecord> FindByFirstName(string firstName)
         {
             this.stopwatch.Start();
             var result = this.service.FindByFirstName(firstName);
@@ -99,7 +100,7 @@ namespace FileCabinetApp
         /// </summary>
         /// <param name="lastName">Person's last name.</param>
         /// <returns>ReadonlyCollection of file records found.</returns>
-        public ReadOnlyCollection<FileCabinetRecord> FindByLastName(string lastName)
+        public IEnumerable<FileCabinetRecord> FindByLastName(string lastName)
         {
             this.stopwatch.Start();
             var result = this.service.FindByLastName(lastName);
@@ -115,7 +116,7 @@ namespace FileCabinetApp
         /// </summary>
         /// <param name="dateOfBirth">Person's dateOfBirth.</param>
         /// <returns>ReadonlyCollection of file records found.</returns>
-        public ReadOnlyCollection<FileCabinetRecord> FindByDateOfBirth(string dateOfBirth)
+        public IEnumerable<FileCabinetRecord> FindByDateOfBirth(string dateOfBirth)
         {
             this.stopwatch.Start();
             var result = this.service.FindByDateOfBirth(dateOfBirth);

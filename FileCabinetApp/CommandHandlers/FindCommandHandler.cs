@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 
 namespace FileCabinetApp.CommandHandlers
@@ -58,7 +59,8 @@ namespace FileCabinetApp.CommandHandlers
             }
 
             string[] searchArguments = parameters.Split(' ');
-            ReadOnlyCollection<FileCabinetRecord> fileCabinetRecords;
+            List<FileCabinetRecord> fileCabinetRecords = new List<FileCabinetRecord>();
+            IEnumerable<FileCabinetRecord> recordsFound;
             searchArguments[0] = searchArguments[0].ToUpperInvariant();
 
             if (searchArguments[1][0] != '"' && searchArguments[1][^1] != '"')
@@ -69,13 +71,23 @@ namespace FileCabinetApp.CommandHandlers
 
             switch (searchArguments[0])
             {
-                case "FIRSTNAME": fileCabinetRecords = this.fileCabinetService.FindByFirstName(searchArguments[1][1..^1]); break;
-                case "LASTNAME": fileCabinetRecords = this.fileCabinetService.FindByLastName(searchArguments[1][1..^1]); break;
-                case "DATEOFBIRTH": fileCabinetRecords = this.fileCabinetService.FindByDateOfBirth(searchArguments[1][1..^1]); break;
+                case "FIRSTNAME": recordsFound = this.fileCabinetService.FindByFirstName(searchArguments[1][1..^1]); break;
+                case "LASTNAME": recordsFound = this.fileCabinetService.FindByLastName(searchArguments[1][1..^1]); break;
+                case "DATEOFBIRTH": recordsFound = this.fileCabinetService.FindByDateOfBirth(searchArguments[1][1..^1]); break;
                 default: Console.WriteLine("! Wrong search parameter."); return;
             }
 
-            this.printer.Invoke(fileCabinetRecords);
+            if (recordsFound is null)
+            {
+                return;
+            }
+
+            foreach (FileCabinetRecord record in recordsFound)
+            {
+                fileCabinetRecords.Add(record);
+            }
+
+            this.printer.Invoke(fileCabinetRecords.AsReadOnly());
         }
     }
 }

@@ -40,21 +40,21 @@ namespace FileCabinetApp
         /// </summary>
         /// <param name="firstName">Person's first name.</param>
         /// <returns>ReadonlyCollection of file records found.</returns>
-        ReadOnlyCollection<FileCabinetRecord> FindByFirstName(string firstName);
+        IEnumerable<FileCabinetRecord> FindByFirstName(string firstName);
 
         /// <summary>
         /// Finds record by Last Name.
         /// </summary>
         /// <param name="lastName">Person's last name.</param>
         /// <returns>ReadonlyCollection of file records found.</returns>
-        ReadOnlyCollection<FileCabinetRecord> FindByLastName(string lastName);
+        IEnumerable<FileCabinetRecord> FindByLastName(string lastName);
 
         /// <summary>
         /// Finds record by dateOfBirth.
         /// </summary>
         /// <param name="dateOfBirth">Person's dateOfBirth.</param>
         /// <returns>ReadonlyCollection of file records found.</returns>
-        ReadOnlyCollection<FileCabinetRecord> FindByDateOfBirth(string dateOfBirth);
+        IEnumerable<FileCabinetRecord> FindByDateOfBirth(string dateOfBirth);
 
         /// <summary>
         /// Makes snapshot of FileCabinetService list of records.
