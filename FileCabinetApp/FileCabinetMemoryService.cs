@@ -91,8 +91,6 @@ namespace FileCabinetApp
             this.AddRecordToFirstNameDictionary(record, record.FirstName);
             this.AddRecordToLastNameDictionary(record, record.LastName);
             this.AddRecordToDateOfBirthDictionary(record, dateOfBirthKey);
-
-            Console.WriteLine($"Record #{record.Id} is created.");
         }
 
         /// <summary>
@@ -114,11 +112,11 @@ namespace FileCabinetApp
         }
 
         /// <summary>
-        /// Edits a record about a person.
+        /// Updates a record about a person.
         /// </summary>
         /// <param name="sender">Sender object is null.</param>
         /// <param name="recordArgs">Record arguments about a person with new data.</param>
-        public void EditRecord(object sender, FileCabinetEventArgs recordArgs)
+        public void UpdateRecord(object sender, FileCabinetEventArgs recordArgs)
         {
             if (recordArgs is null)
             {
@@ -130,9 +128,19 @@ namespace FileCabinetApp
                 throw new ArgumentException("No such record");
             }
 
-            FileCabinetRecord record = (FileCabinetRecord)this.validator.ValidateParameters(recordArgs);
+            FileCabinetRecord record;
 
-            var oldRecord = this.list[record.Id - 1];
+            try
+            {
+                record = (FileCabinetRecord)this.validator.ValidateParameters(recordArgs);
+            }
+            catch (ArgumentException message)
+            {
+                Console.WriteLine(message);
+                return;
+            }
+
+            var oldRecord = Array.Find(this.list.ToArray(), i => i.Id == record.Id);
             var dateOfBirthKey = $"{oldRecord.DateOfBirth.Year}-{oldRecord.DateOfBirth.Month}-{oldRecord.DateOfBirth.Day}";
 
             this.RemoveRecordFromFirstNameDictionary(oldRecord.Id, oldRecord.FirstName);
@@ -245,10 +253,10 @@ namespace FileCabinetApp
         }
 
         /// <summary>
-        /// Removes record from record list and all dictionaries.
+        /// Deletes record from record list and all dictionaries.
         /// </summary>
         /// <param name="id">Record's id.</param>
-        public void RemoveRecord(int id)
+        public void DeleteRecord(int id)
         {
             FileCabinetRecord record;
             record = this.list.Find(i => i.Id.Equals(id));
@@ -275,8 +283,6 @@ namespace FileCabinetApp
             {
                 pair.Value.Remove(record);
             }
-
-            Console.WriteLine($"Record #{id} removed.");
         }
 
         /// <summary>

@@ -139,11 +139,11 @@ namespace FileCabinetApp
         }
 
         /// <summary>
-        /// Edits file record.
+        /// Updates file record.
         /// </summary>
         /// <param name="sender">Object that sends the arguments is null.</param>
         /// <param name="recordArgs">File record arguments.</param>
-        public void EditRecord(object sender, FileCabinetEventArgs recordArgs)
+        public void UpdateRecord(object sender, FileCabinetEventArgs recordArgs)
         {
             CreateStreams();
 
@@ -159,7 +159,7 @@ namespace FileCabinetApp
                 logger.WriteLine(
                     GetNowDateTime() + $"Calling EditRecord() with FirstName = '{recordArgs.FirstName}', LastName = '{recordArgs.LastName}', " +
                     $"DateOfBirth = '{recordArgs.DateOfBirth.Day}/{recordArgs.DateOfBirth.Month}/{recordArgs.DateOfBirth.Year}'.");
-                this.service.EditRecord(sender, recordArgs);
+                this.service.UpdateRecord(sender, recordArgs);
             }
             catch (ArgumentNullException message)
             {
@@ -423,17 +423,17 @@ namespace FileCabinetApp
         }
 
         /// <summary>
-        /// Removes specified record from FileCabinetService data storage.
+        /// Deletes specified record from FileCabinetService data storage.
         /// </summary>
         /// <param name="id">Number of record.</param>
-        public void RemoveRecord(int id)
+        public void DeleteRecord(int id)
         {
             CreateStreams();
 
             try
             {
                 logger.WriteLine(GetNowDateTime() + $"Calling RemoveRecord() with id = '{id}'.");
-                this.service.RemoveRecord(id);
+                this.service.DeleteRecord(id);
             }
             catch (ArgumentNullException message)
             {

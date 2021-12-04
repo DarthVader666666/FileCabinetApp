@@ -71,6 +71,8 @@ namespace FileCabinetApp
         /// <returns>true - record exists, false - record doesn't exist.</returns>
         public bool RecordExists(int id)
         {
+            this.GetRecords();
+
             if (this.list.Find(i => i.Id.Equals(id)) is null)
             {
                 return false;
@@ -218,11 +220,11 @@ namespace FileCabinetApp
         }
 
         /// <summary>
-        /// Edits a record about a person.
+        /// Updates a record about a person.
         /// </summary>
         /// <param name="sender">Sender object is null.</param>
         /// <param name="recordArgs">Record arguments about a person with new data.</param>
-        public void EditRecord(object sender, FileCabinetEventArgs recordArgs)
+        public void UpdateRecord(object sender, FileCabinetEventArgs recordArgs)
         {
             if (recordArgs is null)
             {
@@ -246,8 +248,20 @@ namespace FileCabinetApp
                 return;
             }
 
-            FileCabinetRecord record = (FileCabinetRecord)this.validator.ValidateParameters(recordArgs);
-            var oldRecord = this.list[record.Id - 1];
+            FileCabinetRecord record;
+
+            try
+            {
+                record = (FileCabinetRecord)this.validator.ValidateParameters(recordArgs);
+            }
+            catch (ArgumentException message)
+            {
+                fileStream.Close();
+                Console.WriteLine(message);
+                return;
+            }
+
+            var oldRecord = Array.Find(this.list.ToArray(), i => i.Id == record.Id);
 
             oldRecord.FirstName = record.FirstName;
             oldRecord.LastName = record.LastName;
@@ -388,10 +402,10 @@ namespace FileCabinetApp
         }
 
         /// <summary>
-        /// Removes record from *.db file.
+        /// Deletes record from *.db file.
         /// </summary>
         /// <param name="id">Record's id.</param>
-        public void RemoveRecord(int id)
+        public void DeleteRecord(int id)
         {
             FileStream fileStream = new FileStream(this.FilePath, FileMode.Open, FileAccess.ReadWrite);
             long position = SeekRecordPosition(id, fileStream);
@@ -413,8 +427,6 @@ namespace FileCabinetApp
             this.UpdateIndexes();
 
             this.RecordsCount = this.GetStat().Item1;
-
-            Console.WriteLine($"Record #{id} removed.");
         }
 
         /// <summary>

@@ -66,14 +66,14 @@ namespace FileCabinetApp
         }
 
         /// <summary>
-        /// Edits file record.
+        /// Updates file record.
         /// </summary>
         /// <param name="sender">Object that sends the arguments is null.</param>
         /// <param name="recordArgs">File record arguments.</param>
-        public void EditRecord(object sender, FileCabinetEventArgs recordArgs)
+        public void UpdateRecord(object sender, FileCabinetEventArgs recordArgs)
         {
             this.stopwatch.Start();
-            this.service.EditRecord(sender, recordArgs);
+            this.service.UpdateRecord(sender, recordArgs);
             this.stopwatch.Stop();
             Console.WriteLine($"EditRecord method execution duration is {this.stopwatch.ElapsedTicks} ticks");
             this.stopwatch.Reset();
@@ -171,13 +171,13 @@ namespace FileCabinetApp
         }
 
         /// <summary>
-        /// Removes specified record from FileCabinetService data storage.
+        /// Deletes specified record from FileCabinetService data storage.
         /// </summary>
         /// <param name="id">Number of record.</param>
-        public void RemoveRecord(int id)
+        public void DeleteRecord(int id)
         {
             this.stopwatch.Start();
-            this.service.RemoveRecord(id);
+            this.service.DeleteRecord(id);
             this.stopwatch.Stop();
             Console.WriteLine($"RemoveRecord method execution duration is {this.stopwatch.ElapsedTicks} ticks");
             this.stopwatch.Reset();

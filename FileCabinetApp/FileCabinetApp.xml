@@ -80,25 +80,20 @@
             </summary>
             <param name="records">File records to be printed.</param>
         </member>
-        <member name="T:FileCabinetApp.CommandHandlers.EditCommandHandler">
+        <member name="T:FileCabinetApp.CommandHandlers.DeleteCommandHandler">
             <summary>
-            Handles edit command.
+            Handles 'delete' command.
             </summary>
         </member>
-        <member name="M:FileCabinetApp.CommandHandlers.EditCommandHandler.#ctor(FileCabinetApp.IFileCabinetService)">
+        <member name="M:FileCabinetApp.CommandHandlers.DeleteCommandHandler.#ctor(FileCabinetApp.IFileCabinetService)">
             <summary>
-            Initializes a new instance of the <see cref="T:FileCabinetApp.CommandHandlers.EditCommandHandler"/> class.
+            Initializes a new instance of the <see cref="T:FileCabinetApp.CommandHandlers.DeleteCommandHandler"/> class.
             </summary>
-            <param name="service">FileCabinetService instance.</param>
+            <param name="service">Specific FileCabinet service.</param>
         </member>
-        <member name="E:FileCabinetApp.CommandHandlers.EditCommandHandler.EditRecordEvent">
+        <member name="M:FileCabinetApp.CommandHandlers.DeleteCommandHandler.Handle(FileCabinetApp.CommandHandlers.AddCommandRequest)">
             <summary>
-            Edit record handler
-            </summary>
-        </member>
-        <member name="M:FileCabinetApp.CommandHandlers.EditCommandHandler.Handle(FileCabinetApp.CommandHandlers.AddCommandRequest)">
-            <summary>
-            Calls edit method or next handler.
+            Calls find method or next handler.
             </summary>
             <param name="request">Provides command and parameters.</param>
         </member>
@@ -204,6 +199,28 @@
             </summary>
             <param name="request">Provides command and parameters.</param>
         </member>
+        <member name="T:FileCabinetApp.CommandHandlers.InsertCommandHandler">
+            <summary>
+            Handles insert command.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.CommandHandlers.InsertCommandHandler.#ctor(FileCabinetApp.IFileCabinetService)">
+            <summary>
+            Initializes a new instance of the <see cref="T:FileCabinetApp.CommandHandlers.InsertCommandHandler"/> class.
+            </summary>
+            <param name="service">Specific FileCabinet service.</param>
+        </member>
+        <member name="E:FileCabinetApp.CommandHandlers.InsertCommandHandler.CreateRecordEvent">
+            <summary>
+            Create record handler
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.CommandHandlers.InsertCommandHandler.Handle(FileCabinetApp.CommandHandlers.AddCommandRequest)">
+            <summary>
+            Calls find method or next handler.
+            </summary>
+            <param name="request">Provides command and parameters.</param>
+        </member>
         <member name="T:FileCabinetApp.CommandHandlers.IRecordPrinter">
             <summary>
             Provides extention for Print records method.
@@ -255,23 +272,6 @@
             </summary>
             <param name="request">Provides command and parameters.</param>
         </member>
-        <member name="T:FileCabinetApp.CommandHandlers.RemoveCommandHandler">
-            <summary>
-            Handles remove command.
-            </summary>
-        </member>
-        <member name="M:FileCabinetApp.CommandHandlers.RemoveCommandHandler.#ctor(FileCabinetApp.IFileCabinetService)">
-            <summary>
-            Initializes a new instance of the <see cref="T:FileCabinetApp.CommandHandlers.RemoveCommandHandler"/> class.
-            </summary>
-            <param name="service">FileCabinetService instance.</param>
-        </member>
-        <member name="M:FileCabinetApp.CommandHandlers.RemoveCommandHandler.Handle(FileCabinetApp.CommandHandlers.AddCommandRequest)">
-            <summary>
-            Calls remove method or next handler.
-            </summary>
-            <param name="request">Provides command and parameters.</param>
-        </member>
         <member name="T:FileCabinetApp.CommandHandlers.ServiceCommandHandlerBase">
             <summary>
             Command handlers common Seperclass.
@@ -302,6 +302,28 @@
         <member name="M:FileCabinetApp.CommandHandlers.StatCommandHandler.Handle(FileCabinetApp.CommandHandlers.AddCommandRequest)">
             <summary>
             Calls stat method or next handler.
+            </summary>
+            <param name="request">Provides command and parameters.</param>
+        </member>
+        <member name="T:FileCabinetApp.CommandHandlers.UpdateCommandHandler">
+            <summary>
+            Handles 'update' command.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.CommandHandlers.UpdateCommandHandler.#ctor(FileCabinetApp.IFileCabinetService)">
+            <summary>
+            Initializes a new instance of the <see cref="T:FileCabinetApp.CommandHandlers.UpdateCommandHandler"/> class.
+            </summary>
+            <param name="service">Specified file cabinet service.</param>
+        </member>
+        <member name="E:FileCabinetApp.CommandHandlers.UpdateCommandHandler.UpdateRecordEvent">
+            <summary>
+            Update record handler
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.CommandHandlers.UpdateCommandHandler.Handle(FileCabinetApp.CommandHandlers.AddCommandRequest)">
+            <summary>
+            Calls find method or next handler.
             </summary>
             <param name="request">Provides command and parameters.</param>
         </member>
@@ -407,9 +429,9 @@
             </summary>
             <returns>Count of all file cabinet records.</returns>
         </member>
-        <member name="M:FileCabinetApp.FileCabinetFilesystemService.EditRecord(System.Object,FileCabinetApp.FileCabinetEventArgs)">
+        <member name="M:FileCabinetApp.FileCabinetFilesystemService.UpdateRecord(System.Object,FileCabinetApp.FileCabinetEventArgs)">
             <summary>
-            Edits a record about a person.
+            Updates a record about a person.
             </summary>
             <param name="sender">Sender object is null.</param>
             <param name="recordArgs">Record arguments about a person with new data.</param>
@@ -441,9 +463,9 @@
             </summary>
             <param name="snapshot">Loaded records from csv file.</param>
         </member>
-        <member name="M:FileCabinetApp.FileCabinetFilesystemService.RemoveRecord(System.Int32)">
+        <member name="M:FileCabinetApp.FileCabinetFilesystemService.DeleteRecord(System.Int32)">
             <summary>
-            Removes record from *.db file.
+            Deletes record from *.db file.
             </summary>
             <param name="id">Record's id.</param>
         </member>
@@ -501,9 +523,9 @@
             </summary>
             <returns>Count of all file cabinet records.</returns>
         </member>
-        <member name="M:FileCabinetApp.FileCabinetMemoryService.EditRecord(System.Object,FileCabinetApp.FileCabinetEventArgs)">
+        <member name="M:FileCabinetApp.FileCabinetMemoryService.UpdateRecord(System.Object,FileCabinetApp.FileCabinetEventArgs)">
             <summary>
-            Edits a record about a person.
+            Updates a record about a person.
             </summary>
             <param name="sender">Sender object is null.</param>
             <param name="recordArgs">Record arguments about a person with new data.</param>
@@ -535,9 +557,9 @@
             </summary>
             <param name="snapshot">Loaded records from csv file.</param>
         </member>
-        <member name="M:FileCabinetApp.FileCabinetMemoryService.RemoveRecord(System.Int32)">
+        <member name="M:FileCabinetApp.FileCabinetMemoryService.DeleteRecord(System.Int32)">
             <summary>
-            Removes record from record list and all dictionaries.
+            Deletes record from record list and all dictionaries.
             </summary>
             <param name="id">Record's id.</param>
         </member>
@@ -838,9 +860,9 @@
             </summary>
             <returns>Number of file records.</returns>
         </member>
-        <member name="M:FileCabinetApp.IFileCabinetService.EditRecord(System.Object,FileCabinetApp.FileCabinetEventArgs)">
+        <member name="M:FileCabinetApp.IFileCabinetService.UpdateRecord(System.Object,FileCabinetApp.FileCabinetEventArgs)">
             <summary>
-            Edits file record.
+            Updates file record.
             </summary>
             <param name="sender">Object that sends the arguments is null.</param>
             <param name="recordArgs">File record arguments.</param>
@@ -884,7 +906,7 @@
             </summary>
             <returns>Last record's id.</returns>
         </member>
-        <member name="M:FileCabinetApp.IFileCabinetService.RemoveRecord(System.Int32)">
+        <member name="M:FileCabinetApp.IFileCabinetService.DeleteRecord(System.Int32)">
             <summary>
             Removes specified record from FileCabinetService data storage.
             </summary>
@@ -1040,9 +1062,9 @@
             </summary>
             <returns>Number of file records.</returns>
         </member>
-        <member name="M:FileCabinetApp.ServiceLogger.EditRecord(System.Object,FileCabinetApp.FileCabinetEventArgs)">
+        <member name="M:FileCabinetApp.ServiceLogger.UpdateRecord(System.Object,FileCabinetApp.FileCabinetEventArgs)">
             <summary>
-            Edits file record.
+            Updates file record.
             </summary>
             <param name="sender">Object that sends the arguments is null.</param>
             <param name="recordArgs">File record arguments.</param>
@@ -1086,9 +1108,9 @@
             </summary>
             <returns>Last record's id.</returns>
         </member>
-        <member name="M:FileCabinetApp.ServiceLogger.RemoveRecord(System.Int32)">
+        <member name="M:FileCabinetApp.ServiceLogger.DeleteRecord(System.Int32)">
             <summary>
-            Removes specified record from FileCabinetService data storage.
+            Deletes specified record from FileCabinetService data storage.
             </summary>
             <param name="id">Number of record.</param>
         </member>
@@ -1134,9 +1156,9 @@
             </summary>
             <returns>Number of file records.</returns>
         </member>
-        <member name="M:FileCabinetApp.ServiceMeter.EditRecord(System.Object,FileCabinetApp.FileCabinetEventArgs)">
+        <member name="M:FileCabinetApp.ServiceMeter.UpdateRecord(System.Object,FileCabinetApp.FileCabinetEventArgs)">
             <summary>
-            Edits file record.
+            Updates file record.
             </summary>
             <param name="sender">Object that sends the arguments is null.</param>
             <param name="recordArgs">File record arguments.</param>
@@ -1180,9 +1202,9 @@
             </summary>
             <returns>Last record's id.</returns>
         </member>
-        <member name="M:FileCabinetApp.ServiceMeter.RemoveRecord(System.Int32)">
+        <member name="M:FileCabinetApp.ServiceMeter.DeleteRecord(System.Int32)">
             <summary>
-            Removes specified record from FileCabinetService data storage.
+            Deletes specified record from FileCabinetService data storage.
             </summary>
             <param name="id">Number of record.</param>
         </member>

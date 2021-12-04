@@ -20,9 +20,11 @@ namespace FileCabinetApp.CommandHandlers
             new string[] { "export", "exports records into chosen file and format (csv or xml). Ex: export csv D:\\file.csv" },
             new string[] { "find", "finds records by specified parameter. Ex: find firstname \"Vadim\"" },
             new string[] { "import", "Imports records from csv or xml file. Ex: import csv d:\\file.csv" },
-            new string[] { "remove", "Removes specific record from record list (uses id parameter)." },
+            new string[] { "delete", "Deletes specific record from record list (uses record field parameter, Ex: delete where id = '1')." },
+            new string[] { "update", "Updates records using specific parameters (Ex: update set DateOfBirth = '5/18/1986' where FirstName='Stan' and LastName='Smith')." },
             new string[] { "purge", "Deletes record from *.db file in FilesystemService." },
             new string[] { "stat", "Displays record list statistics." },
+            new string[] { "insert", "Inserts new record using delegated parameters. Ex: insert (id, firstname, lastname, dateofbirth...) values ('1', 'John', 'Doe', '5/18/1986'...)." },
         };
 
         /// <summary>

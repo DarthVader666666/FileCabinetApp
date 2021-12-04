@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Globalization;
+using System.Linq;
 
 namespace FileCabinetApp
 {
@@ -16,6 +18,7 @@ namespace FileCabinetApp
         private const string CustomValidationMessage = "Using custom validation rules.";
         private const string FileStorageMessage = "Using file storage.";
         private const string MemoryStorageMessage = "Using memory storage.";
+        private static readonly string[] Commands = new string[] { "help", "exit", "list", "create", "export", "find", "import", "delete", "update", "purge", "stat", "insert" };
 
         /// <summary>
         /// file cabinet instance.
@@ -111,7 +114,34 @@ namespace FileCabinetApp
                 const int parametersIndex = 1;
                 string parameters = inputs.Length > 1 ? inputs[parametersIndex] : string.Empty;
 
-                handler.Handle(new CommandHandlers.AddCommandRequest() { Command = command, Parameters = parameters });
+                if (Array.FindAll(Commands, i => i.Equals(command, StringComparison.InvariantCultureIgnoreCase)).Length == 0)
+                {
+                    Console.WriteLine("Didn't recornise command.");
+
+                    List<string> similarCommands = new List<string>();
+
+                    foreach (string com in Commands)
+                    {
+                        if (Array.FindAll(com.ToArray(), i => command.Contains(i)).Length > 2)
+                        {
+                            similarCommands.Add(com);
+                        }
+                    }
+
+                    if (similarCommands.Any())
+                    {
+                        Console.WriteLine("Most similar commands are:");
+
+                        foreach (string s in similarCommands)
+                        {
+                            Console.WriteLine('\t' + s);
+                        }
+                    }
+                }
+                else
+                {
+                    handler.Handle(new CommandHandlers.AddCommandRequest() { Command = command, Parameters = parameters });
+                }
             }
             while (isRunning);
         }
@@ -177,23 +207,25 @@ namespace FileCabinetApp
             var listHandler = new CommandHandlers.ListCommandHandler(service, printer);
             var createHandler = new CommandHandlers.CreateCommandHandler(service);
             var findHandler = new CommandHandlers.FindCommandHandler(service, printer);
-            var editHandler = new CommandHandlers.EditCommandHandler(service);
             var importHandler = new CommandHandlers.ImportCommandHandler(service);
             var exportHandler = new CommandHandlers.ExportCommandHandler(service);
-            var removeHandler = new CommandHandlers.RemoveCommandHandler(service);
             var purgeHandler = new CommandHandlers.PurgeCommandHandler(service);
+            var insertHandler = new CommandHandlers.InsertCommandHandler(service);
+            var deleteHandler = new CommandHandlers.DeleteCommandHandler(service);
+            var updateHandler = new CommandHandlers.UpdateCommandHandler(service);
             var exitHandler = new CommandHandlers.ExitCommandHandler(breakAll);
 
             helpHandler.SetNext(statHandler);
             statHandler.SetNext(listHandler);
             listHandler.SetNext(createHandler);
             createHandler.SetNext(findHandler);
-            findHandler.SetNext(editHandler);
-            editHandler.SetNext(importHandler);
+            findHandler.SetNext(importHandler);
             importHandler.SetNext(exportHandler);
-            exportHandler.SetNext(removeHandler);
-            removeHandler.SetNext(purgeHandler);
-            purgeHandler.SetNext(exitHandler);
+            exportHandler.SetNext(purgeHandler);
+            purgeHandler.SetNext(insertHandler);
+            insertHandler.SetNext(deleteHandler);
+            deleteHandler.SetNext(updateHandler);
+            updateHandler.SetNext(exitHandler);
 
             return helpHandler;
         }

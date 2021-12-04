@@ -29,11 +29,11 @@ namespace FileCabinetApp
         Tuple<int, int> GetStat();
 
         /// <summary>
-        /// Edits file record.
+        /// Updates file record.
         /// </summary>
         /// <param name="sender">Object that sends the arguments is null.</param>
         /// <param name="recordArgs">File record arguments.</param>
-        void EditRecord(object sender, FileCabinetEventArgs recordArgs);
+        void UpdateRecord(object sender, FileCabinetEventArgs recordArgs);
 
         /// <summary>
         /// Finds record by First Name.
@@ -78,7 +78,7 @@ namespace FileCabinetApp
         /// Removes specified record from FileCabinetService data storage.
         /// </summary>
         /// <param name="id">Number of record.</param>
-        void RemoveRecord(int id);
+        void DeleteRecord(int id);
 
         /// <summary>
         /// Deletes marked as IsDeleted from *.db file.
