@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Globalization;
+using System.Linq;
 
 namespace FileCabinetApp.CommandHandlers
 {
@@ -61,7 +62,7 @@ namespace FileCabinetApp.CommandHandlers
                 return;
             }
 
-            string[] recordFieldNames = args[0].Split(new char[] { ',', ' ' }, StringSplitOptions.RemoveEmptyEntries);
+            string[] recordFieldNames = args[0].Split(new char[] { ',', ' ', '\'' }, StringSplitOptions.RemoveEmptyEntries);
             string[] recordFieldValues = args[1].Split(new char[] { ',', '\'', ' ' }, StringSplitOptions.RemoveEmptyEntries);
 
             if (recordFieldNames.Length != recordFieldValues.Length)
@@ -71,76 +72,91 @@ namespace FileCabinetApp.CommandHandlers
             }
 
             FileCabinetRecord record = new FileCabinetRecord();
+            FileCabinetRecord oldRecord = new FileCabinetRecord();
 
             try
             {
-                record.Id = int.Parse(recordFieldValues[GetIndex(recordFieldNames, nameof(record.Id))], CultureInfo.InvariantCulture);
+                int id;
+                var list = this.Service.GetRecords();
 
-                if (this.Service.RecordExists(record.Id))
+                if (Array.FindIndex(recordFieldNames, i => i.Equals(nameof(record.Id), StringComparison.InvariantCultureIgnoreCase)) == -1)
                 {
-                    Console.WriteLine($"Records #{record.Id} already exists.");
-                    return;
-                }
-
-                if (record.Id < 1)
-                {
-                    Console.WriteLine($"Id can't be negative.");
-                    return;
-                }
-
-                if (Array.FindIndex(recordFieldNames, i => i.Equals(nameof(record.FirstName), StringComparison.InvariantCultureIgnoreCase)) == -1)
-                {
-                    record.FirstName = string.Empty;
+                    id = this.Service.GetNewId();
+                    record.Id = id;
                 }
                 else
+                {
+                    id = int.Parse(recordFieldValues[GetIndex(recordFieldNames, nameof(record.Id))], CultureInfo.InvariantCulture);
+
+                    if (id < 1)
+                    {
+                        Console.WriteLine($"Id can't be negative.");
+                        return;
+                    }
+
+                    if (this.Service.RecordExists(id))
+                    {
+                        oldRecord = (from rec in list where rec.Id == id select rec).ToList()[0];
+                    }
+
+                    record.Id = id;
+                }
+
+                if (Array.FindIndex(recordFieldNames, i => i.Equals(nameof(record.FirstName), StringComparison.InvariantCultureIgnoreCase)) != -1)
                 {
                     record.FirstName = recordFieldValues[GetIndex(recordFieldNames, nameof(record.FirstName))];
                 }
-
-                if (Array.FindIndex(recordFieldNames, i => i.Equals(nameof(record.LastName), StringComparison.InvariantCultureIgnoreCase)) == -1)
-                {
-                    record.LastName = string.Empty;
-                }
                 else
+                {
+                    record.FirstName = new string(oldRecord.FirstName);
+                }
+
+                if (Array.FindIndex(recordFieldNames, i => i.Equals(nameof(record.LastName), StringComparison.InvariantCultureIgnoreCase)) != -1)
                 {
                     record.LastName = recordFieldValues[GetIndex(recordFieldNames, nameof(record.LastName))];
                 }
-
-                if (Array.FindIndex(recordFieldNames, i => i.Equals(nameof(record.DateOfBirth), StringComparison.InvariantCultureIgnoreCase)) == -1)
-                {
-                    record.DateOfBirth = default(DateTime);
-                }
                 else
+                {
+                    record.LastName = new string(oldRecord.LastName);
+                }
+
+                if (Array.FindIndex(recordFieldNames, i => i.Equals(nameof(record.DateOfBirth), StringComparison.InvariantCultureIgnoreCase)) != -1)
                 {
                     record.DateOfBirth = DateTime.Parse(recordFieldValues[GetIndex(recordFieldNames, nameof(record.DateOfBirth))], CultureInfo.InvariantCulture);
                 }
-
-                if (Array.FindIndex(recordFieldNames, i => i.Equals(nameof(record.JobExperience), StringComparison.InvariantCultureIgnoreCase)) == -1)
-                {
-                    record.JobExperience = default(short);
-                }
                 else
+                {
+                    record.DateOfBirth = oldRecord.DateOfBirth;
+                }
+
+                if (Array.FindIndex(recordFieldNames, i => i.Equals(nameof(record.JobExperience), StringComparison.InvariantCultureIgnoreCase)) != -1)
                 {
                     record.JobExperience = short.Parse(recordFieldValues[GetIndex(recordFieldNames, nameof(record.JobExperience))], CultureInfo.InvariantCulture);
                 }
-
-                if (Array.FindIndex(recordFieldNames, i => i.Equals(nameof(record.MonthlyPay), StringComparison.InvariantCultureIgnoreCase)) == -1)
-                {
-                    record.MonthlyPay = default(decimal);
-                }
                 else
+                {
+                    record.JobExperience = oldRecord.JobExperience;
+                }
+
+                if (Array.FindIndex(recordFieldNames, i => i.Equals(nameof(record.MonthlyPay), StringComparison.InvariantCultureIgnoreCase)) != -1)
                 {
                     record.MonthlyPay = decimal.Parse(recordFieldValues[GetIndex(recordFieldNames, nameof(record.MonthlyPay))], CultureInfo.InvariantCulture);
                 }
-
-                if (Array.FindIndex(recordFieldNames, i => i.Equals(nameof(record.Gender), StringComparison.InvariantCultureIgnoreCase)) == -1)
-                {
-                    record.Gender = default(char);
-                }
                 else
+                {
+                    record.MonthlyPay = oldRecord.MonthlyPay;
+                }
+
+                if (Array.FindIndex(recordFieldNames, i => i.Equals(nameof(record.Gender), StringComparison.InvariantCultureIgnoreCase)) != -1)
                 {
                     record.Gender = char.Parse(recordFieldValues[GetIndex(recordFieldNames, nameof(record.Gender))]);
                 }
+                else
+                {
+                    record.Gender = oldRecord.Gender;
+                }
+
+                this.Service.DeleteRecord(id);
             }
             catch (IndexOutOfRangeException)
             {
@@ -155,7 +171,7 @@ namespace FileCabinetApp.CommandHandlers
 
             FileCabinetEventArgs recordArgs = new FileCabinetEventArgs(record);
             CreateRecordEvent(null, recordArgs);
-            Console.WriteLine($"Record #{record.Id} was successfully incerted.");
+            Console.WriteLine($"Record #{recordArgs.Id} was successfully incerted.");
         }
     }
 }
