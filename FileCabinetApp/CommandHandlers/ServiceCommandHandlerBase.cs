@@ -10,15 +10,24 @@ namespace FileCabinetApp.CommandHandlers
         /// <summary>
         /// Common File Service for command handlers.
         /// </summary>
-        protected IFileCabinetService fileCabinetService;
+        private readonly IFileCabinetService fileCabinetService;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ServiceCommandHandlerBase"/> class.
         /// </summary>
-        /// <param name="service">FileCabinetService instance.</param>
-        protected ServiceCommandHandlerBase(IFileCabinetService service)
+        /// <param name="fileCabinetService">FileCabinetService instance.</param>
+        protected ServiceCommandHandlerBase(IFileCabinetService fileCabinetService)
         {
-            this.fileCabinetService = service;
+            this.fileCabinetService = fileCabinetService;
+        }
+
+        /// <summary>
+        /// Gets IFileCabinetService instance.
+        /// </summary>
+        /// <value>IFileCabinetService.</value>
+        protected IFileCabinetService Service
+        {
+            get { return this.fileCabinetService; }
         }
     }
 }

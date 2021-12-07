@@ -1,14 +1,10 @@
-﻿// <copyright file="FileCabinetXmlSerializeble.cs" company="PlaceholderCompany">
-// Copyright (c) PlaceholderCompany. All rights reserved.
-// </copyright>
+﻿using System;
+using System.Collections.Generic;
+using System.Globalization;
+using System.Xml.Serialization;
 
 namespace FileCabinetApp
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Globalization;
-    using System.Xml.Serialization;
-
     /// <summary>
     /// Serializes records to xml format.
     /// </summary>
@@ -40,9 +36,11 @@ namespace FileCabinetApp
         /// <summary>
         /// Gets or sets records for xml serialization.
         /// </summary>
-        /// <value></value>
+        /// <value>List of Xml Serializeble Records.</value>
         [XmlElement("record")]
+#pragma warning disable CA2227 // Collection properties should be read only
         public List<FileCabinetXmlSerializebleRecord> Records { get; set; }
+#pragma warning restore CA2227 // Collection properties should be read only
 
         /// <summary>
         /// Converts xmlSerializeble records from xml file to FileCabinetRecords.

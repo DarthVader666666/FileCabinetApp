@@ -157,12 +157,12 @@ namespace FileCabinetApp.CommandHandlers
             {
                 switch (property.Name.ToUpperInvariant())
                 {
-                    case "ID": return Array.FindAll(this.fileCabinetService.GetRecords().ToArray(), i => i.Id.Equals(int.Parse(value, CultureInfo.InvariantCulture))).ToList();
-                    case "FIRSTNAME": return this.fileCabinetService.FindByFirstName(new string(value)).ToList();
-                    case "LASTNAME": return this.fileCabinetService.FindByLastName(new string(value)).ToList();
-                    case "DATEOFBIRTH": return this.fileCabinetService.FindByDateOfBirth(DateTime.Parse(value, CultureInfo.InvariantCulture)).ToList();
-                    case "JOBEXPERIENCE": return this.fileCabinetService.FindByJobExperience(short.Parse(value, CultureInfo.InvariantCulture)).ToList();
-                    case "MONTHLYPAY": return this.fileCabinetService.FindByMonthlyPay(decimal.Parse(value, CultureInfo.InvariantCulture)).ToList();
+                    case "ID": return Array.FindAll(this.Service.GetRecords().ToArray(), i => i.Id.Equals(int.Parse(value, CultureInfo.InvariantCulture))).ToList();
+                    case "FIRSTNAME": return this.Service.FindByFirstName(new string(value)).ToList();
+                    case "LASTNAME": return this.Service.FindByLastName(new string(value)).ToList();
+                    case "DATEOFBIRTH": return this.Service.FindByDateOfBirth(DateTime.Parse(value, CultureInfo.InvariantCulture)).ToList();
+                    case "JOBEXPERIENCE": return this.Service.FindByJobExperience(short.Parse(value, CultureInfo.InvariantCulture)).ToList();
+                    case "MONTHLYPAY": return this.Service.FindByMonthlyPay(decimal.Parse(value, CultureInfo.InvariantCulture)).ToList();
                     case "GENDER":
                         {
                             if (value.Length > 1)
@@ -170,7 +170,7 @@ namespace FileCabinetApp.CommandHandlers
                                 throw new FormatException();
                             }
 
-                            return this.fileCabinetService.FindByGender(char.Parse(value)).ToList();
+                            return this.Service.FindByGender(char.Parse(value)).ToList();
                         }
 
                     default:
@@ -290,13 +290,13 @@ namespace FileCabinetApp.CommandHandlers
 
             if (selectFields.Length > 0 && whereOrParameters.Length == 0)
             {
-                recordsFound = this.fileCabinetService.GetRecords().ToList();
+                recordsFound = this.Service.GetRecords().ToList();
             }
 
             if (selectFields.Length == 0 && whereOrParameters.Length == 0)
             {
                 selectedProperties = allProperties;
-                recordsFound = this.fileCabinetService.GetRecords().ToList();
+                recordsFound = this.Service.GetRecords().ToList();
                 this.printer.Print(recordsFound.AsReadOnly(), selectedProperties);
                 return;
             }

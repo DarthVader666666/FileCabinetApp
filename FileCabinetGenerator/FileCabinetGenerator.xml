@@ -1,0 +1,60 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>FileCabinetGenerator</name>
+    </assembly>
+    <members>
+        <member name="T:FileCabinetGenerator.FileCabinetRecordGenerator">
+            <summary>
+            Generates record list.
+            </summary>
+        </member>
+        <member name="M:FileCabinetGenerator.FileCabinetRecordGenerator.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:FileCabinetGenerator.FileCabinetRecordGenerator"/> class.
+            </summary>
+        </member>
+        <member name="P:FileCabinetGenerator.FileCabinetRecordGenerator.RecordList">
+            <summary>
+            Gets generated record list.
+            </summary>
+            <value>FileCabinetRecord list.</value>
+        </member>
+        <member name="M:FileCabinetGenerator.FileCabinetRecordGenerator.GenerateRecordList(System.Int32,System.Int32)">
+            <summary>
+            Generates new record list.
+            </summary>
+            <param name="startId">Start id record number.</param>
+            <param name="recordsAmount">Amount of records to be generated.</param>
+        </member>
+        <member name="M:FileCabinetGenerator.FileCabinetRecordGenerator.GetRecords">
+            <summary>
+            Getsgenerated list of records.
+            </summary>
+            <returns>ReadOnlyCollection of records.</returns>
+        </member>
+        <member name="M:FileCabinetGenerator.FileCabinetRecordGenerator.MakeSnapshot">
+            <summary>
+            Gets snapshot entity.
+            </summary>
+            <returns>Snapshot object.</returns>
+        </member>
+        <member name="M:FileCabinetGenerator.FileCabinetRecordGenerator.SerializeRecordsToXml(System.IO.StreamWriter)">
+            <summary>
+            Serializes recods into xml format.
+            </summary>
+            <param name="steramWriter">Stream fo searilization.</param>
+        </member>
+        <member name="T:FileCabinetGenerator.Program">
+            <summary>
+            Class which operates FileCabinetGenerator application.
+            </summary>
+        </member>
+        <member name="M:FileCabinetGenerator.Program.Main(System.String[])">
+            <summary>
+            Provides user interface and calls command handlers.
+            </summary>
+            <param name="args">Command line args.</param>
+        </member>
+    </members>
+</doc>

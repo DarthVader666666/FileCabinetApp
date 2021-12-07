@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Linq;
 
@@ -14,11 +13,10 @@ namespace FileCabinetApp
         private const string DeveloperName = "Vadzim Rumiantsau";
         private const string HintMessage = "Enter your command, or enter 'help' to get help.";
         private const string StorageDbFilePath = "cabinet-records.db";
-        private const string DefaultValidationMessage = "Using default validation rules.";
-        private const string CustomValidationMessage = "Using custom validation rules.";
-        private const string FileStorageMessage = "Using file storage.";
-        private const string MemoryStorageMessage = "Using memory storage.";
-        private static readonly string[] Commands = new string[] { "help", "exit", "list", "create", "export", "find", "import", "delete", "update", "purge", "stat", "insert", "select" };
+        private const string WrongArgumentsMessage = "Wrong or absent argument parameter";
+        private static readonly string[] Commands = new string[] { "help", "exit", "create", "export", "import", "delete", "update", "purge", "stat", "insert", "select" };
+        private static string validationMessage = "Using default validation rules.";
+        private static string storageMessage = "Using memory storage.";
 
         /// <summary>
         /// file cabinet instance.
@@ -39,61 +37,85 @@ namespace FileCabinetApp
                 throw new ArgumentNullException($"{args} is null");
             }
 
-            //args = new string[] { "-s", "memory", "-use-stopwatch", "-use-logger" };
-            args = new string[] { "-s", "memory" };
-
-            if (args.Length == 1)
+            for (int i = 0; i < args.Length; i++)
             {
-                args = args[0].Split('=');
-            }
-
-            if (args.Length >= 2 && args[1].Length > 0 && (args[0] == "--validation-rule" || args[0] == "-v"))
-            {
-                switch (args[1].ToUpper(CultureInfo.InvariantCulture))
+                if (args[i].ToUpperInvariant() == "--VALIDATION-RULE" || args[i].ToUpperInvariant() == "-V")
                 {
-                    case "DEFAULT":
-                        fileCabinetService = new FileCabinetMemoryService(new Validators.ValidatorBuilder().CreateDefault());
-                        Console.WriteLine(DefaultValidationMessage); break;
-                    case "CUSTOM":
-                        fileCabinetService = new FileCabinetMemoryService(new Validators.ValidatorBuilder().CreateCustom());
-                        Console.WriteLine(CustomValidationMessage); break;
+                    try
+                    {
+                        switch (args[i + 1].ToUpperInvariant())
+                        {
+                            case "DEFAULT":
+                                fileCabinetService = new FileCabinetMemoryService(new Validators.ValidatorBuilder().CreateDefault());
+                                break;
+                            case "CUSTOM":
+                                fileCabinetService = new FileCabinetMemoryService(new Validators.ValidatorBuilder().CreateCustom());
+                                validationMessage = "Using custom validation rules."; break;
+                            default:
+                                Console.WriteLine(WrongArgumentsMessage);
+                                Console.WriteLine("Ex.: '-validation-rule custom' or '-v default'.");
+                                return;
+                        }
+                    }
+                    catch (IndexOutOfRangeException)
+                    {
+                        Console.WriteLine(WrongArgumentsMessage);
+                        return;
+                    }
+                    catch (ArgumentOutOfRangeException)
+                    {
+                        Console.WriteLine(WrongArgumentsMessage);
+                        return;
+                    }
+                }
+
+                if (args[i].ToUpperInvariant() == "--STORAGE" || args[i].ToUpperInvariant() == "-S")
+                {
+                    try
+                    {
+                        switch (args[i + 1].ToUpper(CultureInfo.InvariantCulture))
+                        {
+                            case "MEMORY":
+                                fileCabinetService = new FileCabinetMemoryService(new Validators.ValidatorBuilder().CreateDefault());
+                                break;
+                            case "FILE":
+                                fileCabinetService = new FileCabinetFilesystemService(StorageDbFilePath);
+                                storageMessage = "Using file storage."; break;
+                            default:
+                                Console.WriteLine(WrongArgumentsMessage);
+                                Console.WriteLine("Ex.: '-storage file' or '-s memory'.");
+                                return;
+                        }
+                    }
+                    catch (IndexOutOfRangeException)
+                    {
+                        Console.WriteLine(WrongArgumentsMessage);
+                        return;
+                    }
+                    catch (ArgumentOutOfRangeException)
+                    {
+                        Console.WriteLine(WrongArgumentsMessage);
+                        return;
+                    }
                 }
             }
-            else
-            {
-                Console.WriteLine(DefaultValidationMessage);
-            }
 
-            if (args.Length >= 2 && args[1].Length > 0 && (args[0] == "--storage" || args[0] == "-s"))
-            {
-                switch (args[1].ToUpper(CultureInfo.InvariantCulture))
-                {
-                    case "MEMORY":
-                        fileCabinetService = new FileCabinetMemoryService(new Validators.ValidatorBuilder().CreateDefault());
-                        Console.WriteLine(MemoryStorageMessage); break;
-                    case "FILE":
-                        fileCabinetService = new FileCabinetFilesystemService(StorageDbFilePath);
-                        Console.WriteLine(FileStorageMessage); break;
-                }
-            }
-            else
-            {
-                Console.WriteLine(MemoryStorageMessage);
-            }
+            Console.WriteLine($"File Cabinet Application, developed by {DeveloperName}");
+            Console.WriteLine(storageMessage);
+            Console.WriteLine(validationMessage);
 
-            if (Array.Find(args, i => i.Equals("-use-stopwatch")) != null)
+            if (Array.Find(args, i => i.Equals("-use-stopwatch", StringComparison.CurrentCultureIgnoreCase)) != null)
             {
                 fileCabinetService = new ServiceMeter(fileCabinetService);
                 Console.WriteLine("Methods execution duration mesurement enabled.");
             }
 
-            if (Array.Find(args, i => i.Equals("-use-logger")) != null)
+            if (Array.Find(args, i => i.Equals("-use-logger", StringComparison.CurrentCultureIgnoreCase)) != null)
             {
                 fileCabinetService = new ServiceLogger(fileCabinetService);
                 Console.WriteLine("Methods execution logging enabled.");
             }
 
-            Console.WriteLine($"File Cabinet Application, developed by {DeveloperName}");
             Console.WriteLine(HintMessage);
             Console.WriteLine();
 

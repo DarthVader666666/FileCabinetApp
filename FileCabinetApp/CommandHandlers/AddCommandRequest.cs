@@ -10,15 +10,13 @@ namespace FileCabinetApp.CommandHandlers
         /// <summary>
         /// Gets or sets Command to execute.
         /// </summary>
-        /// <value>
-        /// </value>
+        /// <value>string.</value>
         public string Command { get; set; }
 
         /// <summary>
         /// Gets or sets parameters of the command.
         /// </summary>
-        /// <value>
-        /// </value>
+        /// <value>string.</value>
         public string Parameters { get; set; }
     }
 }

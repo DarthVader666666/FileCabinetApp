@@ -51,7 +51,7 @@ namespace FileCabinetApp.CommandHandlers
                 return;
             }
 
-            this.fileCabinetService.PurgeFile();
+            this.Service.PurgeFile();
         }
     }
 }

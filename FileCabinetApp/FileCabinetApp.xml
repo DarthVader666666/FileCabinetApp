@@ -13,15 +13,13 @@
             <summary>
             Gets or sets Command to execute.
             </summary>
-            <value>
-            </value>
+            <value>string.</value>
         </member>
         <member name="P:FileCabinetApp.CommandHandlers.AddCommandRequest.Parameters">
             <summary>
             Gets or sets parameters of the command.
             </summary>
-            <value>
-            </value>
+            <value>string.</value>
         </member>
         <member name="T:FileCabinetApp.CommandHandlers.CommandHandlerBase">
             <summary>
@@ -32,8 +30,7 @@
             <summary>
             Gets nextHandler.
             </summary>
-            <value>
-            </value>
+            <value>ICommandHandler.</value>
         </member>
         <member name="M:FileCabinetApp.CommandHandlers.CommandHandlerBase.SetNext(FileCabinetApp.CommandHandlers.ICommandHandler)">
             <summary>
@@ -149,7 +146,7 @@
             <summary>
             Gets Hash Code of the record.
             </summary>
-            <param name="obj">FileCabinetRecord</param>
+            <param name="obj">FileCabinetRecord.</param>
             <returns>Record hash code.</returns>
         </member>
         <member name="T:FileCabinetApp.CommandHandlers.FileCabinetRecordListSort">
@@ -311,7 +308,13 @@
             <summary>
             Initializes a new instance of the <see cref="T:FileCabinetApp.CommandHandlers.ServiceCommandHandlerBase"/> class.
             </summary>
-            <param name="service">FileCabinetService instance.</param>
+            <param name="fileCabinetService">FileCabinetService instance.</param>
+        </member>
+        <member name="P:FileCabinetApp.CommandHandlers.ServiceCommandHandlerBase.Service">
+            <summary>
+            Gets IFileCabinetService instance.
+            </summary>
+            <value>IFileCabinetService.</value>
         </member>
         <member name="T:FileCabinetApp.CommandHandlers.StatCommandHandler">
             <summary>
@@ -829,7 +832,7 @@
             <summary>
             Gets or sets records for xml serialization.
             </summary>
-            <value></value>
+            <value>List of Xml Serializeble Records.</value>
         </member>
         <member name="M:FileCabinetApp.FileCabinetXmlSerializebleData.GetRecordsFromXml">
             <summary>
@@ -863,7 +866,7 @@
             <summary>
             Gets or sets Name property.
             </summary>
-            <value></value>
+            <value>Xml serialiseble Name.</value>
         </member>
         <member name="P:FileCabinetApp.FileCabinetXmlSerializebleRecord.DateOfBirth">
             <summary>
@@ -1036,7 +1039,7 @@
             <summary>
             Gets next file record.
             </summary>
-            <returns>FileCabinetRecord</returns>
+            <returns>FileCabinetRecord.</returns>
         </member>
         <member name="M:FileCabinetApp.IRecordIterator.HasMore">
             <summary>
@@ -1076,13 +1079,13 @@
             <summary>
             Gets or sets first name.
             </summary>
-            <value></value>
+            <value>string.</value>
         </member>
         <member name="P:FileCabinetApp.NameClass.Last">
             <summary>
             Gets or sets last name.
             </summary>
-            <value></value>
+            <value>string.</value>
         </member>
         <member name="T:FileCabinetApp.Program">
             <summary>
@@ -1378,37 +1381,37 @@
             <summary>
             Gets or sets FirstNameSettings value.
             </summary>
-            <value></value>
+            <value>FirstNameSettings.</value>
         </member>
         <member name="P:FileCabinetApp.ValidationSettings.CustomSettings.LastName">
             <summary>
             Gets or sets LastNameSettings value.
             </summary>
-            <value></value>
+            <value>LastNameSettings.</value>
         </member>
         <member name="P:FileCabinetApp.ValidationSettings.CustomSettings.DateOfBirth">
             <summary>
             Gets or sets DateOfBirthSettings value.
             </summary>
-            <value></value>
+            <value>DateOfBirthSettings.</value>
         </member>
         <member name="P:FileCabinetApp.ValidationSettings.CustomSettings.JobExperience">
             <summary>
             Gets or sets JobExperienceSettings value.
             </summary>
-            <value></value>
+            <value>JobExperienceSettings.</value>
         </member>
         <member name="P:FileCabinetApp.ValidationSettings.CustomSettings.MonthlyPay">
             <summary>
             Gets or sets MonthlyPaySettings value.
             </summary>
-            <value></value>
+            <value>MonthlyPaySettings.</value>
         </member>
         <member name="P:FileCabinetApp.ValidationSettings.CustomSettings.Gender">
             <summary>
             Gets or sets GenderSettings value.
             </summary>
-            <value></value>
+            <value>v.</value>
         </member>
         <member name="T:FileCabinetApp.ValidationSettings.DateOfBirthSettings">
             <summary>
@@ -1419,13 +1422,13 @@
             <summary>
             Gets or sets min date.
             </summary>
-            <value></value>
+            <value>string.</value>
         </member>
         <member name="P:FileCabinetApp.ValidationSettings.DateOfBirthSettings.To">
             <summary>
             Gets or sets max date.
             </summary>
-            <value></value>
+            <value>string.</value>
         </member>
         <member name="T:FileCabinetApp.ValidationSettings.DefaultSettings">
             <summary>
@@ -1436,37 +1439,37 @@
             <summary>
             Gets or sets FirstNameSettings value.
             </summary>
-            <value></value>
+            <value>Json validation firstName properties.</value>
         </member>
         <member name="P:FileCabinetApp.ValidationSettings.DefaultSettings.LastName">
             <summary>
             Gets or sets LastNameSettings value.
             </summary>
-            <value></value>
+            <value>Json validation lastName properties.</value>
         </member>
         <member name="P:FileCabinetApp.ValidationSettings.DefaultSettings.DateOfBirth">
             <summary>
             Gets or sets DateOfBirthSettings value.
             </summary>
-            <value></value>
+            <value>Json validation dateOfBirth properties.</value>
         </member>
         <member name="P:FileCabinetApp.ValidationSettings.DefaultSettings.JobExperience">
             <summary>
             Gets or sets JobExperienceSettings value.
             </summary>
-            <value></value>
+            <value>Json validation jobExperience properties.</value>
         </member>
         <member name="P:FileCabinetApp.ValidationSettings.DefaultSettings.MonthlyPay">
             <summary>
             Gets or sets MonthlyPaySettings value.
             </summary>
-            <value></value>
+            <value>Json validation monthlyPay properties.</value>
         </member>
         <member name="P:FileCabinetApp.ValidationSettings.DefaultSettings.Gender">
             <summary>
             Gets or sets GenderSettings value.
             </summary>
-            <value></value>
+            <value>Json validation gender properties.</value>
         </member>
         <member name="T:FileCabinetApp.ValidationSettings.FirstNameSettings">
             <summary>
@@ -1477,13 +1480,13 @@
             <summary>
             Gets or sets min firstName length.
             </summary>
-            <value></value>
+            <value>int.</value>
         </member>
         <member name="P:FileCabinetApp.ValidationSettings.FirstNameSettings.Max">
             <summary>
             Gets or sets max firstName length.
             </summary>
-            <value></value>
+            <value>int.</value>
         </member>
         <member name="T:FileCabinetApp.ValidationSettings.GenderSettings">
             <summary>
@@ -1494,13 +1497,13 @@
             <summary>
             Gets or sets male symbol.
             </summary>
-            <value></value>
+            <value>char.</value>
         </member>
         <member name="P:FileCabinetApp.ValidationSettings.GenderSettings.Female">
             <summary>
             Gets or sets female symbol.
             </summary>
-            <value></value>
+            <value>char.</value>
         </member>
         <member name="T:FileCabinetApp.ValidationSettings.JobExperienceSettings">
             <summary>
@@ -1511,13 +1514,13 @@
             <summary>
             Gets or sets min short value.
             </summary>
-            <value></value>
+            <value>short.</value>
         </member>
         <member name="P:FileCabinetApp.ValidationSettings.JobExperienceSettings.Max">
             <summary>
             Gets or sets max short value.
             </summary>
-            <value></value>
+            <value>short.</value>
         </member>
         <member name="T:FileCabinetApp.ValidationSettings.LastNameSettings">
             <summary>
@@ -1528,13 +1531,13 @@
             <summary>
             Gets or sets min lastName length.
             </summary>
-            <value></value>
+            <value>int.</value>
         </member>
         <member name="P:FileCabinetApp.ValidationSettings.LastNameSettings.Max">
             <summary>
             Gets or sets min lastName length.
             </summary>
-            <value></value>
+            <value>int.</value>
         </member>
         <member name="T:FileCabinetApp.ValidationSettings.MonthlyPaySettings">
             <summary>
@@ -1545,13 +1548,13 @@
             <summary>
             Gets or sets min decimal value.
             </summary>
-            <value></value>
+            <value>decimal.</value>
         </member>
         <member name="P:FileCabinetApp.ValidationSettings.MonthlyPaySettings.Max">
             <summary>
             Gets or sets max decimal value.
             </summary>
-            <value></value>
+            <value>decimal.</value>
         </member>
         <member name="T:FileCabinetApp.Validators.CompositeValidator">
             <summary>

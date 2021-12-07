@@ -43,7 +43,7 @@ namespace FileCabinetApp.CommandHandlers
 
         private void Delete(string parameters)
         {
-            this.fileCabinetService.ClearCache();
+            this.Service.ClearCache();
 
             string[] args;
             string field;
@@ -83,7 +83,7 @@ namespace FileCabinetApp.CommandHandlers
 
             foreach (int id in ids)
             {
-                this.fileCabinetService.DeleteRecord(id);
+                this.Service.DeleteRecord(id);
                 recordIds = string.Concat(recordIds, $"#{id}, ");
             }
 
@@ -92,7 +92,7 @@ namespace FileCabinetApp.CommandHandlers
 
         private IEnumerable<int> SelectRecordIds(PropertyInfo property, string value)
         {
-            var records = this.fileCabinetService.GetRecords().ToList();
+            var records = this.Service.GetRecords().ToList();
 
             try
             {

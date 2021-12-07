@@ -2,15 +2,15 @@
 // Copyright (c) PlaceholderCompany. All rights reserved.
 // </copyright>
 
+using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.IO;
+using System.Xml.Serialization;
+using FileCabinetApp;
+
 namespace FileCabinetGenerator
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Collections.ObjectModel;
-    using System.IO;
-    using System.Xml.Serialization;
-    using FileCabinetApp;
-
     /// <summary>
     /// Generates record list.
     /// </summary>
@@ -31,6 +31,7 @@ namespace FileCabinetGenerator
         /// <summary>
         /// Gets generated record list.
         /// </summary>
+        /// <value>FileCabinetRecord list.</value>
         public List<FileCabinetRecord> RecordList
         {
             get { return this.list; }
@@ -71,7 +72,11 @@ namespace FileCabinetGenerator
 
                         startId++;
                     }
-                    catch (Exception)
+                    catch (ArgumentNullException)
+                    {
+                        running = true;
+                    }
+                    catch (ArgumentException)
                     {
                         running = true;
                     }
@@ -122,7 +127,7 @@ namespace FileCabinetGenerator
                 "Tauriel", "Lora", "Palmer", "Sarah", "Connor", "Vladimir", "Harconer", "Leto", "Atredis", "Poul", "Muaddib", "Batista", "Brad", "Pitt",
             };
 
-            return names[random.Next(names.Length + 1)];
+            return names[random.Next(names.Length)];
         }
 
         private static DateTime GenerateDateTime()

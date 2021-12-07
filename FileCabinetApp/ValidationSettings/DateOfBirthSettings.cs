@@ -11,14 +11,14 @@ namespace FileCabinetApp.ValidationSettings
         /// <summary>
         /// Gets or sets min date.
         /// </summary>
-        /// <value></value>
+        /// <value>string.</value>
         [JsonProperty("from")]
         public string From { get; set; }
 
         /// <summary>
         /// Gets or sets max date.
         /// </summary>
-        /// <value></value>
+        /// <value>string.</value>
         [JsonProperty("to")]
         public string To { get; set; }
     }

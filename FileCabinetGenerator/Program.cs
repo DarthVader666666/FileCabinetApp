@@ -2,14 +2,14 @@
 // Copyright (c) PlaceholderCompany. All rights reserved.
 // </copyright>
 
+using System;
+using System.Collections.ObjectModel;
+using System.Globalization;
+using System.IO;
+using FileCabinetApp;
+
 namespace FileCabinetGenerator
 {
-    using System;
-    using System.Collections.ObjectModel;
-    using System.Globalization;
-    using System.IO;
-    using FileCabinetApp;
-
     /// <summary>
     /// Class which operates FileCabinetGenerator application.
     /// </summary>
@@ -55,15 +55,10 @@ namespace FileCabinetGenerator
         /// <param name="args">Command line args.</param>
         public static void Main(string[] args)
         {
-            //args = new string[] { "-t", "xml", "-o", "d:\\file.xml", "-a", "40", "-i", "1" };
             if (args is null)
             {
                 throw new ArgumentNullException($"{args} is null");
             }
-
-            Console.WriteLine($"File Generatort Application, developed by {DeveloperName}");
-            Console.WriteLine(HintMessage);
-            Console.WriteLine();
 
             if (args.Length <= 8)
             {
@@ -71,45 +66,45 @@ namespace FileCabinetGenerator
                 args = wholeLine.Split(new char[] { ' ', '=' });
             }
 
-            if ((args[0].ToLower() == "--output-type" || args[0].ToLower() == "-t") && (args[2].ToLower() == "--output" || args[2].ToLower() == "-o") &&
-                (args[4].ToLower() == "--records-amount" || args[4].ToLower() == "-a") && (args[6].ToLower() == "--start-id" || args[6].ToLower() == "-i"))
+            if ((args[0].ToUpperInvariant() == "--OUTPUT-TYPE" || args[0].ToUpperInvariant() == "-T") && (args[2].ToUpperInvariant() == "--OUTPUT" || args[2].ToUpperInvariant() == "-O") &&
+                (args[4].ToUpperInvariant() == "--RECORDS-AMOUNT" || args[4].ToUpperInvariant() == "-A") && (args[6].ToUpperInvariant() == "--START-ID" || args[6].ToUpperInvariant() == "-I"))
             {
                 fileType = args[1];
                 filePath = args[3];
 
-                if (!(fileType.ToLower() == "csv" || fileType.ToLower() == "xml"))
+                if (!(fileType.ToUpperInvariant() == "CSV" || fileType.ToUpperInvariant() == "XML"))
                 {
-                    Console.WriteLine("Wrong file type");
+                    Console.WriteLine($"Wrong file type '{fileType}'");
                     return;
                 }
 
-                if (!fileType.ToLower().Equals(filePath[(Array.FindIndex(filePath.ToCharArray(), i => i.Equals('.')) + 1) ..].ToLower()))
+                if (!fileType.ToUpperInvariant().Equals(filePath[(Array.FindIndex(filePath.ToCharArray(), i => i.Equals('.')) + 1) ..].ToUpperInvariant()))
                 {
-                    Console.WriteLine("File type and file extention don't match.");
+                    Console.WriteLine($"File type '{fileType}' and file extention of {filePath} don't match.");
                     return;
                 }
 
-                try
+                if (!int.TryParse(args[5], out recordsAmount))
                 {
-                    int.TryParse(args[5], out recordsAmount);
-                }
-                catch (ArgumentException)
-                {
-                    Console.WriteLine("Wrong records amount parameter.");
+                    Console.WriteLine($"Wrong records amount parameter '{args[5]}'.");
                     return;
                 }
 
-                try
+                if (!int.TryParse(args[7], out startId) || startId < 1)
                 {
-                    int.TryParse(args[7], out startId);
-                }
-                catch (ArgumentException)
-                {
-                    Console.WriteLine("Wrong start Id parameter.");
+                    Console.WriteLine($"Wrong start Id parameter '{args[7]}'.");
                     return;
                 }
             }
+            else
+            {
+                Console.WriteLine("Wrong input parameters. Ex: --output-type xml --output d:\\file.xml --records-amount 40 --start-id 1");
+                return;
+            }
 
+            Console.WriteLine($"File Generatort Application, developed by {DeveloperName}");
+            Console.WriteLine(HintMessage);
+            Console.WriteLine();
             Console.WriteLine($"Chosen file type: {fileType}. Output file: {filePath}.");
             Console.WriteLine($"Amount of records: {recordsAmount}. Id start: {startId}");
 
@@ -293,7 +288,7 @@ namespace FileCabinetGenerator
                 return;
             }
 
-            switch (fileType.ToUpper())
+            switch (fileType.ToUpperInvariant())
             {
                 case "CSV":
                     snapshot = fileGenerator.MakeSnapshot();
@@ -304,7 +299,7 @@ namespace FileCabinetGenerator
                     break;
                 case "XML":
                     streamWriter = new StreamWriter(filePath);
-                    Console.WriteLine("Writing...");
+                    Console.WriteLine("Writing... ");
                     fileGenerator.SerializeRecordsToXml(streamWriter);
                     streamWriter.Close();
                     Console.WriteLine($"{recordsAmount} records were written to {filePath}");

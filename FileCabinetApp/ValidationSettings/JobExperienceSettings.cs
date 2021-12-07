@@ -11,14 +11,14 @@ namespace FileCabinetApp.ValidationSettings
         /// <summary>
         /// Gets or sets min short value.
         /// </summary>
-        /// <value></value>
+        /// <value>short.</value>
         [JsonProperty("min")]
         public short Min { get; set; }
 
         /// <summary>
         /// Gets or sets max short value.
         /// </summary>
-        /// <value></value>
+        /// <value>short.</value>
         [JsonProperty("max")]
         public short Max { get; set; }
     }

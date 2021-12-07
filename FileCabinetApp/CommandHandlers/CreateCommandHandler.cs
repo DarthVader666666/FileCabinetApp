@@ -14,7 +14,7 @@ namespace FileCabinetApp.CommandHandlers
         public CreateCommandHandler(IFileCabinetService service)
             : base(service)
         {
-            CreateRecordEvent += this.fileCabinetService.CreateRecord;
+            CreateRecordEvent += this.Service.CreateRecord;
         }
 
         /// <summary>
@@ -53,7 +53,7 @@ namespace FileCabinetApp.CommandHandlers
 
             FileCabinetRecord record = new FileCabinetRecord();
             Program.InputRecordProperties(record);
-            record.Id = this.fileCabinetService.GetNewId();
+            record.Id = this.Service.GetNewId();
             FileCabinetEventArgs recordArgs = new FileCabinetEventArgs(record);
             CreateRecordEvent(null, recordArgs);
             Console.WriteLine($"Record #{record.Id} is created.");

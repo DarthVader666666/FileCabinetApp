@@ -1,13 +1,9 @@
-﻿// <copyright file="FileCabinetRecordXmlSerializeble.cs" company="PlaceholderCompany">
-// Copyright (c) PlaceholderCompany. All rights reserved.
-// </copyright>
+﻿using System;
+using System.Globalization;
+using System.Xml.Serialization;
 
 namespace FileCabinetApp
 {
-    using System;
-    using System.Globalization;
-    using System.Xml.Serialization;
-
     /// <summary>
     /// Class for defining a record about person.
     /// </summary>
@@ -51,7 +47,7 @@ namespace FileCabinetApp
         /// <summary>
         /// Gets or sets Name property.
         /// </summary>
-        /// <value></value>
+        /// <value>Xml serialiseble Name.</value>
         [XmlElement("name")]
         public NameClass Name { get; set; }
 

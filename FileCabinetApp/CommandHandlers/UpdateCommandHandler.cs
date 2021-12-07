@@ -18,7 +18,7 @@ namespace FileCabinetApp.CommandHandlers
         public UpdateCommandHandler(IFileCabinetService service)
             : base(service)
         {
-            UpdateRecordEvent += this.fileCabinetService.UpdateRecord;
+            UpdateRecordEvent += this.Service.UpdateRecord;
         }
 
         /// <summary>
@@ -142,7 +142,13 @@ namespace FileCabinetApp.CommandHandlers
 
         private void Update(string parameters)
         {
-            this.fileCabinetService.ClearCache();
+            if (string.IsNullOrEmpty(parameters))
+            {
+                Console.WriteLine("'update' didn't get parameters (Ex: update set DateOfBirth = '5/18/1986' where FirstName='Stan' and LastName='Smith')");
+                return;
+            }
+
+            this.Service.ClearCache();
 
             string[] args = Array.Empty<string>();
             string[] setFields;
@@ -156,6 +162,11 @@ namespace FileCabinetApp.CommandHandlers
                 args = args[0].Split("where", StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
             }
             catch (ArgumentOutOfRangeException)
+            {
+                Console.WriteLine("'set' or 'where' parameters wrong or absent.");
+                return;
+            }
+            catch (IndexOutOfRangeException)
             {
                 Console.WriteLine("'set' or 'where' parameters wrong or absent.");
                 return;
@@ -183,7 +194,7 @@ namespace FileCabinetApp.CommandHandlers
                 return;
             }
 
-            var allRecords = this.fileCabinetService.GetRecords();
+            var allRecords = this.Service.GetRecords();
             List<FileCabinetRecord> recordsToUpdate = new List<FileCabinetRecord>();
 
             foreach (var id in ids)
@@ -247,7 +258,7 @@ namespace FileCabinetApp.CommandHandlers
 
         private IEnumerable<int> SelectRecordIds(PropertyInfo property, string value)
         {
-            var records = this.fileCabinetService.GetRecords().ToList();
+            var records = this.Service.GetRecords().ToList();
 
             try
             {
