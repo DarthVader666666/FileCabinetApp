@@ -12,8 +12,7 @@ namespace FileCabinetApp.CommandHandlers
         /// <summary>
         /// Gets nextHandler.
         /// </summary>
-        /// <value>
-        /// </value>
+        /// <value>ICommandHandler.</value>
         public ICommandHandler NextHandler
         {
             get { return this.nextHandler; }

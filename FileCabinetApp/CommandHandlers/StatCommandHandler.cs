@@ -45,7 +45,7 @@ namespace FileCabinetApp.CommandHandlers
                 return;
             }
 
-            Tuple<int, int> countDeleted = this.fileCabinetService.GetStat();
+            Tuple<int, int> countDeleted = this.Service.GetStat();
             Console.WriteLine($"{countDeleted.Item1} recods in list, {countDeleted.Item2} deleted.");
         }
     }

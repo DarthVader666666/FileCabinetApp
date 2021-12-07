@@ -11,14 +11,14 @@ namespace FileCabinetApp
         /// <summary>
         /// Gets or sets first name.
         /// </summary>
-        /// <value></value>
+        /// <value>string.</value>
         [XmlAttribute("first")]
         public string First { get; set; }
 
         /// <summary>
         /// Gets or sets last name.
         /// </summary>
-        /// <value></value>
+        /// <value>string.</value>
         [XmlAttribute("last")]
         public string Last { get; set; }
     }

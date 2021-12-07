@@ -110,14 +110,14 @@ namespace FileCabinetApp.CommandHandlers
             switch (format.ToUpper(CultureInfo.InvariantCulture))
             {
                 case "CSV":
-                    snapshot = this.fileCabinetService.MakeSnapshot();
+                    snapshot = this.Service.MakeSnapshot();
                     streamWriter = new StreamWriter(path);
                     snapshot.SaveToCsv(streamWriter);
                     streamWriter.Close();
                     Console.WriteLine($"All records are exported to file {path}");
                     break;
                 case "XML":
-                    snapshot = this.fileCabinetService.MakeSnapshot();
+                    snapshot = this.Service.MakeSnapshot();
                     streamWriter = new StreamWriter(path);
                     snapshot.SaveToXml(streamWriter);
                     streamWriter.Close();

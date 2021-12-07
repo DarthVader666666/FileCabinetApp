@@ -12,7 +12,7 @@ namespace FileCabinetApp.ValidationSettings
         /// <summary>
         /// Gets or sets FirstNameSettings value.
         /// </summary>
-        /// <value></value>
+        /// <value>Json validation firstName properties.</value>
         [JsonProperty("firstName")]
         public FirstNameSettings FirstName
         { get; set; }
@@ -20,7 +20,7 @@ namespace FileCabinetApp.ValidationSettings
         /// <summary>
         /// Gets or sets LastNameSettings value.
         /// </summary>
-        /// <value></value>
+        /// <value>Json validation lastName properties.</value>
         [JsonProperty("lastName")]
         public LastNameSettings LastName
         { get; set; }
@@ -28,7 +28,7 @@ namespace FileCabinetApp.ValidationSettings
         /// <summary>
         /// Gets or sets DateOfBirthSettings value.
         /// </summary>
-        /// <value></value>
+        /// <value>Json validation dateOfBirth properties.</value>
         [JsonProperty("dateOfBirth")]
         public DateOfBirthSettings DateOfBirth
         { get; set; }
@@ -36,7 +36,7 @@ namespace FileCabinetApp.ValidationSettings
         /// <summary>
         /// Gets or sets JobExperienceSettings value.
         /// </summary>
-        /// <value></value>
+        /// <value>Json validation jobExperience properties.</value>
         [JsonProperty("jobExperience")]
         public JobExperienceSettings JobExperience
         { get; set; }
@@ -44,7 +44,7 @@ namespace FileCabinetApp.ValidationSettings
         /// <summary>
         /// Gets or sets MonthlyPaySettings value.
         /// </summary>
-        /// <value></value>
+        /// <value>Json validation monthlyPay properties.</value>
         [JsonProperty("monthlyPay")]
         public MonthlyPaySettings MonthlyPay
         { get; set; }
@@ -52,7 +52,7 @@ namespace FileCabinetApp.ValidationSettings
         /// <summary>
         /// Gets or sets GenderSettings value.
         /// </summary>
-        /// <value></value>
+        /// <value>Json validation gender properties.</value>
         [JsonProperty("gender")]
         public GenderSettings Gender
         { get; set; }

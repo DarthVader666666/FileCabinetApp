@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 
 namespace FileCabinetApp
 {
@@ -11,7 +10,7 @@ namespace FileCabinetApp
         /// <summary>
         /// Gets next file record.
         /// </summary>
-        /// <returns>FileCabinetRecord</returns>
+        /// <returns>FileCabinetRecord.</returns>
         FileCabinetRecord GetNext();
 
         /// <summary>

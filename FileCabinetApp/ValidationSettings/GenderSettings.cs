@@ -11,14 +11,14 @@ namespace FileCabinetApp.ValidationSettings
         /// <summary>
         /// Gets or sets male symbol.
         /// </summary>
-        /// <value></value>
+        /// <value>char.</value>
         [JsonProperty("male")]
         public char Male { get; set; }
 
         /// <summary>
         /// Gets or sets female symbol.
         /// </summary>
-        /// <value></value>
+        /// <value>char.</value>
         [JsonProperty("female")]
         public char Female { get; set; }
     }

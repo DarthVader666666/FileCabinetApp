@@ -33,7 +33,7 @@ namespace FileCabinetApp.CommandHandlers
         /// <summary>
         /// Gets Hash Code of the record.
         /// </summary>
-        /// <param name="obj">FileCabinetRecord</param>
+        /// <param name="obj">FileCabinetRecord.</param>
         /// <returns>Record hash code.</returns>
         public int GetHashCode([DisallowNull] FileCabinetRecord obj)
         {

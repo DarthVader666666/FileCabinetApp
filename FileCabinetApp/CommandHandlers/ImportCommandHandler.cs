@@ -82,18 +82,18 @@ namespace FileCabinetApp.CommandHandlers
                 switch (dataType.ToUpperInvariant())
                 {
                     case "CSV":
-                        snapshot = this.fileCabinetService.MakeSnapshot();
+                        snapshot = this.Service.MakeSnapshot();
                         streamReader = new StreamReader(fileStream);
                         snapshot.LoadFromCsv(streamReader);
-                        this.fileCabinetService.Restore(snapshot);
+                        this.Service.Restore(snapshot);
                         Console.WriteLine($"{snapshot.Records.Count} records were imported from {path}");
                         streamReader.Close();
                         break;
                     case "XML":
-                        snapshot = this.fileCabinetService.MakeSnapshot();
+                        snapshot = this.Service.MakeSnapshot();
                         streamReader = new StreamReader(fileStream);
                         snapshot.LoadFromXml(streamReader);
-                        this.fileCabinetService.Restore(snapshot);
+                        this.Service.Restore(snapshot);
                         Console.WriteLine($"{snapshot.Records.Count} records were imported from {path}");
                         streamReader.Close();
                         break;

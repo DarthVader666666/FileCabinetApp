@@ -12,7 +12,7 @@ namespace FileCabinetApp.ValidationSettings
         /// <summary>
         /// Gets or sets FirstNameSettings value.
         /// </summary>
-        /// <value></value>
+        /// <value>FirstNameSettings.</value>
         [JsonProperty("firstName")]
         public FirstNameSettings FirstName
         { get; set; }
@@ -20,7 +20,7 @@ namespace FileCabinetApp.ValidationSettings
         /// <summary>
         /// Gets or sets LastNameSettings value.
         /// </summary>
-        /// <value></value>
+        /// <value>LastNameSettings.</value>
         [JsonProperty("lastName")]
         public LastNameSettings LastName
         { get; set; }
@@ -28,7 +28,7 @@ namespace FileCabinetApp.ValidationSettings
         /// <summary>
         /// Gets or sets DateOfBirthSettings value.
         /// </summary>
-        /// <value></value>
+        /// <value>DateOfBirthSettings.</value>
         [JsonProperty("dateOfBirth")]
         public DateOfBirthSettings DateOfBirth
         { get; set; }
@@ -36,7 +36,7 @@ namespace FileCabinetApp.ValidationSettings
         /// <summary>
         /// Gets or sets JobExperienceSettings value.
         /// </summary>
-        /// <value></value>
+        /// <value>JobExperienceSettings.</value>
         [JsonProperty("jobExperience")]
         public JobExperienceSettings JobExperience
         { get; set; }
@@ -44,7 +44,7 @@ namespace FileCabinetApp.ValidationSettings
         /// <summary>
         /// Gets or sets MonthlyPaySettings value.
         /// </summary>
-        /// <value></value>
+        /// <value>MonthlyPaySettings.</value>
         [JsonProperty("monthlyPay")]
         public MonthlyPaySettings MonthlyPay
         { get; set; }
@@ -52,7 +52,7 @@ namespace FileCabinetApp.ValidationSettings
         /// <summary>
         /// Gets or sets GenderSettings value.
         /// </summary>
-        /// <value></value>
+        /// <value>v.</value>
         [JsonProperty("gender")]
         public GenderSettings Gender
         { get; set; }

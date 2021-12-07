@@ -15,7 +15,7 @@ namespace FileCabinetApp.CommandHandlers
         public InsertCommandHandler(IFileCabinetService service)
             : base(service)
         {
-            CreateRecordEvent += this.fileCabinetService.CreateRecord;
+            CreateRecordEvent += this.Service.CreateRecord;
         }
 
         /// <summary>
@@ -51,7 +51,7 @@ namespace FileCabinetApp.CommandHandlers
 
         private void Insert(string parameters)
         {
-            this.fileCabinetService.ClearCache();
+            this.Service.ClearCache();
 
             string[] args = parameters.Split(new string[] { "values", "(", ")" }, StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
 
@@ -76,9 +76,15 @@ namespace FileCabinetApp.CommandHandlers
             {
                 record.Id = int.Parse(recordFieldValues[GetIndex(recordFieldNames, nameof(record.Id))], CultureInfo.InvariantCulture);
 
-                if (this.fileCabinetService.RecordExists(record.Id))
+                if (this.Service.RecordExists(record.Id))
                 {
                     Console.WriteLine($"Records #{record.Id} already exists.");
+                    return;
+                }
+
+                if (record.Id < 1)
+                {
+                    Console.WriteLine($"Id can't be negative.");
                     return;
                 }
 
