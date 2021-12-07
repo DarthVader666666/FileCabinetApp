@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Globalization;
 using System.IO;
+using System.Linq;
 using System.Text;
 
 namespace FileCabinetApp
@@ -30,6 +31,9 @@ namespace FileCabinetApp
         private readonly Dictionary<string, List<long>> firstNameIndex = new Dictionary<string, List<long>>();
         private readonly Dictionary<string, List<long>> lastNameIndex = new Dictionary<string, List<long>>();
         private readonly Dictionary<string, List<long>> dateOfBirthIndex = new Dictionary<string, List<long>>();
+        private readonly Dictionary<string, List<long>> jobExperienceIndex = new Dictionary<string, List<long>>();
+        private readonly Dictionary<string, List<long>> monthlyPayIndex = new Dictionary<string, List<long>>();
+        private readonly Dictionary<string, List<long>> genderIndex = new Dictionary<string, List<long>>();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="FileCabinetFilesystemService"/> class.
@@ -49,19 +53,24 @@ namespace FileCabinetApp
         private int RecordsCount { get; set; }
 
         /// <summary>
-        /// Gets max record's id.
+        /// Gets new record's id.
         /// </summary>
-        /// <returns>Last record's id.</returns>
-        public int GetMaxId()
+        /// <returns>New record's id.</returns>
+        public int GetNewId()
         {
-            int maxId = this.list[0].Id;
+            IEnumerable<int> ids = from record in this.list select record.Id;
+            ids.ToList().Sort();
+            int id = 1;
 
-            foreach (var record in this.list)
+            for (; id <= ids.Count(); id++)
             {
-                maxId = record.Id > maxId ? record.Id : maxId;
+                if (!ids.Contains(id))
+                {
+                    return id;
+                }
             }
 
-            return maxId;
+            return id;
         }
 
         /// <summary>
@@ -110,8 +119,8 @@ namespace FileCabinetApp
             WriteRecordToFile(record, fileStream);
             fileStream.Close();
 
+            this.GetRecords();
             this.UpdateIndexes();
-
             this.RecordsCount = this.GetStat().Item1;
         }
 
@@ -330,16 +339,78 @@ namespace FileCabinetApp
         /// </summary>
         /// <param name="dateOfBirth">Person's date of birth which record should be found with.</param>
         /// <returns>Records which fit search requirements.</returns>
-        public IEnumerable<FileCabinetRecord> FindByDateOfBirth(string dateOfBirth)
+        public IEnumerable<FileCabinetRecord> FindByDateOfBirth(DateTime dateOfBirth)
         {
-            if (dateOfBirth is null)
+            string dateOfBirthKey = $"{dateOfBirth.Year}-{dateOfBirth.Month}-{dateOfBirth.Day}";
+
+            if (dateOfBirth.Equals(default(DateTime)))
             {
-                throw new ArgumentNullException($"{dateOfBirth} is null");
+                throw new ArgumentException($"{dateOfBirth} is invalid");
             }
 
             List<long> positions;
 
-            if (!this.dateOfBirthIndex.TryGetValue(dateOfBirth.ToUpper(CultureInfo.InvariantCulture), out positions))
+            if (!this.dateOfBirthIndex.TryGetValue(dateOfBirthKey, out positions))
+            {
+                Console.WriteLine("! No matches found");
+                return new List<FileCabinetRecord>();
+            }
+
+            return new RecordsFound(new FilesystemIterator(positions, this.FilePath));
+        }
+
+        /// <summary>
+        /// Finds records by jobExperience.
+        /// </summary>
+        /// <param name="jobExperience">Person's jobExperience.</param>
+        /// <returns>Records which fit search requirements.</returns>
+        public IEnumerable<FileCabinetRecord> FindByJobExperience(short jobExperience)
+        {
+            string jobExperienceKey = jobExperience.ToString(CultureInfo.InvariantCulture);
+
+            List<long> positions;
+
+            if (!this.jobExperienceIndex.TryGetValue(jobExperienceKey, out positions))
+            {
+                Console.WriteLine("! No matches found");
+                return new List<FileCabinetRecord>();
+            }
+
+            return new RecordsFound(new FilesystemIterator(positions, this.FilePath));
+        }
+
+        /// <summary>
+        /// Finds records by monthlyPay.
+        /// </summary>
+        /// <param name="monthlyPay">Person's monthlyPay.</param>
+        /// <returns>Records which fit search requirements.</returns>
+        public IEnumerable<FileCabinetRecord> FindByMonthlyPay(decimal monthlyPay)
+        {
+            string monthlyPayKey = monthlyPay.ToString(CultureInfo.InvariantCulture);
+
+            List<long> positions;
+
+            if (!this.monthlyPayIndex.TryGetValue(monthlyPayKey, out positions))
+            {
+                Console.WriteLine("! No matches found");
+                return new List<FileCabinetRecord>();
+            }
+
+            return new RecordsFound(new FilesystemIterator(positions, this.FilePath));
+        }
+
+        /// <summary>
+        /// Finds records by gender.
+        /// </summary>
+        /// <param name="gender">Person's gender.</param>
+        /// <returns>Records which fit search requirements.</returns>
+        public IEnumerable<FileCabinetRecord> FindByGender(char gender)
+        {
+            string genderKey = gender.ToString(CultureInfo.InvariantCulture);
+
+            List<long> positions;
+
+            if (!this.genderIndex.TryGetValue(genderKey, out positions))
             {
                 Console.WriteLine("! No matches found");
                 return new List<FileCabinetRecord>();
@@ -447,6 +518,14 @@ namespace FileCabinetApp
             fileStream.Close();
 
             Console.WriteLine($"Data file processing is completed: {deleted} of {this.RecordsCount} records were purged.");
+        }
+
+        /// <summary>
+        /// Clears FileService cache.
+        /// </summary>
+        public void ClearCache()
+        {
+            // Method intentionally left empty.
         }
 
         private static bool IsDeleted(long position, FileStream fileStream)
@@ -594,6 +673,9 @@ namespace FileCabinetApp
             this.firstNameIndex.Clear();
             this.lastNameIndex.Clear();
             this.dateOfBirthIndex.Clear();
+            this.jobExperienceIndex.Clear();
+            this.monthlyPayIndex.Clear();
+            this.genderIndex.Clear();
 
             FileStream fileStream = new FileStream(this.FilePath, FileMode.OpenOrCreate, FileAccess.Read);
 
@@ -645,7 +727,42 @@ namespace FileCabinetApp
 
                         this.dateOfBirthIndex[stringKey].Add(fileStream.Position - YearOffset - MonthOffset - DayOffset - LastNameOffset - FirstNameOffset - IdOffset - ReservedOffset);
 
-                        fileStream.Seek(JobExperienceOffset + MonthlyPayOffset + GenderOffset, SeekOrigin.Current);
+                        buffer = new byte[JobExperienceOffset];
+                        fileStream.Read(buffer, 0, JobExperienceOffset);
+                        stringKey = $"{BitConverter.ToInt16(buffer)}";
+
+                        if (!this.jobExperienceIndex.ContainsKey(stringKey))
+                        {
+                            this.jobExperienceIndex.Add(stringKey, new List<long>());
+                        }
+
+                        this.jobExperienceIndex[stringKey].Add(fileStream.Position - JobExperienceOffset - YearOffset - MonthOffset - DayOffset - LastNameOffset - FirstNameOffset - IdOffset - ReservedOffset);
+
+                        buffer = new byte[MonthlyPayOffset];
+                        fileStream.Read(buffer, 0, MonthlyPayOffset);
+                        MemoryStream memoryStream = new MemoryStream(buffer);
+                        BinaryReader binaryReader = new BinaryReader(memoryStream);
+                        stringKey = $"{binaryReader.ReadDecimal()}";
+                        memoryStream.Close();
+                        binaryReader.Close();
+
+                        if (!this.monthlyPayIndex.ContainsKey(stringKey))
+                        {
+                            this.monthlyPayIndex.Add(stringKey, new List<long>());
+                        }
+
+                        this.monthlyPayIndex[stringKey].Add(fileStream.Position - MonthlyPayOffset - JobExperienceOffset - YearOffset - MonthOffset - DayOffset - LastNameOffset - FirstNameOffset - IdOffset - ReservedOffset);
+
+                        buffer = new byte[GenderOffset];
+                        fileStream.Read(buffer, 0, GenderOffset);
+                        stringKey = $"{BitConverter.ToChar(buffer)}";
+
+                        if (!this.genderIndex.ContainsKey(stringKey))
+                        {
+                            this.genderIndex.Add(stringKey, new List<long>());
+                        }
+
+                        this.genderIndex[stringKey].Add(fileStream.Position - GenderOffset - MonthlyPayOffset - JobExperienceOffset - YearOffset - MonthOffset - DayOffset - LastNameOffset - FirstNameOffset - IdOffset - ReservedOffset);
                     }
                     else
                     {

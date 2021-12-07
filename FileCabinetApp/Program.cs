@@ -18,7 +18,7 @@ namespace FileCabinetApp
         private const string CustomValidationMessage = "Using custom validation rules.";
         private const string FileStorageMessage = "Using file storage.";
         private const string MemoryStorageMessage = "Using memory storage.";
-        private static readonly string[] Commands = new string[] { "help", "exit", "list", "create", "export", "find", "import", "delete", "update", "purge", "stat", "insert" };
+        private static readonly string[] Commands = new string[] { "help", "exit", "list", "create", "export", "find", "import", "delete", "update", "purge", "stat", "insert", "select" };
 
         /// <summary>
         /// file cabinet instance.
@@ -26,7 +26,7 @@ namespace FileCabinetApp
         private static IFileCabinetService fileCabinetService = new FileCabinetMemoryService(new Validators.ValidatorBuilder().CreateDefault());
         private static bool isRunning = true;
         private static Action<bool> breakAll = StopProgram;
-        private static Action<ReadOnlyCollection<FileCabinetRecord>> printer = Defaultprinter;
+        private static CommandHandlers.IRecordPrinter customPrinter = new CommandHandlers.CustomPrinter();
 
         /// <summary>
         /// Provides user interface and calls command handlers.
@@ -39,7 +39,8 @@ namespace FileCabinetApp
                 throw new ArgumentNullException($"{args} is null");
             }
 
-            //args = new string[] { "-s", "file" };
+            //args = new string[] { "-s", "memory", "-use-stopwatch", "-use-logger" };
+            args = new string[] { "-s", "memory" };
 
             if (args.Length == 1)
             {
@@ -204,27 +205,25 @@ namespace FileCabinetApp
         {
             var helpHandler = new CommandHandlers.HelpCommandHandler();
             var statHandler = new CommandHandlers.StatCommandHandler(service);
-            var listHandler = new CommandHandlers.ListCommandHandler(service, printer);
             var createHandler = new CommandHandlers.CreateCommandHandler(service);
-            var findHandler = new CommandHandlers.FindCommandHandler(service, printer);
             var importHandler = new CommandHandlers.ImportCommandHandler(service);
             var exportHandler = new CommandHandlers.ExportCommandHandler(service);
             var purgeHandler = new CommandHandlers.PurgeCommandHandler(service);
             var insertHandler = new CommandHandlers.InsertCommandHandler(service);
             var deleteHandler = new CommandHandlers.DeleteCommandHandler(service);
             var updateHandler = new CommandHandlers.UpdateCommandHandler(service);
+            var selectHandler = new CommandHandlers.SelectCommandHandler(service, customPrinter);
             var exitHandler = new CommandHandlers.ExitCommandHandler(breakAll);
 
             helpHandler.SetNext(statHandler);
-            statHandler.SetNext(listHandler);
-            listHandler.SetNext(createHandler);
-            createHandler.SetNext(findHandler);
-            findHandler.SetNext(importHandler);
+            statHandler.SetNext(createHandler);
+            createHandler.SetNext(importHandler);
             importHandler.SetNext(exportHandler);
             exportHandler.SetNext(purgeHandler);
             purgeHandler.SetNext(insertHandler);
             insertHandler.SetNext(deleteHandler);
-            deleteHandler.SetNext(updateHandler);
+            deleteHandler.SetNext(selectHandler);
+            selectHandler.SetNext(updateHandler);
             updateHandler.SetNext(exitHandler);
 
             return helpHandler;
@@ -233,32 +232,6 @@ namespace FileCabinetApp
         private static void StopProgram(bool stop)
         {
             isRunning = stop;
-        }
-
-        /// <summary>
-        /// Implements Default Print method.
-        /// </summary>
-        /// <param name="records">File records to be printed.</param>
-        private static void Defaultprinter(ReadOnlyCollection<FileCabinetRecord> records)
-        {
-            if (records is null)
-            {
-                throw new ArgumentNullException($"{records} is null");
-            }
-
-            if (records.Count == 0)
-            {
-                Console.WriteLine("Record list is empty.");
-                return;
-            }
-
-            foreach (FileCabinetRecord fileCabinetRecord in records)
-            {
-                Console.WriteLine($"#{fileCabinetRecord.Id}, {fileCabinetRecord.FirstName}, {fileCabinetRecord.LastName}, " +
-                    $"{fileCabinetRecord.DateOfBirth.Year}-{fileCabinetRecord.DateOfBirth.Month}-{fileCabinetRecord.DateOfBirth.Day}, " +
-                    $"{fileCabinetRecord.JobExperience}, " + string.Format(CultureInfo.InvariantCulture, "{0:F2}", fileCabinetRecord.MonthlyPay) +
-                    $", {fileCabinetRecord.Gender}");
-            }
         }
 
         private static T ReadInput<T>(Func<string, Tuple<bool, string, T>> converter, Func<T, Tuple<bool, string>> validator)

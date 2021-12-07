@@ -273,7 +273,7 @@ namespace FileCabinetApp
         /// </summary>
         /// <param name="dateOfBirth">Person's dateOfBirth.</param>
         /// <returns>ReadonlyCollection of file records found.</returns>
-        public IEnumerable<FileCabinetRecord> FindByDateOfBirth(string dateOfBirth)
+        public IEnumerable<FileCabinetRecord> FindByDateOfBirth(DateTime dateOfBirth)
         {
             IEnumerable<FileCabinetRecord> recordsFound;
 
@@ -307,6 +307,138 @@ namespace FileCabinetApp
             }
 
             logger.WriteLine(GetNowDateTime() + $"FindByDateOfBirth() returned IRecordIterator which match key = '{dateOfBirth}'.");
+            DisposeStreams();
+
+            return recordsFound;
+        }
+
+        /// <summary>
+        /// Finds record by jobExperience.
+        /// </summary>
+        /// <param name="jobExperience">Person's jobExperience.</param>
+        /// <returns>ReadonlyCollection of file records found.</returns>
+        public IEnumerable<FileCabinetRecord> FindByJobExperience(short jobExperience)
+        {
+            IEnumerable<FileCabinetRecord> recordsFound;
+
+            CreateStreams();
+
+            try
+            {
+                logger.WriteLine(GetNowDateTime() + $"Calling FindByJobExperienceh() with key = '{jobExperience}'.");
+                recordsFound = this.service.FindByJobExperience(jobExperience);
+            }
+            catch (ArgumentNullException message)
+            {
+                logger.WriteLine(GetNowDateTime() + message);
+                DisposeStreams();
+                Console.WriteLine(message);
+                return new List<FileCabinetRecord>();
+            }
+            catch (ArgumentException message)
+            {
+                logger.WriteLine(GetNowDateTime() + message);
+                DisposeStreams();
+                Console.WriteLine(message);
+                return new List<FileCabinetRecord>();
+            }
+
+            if (recordsFound is null)
+            {
+                logger.WriteLine(GetNowDateTime() + $"FindByJobExperience() found no match with key = '{jobExperience}' and returned null.");
+                DisposeStreams();
+                return recordsFound;
+            }
+
+            logger.WriteLine(GetNowDateTime() + $"FindByJobExperience() returned IRecordIterator which match key = '{jobExperience}'.");
+            DisposeStreams();
+
+            return recordsFound;
+        }
+
+        /// <summary>
+        /// Finds record by monthlyPay.
+        /// </summary>
+        /// <param name="monthlyPay">Person's monthlyPay.</param>
+        /// <returns>ReadonlyCollection of file records found.</returns>
+        public IEnumerable<FileCabinetRecord> FindByMonthlyPay(decimal monthlyPay)
+        {
+            IEnumerable<FileCabinetRecord> recordsFound;
+
+            CreateStreams();
+
+            try
+            {
+                logger.WriteLine(GetNowDateTime() + $"Calling FindByMonthlyPay() with key = '{monthlyPay}'.");
+                recordsFound = this.service.FindByMonthlyPay(monthlyPay);
+            }
+            catch (ArgumentNullException message)
+            {
+                logger.WriteLine(GetNowDateTime() + message);
+                DisposeStreams();
+                Console.WriteLine(message);
+                return new List<FileCabinetRecord>();
+            }
+            catch (ArgumentException message)
+            {
+                logger.WriteLine(GetNowDateTime() + message);
+                DisposeStreams();
+                Console.WriteLine(message);
+                return new List<FileCabinetRecord>();
+            }
+
+            if (recordsFound is null)
+            {
+                logger.WriteLine(GetNowDateTime() + $"FindByMonthlyPay() found no match with key = '{monthlyPay}' and returned null.");
+                DisposeStreams();
+                return recordsFound;
+            }
+
+            logger.WriteLine(GetNowDateTime() + $"FindByMonthlyPay() returned IRecordIterator which match key = '{monthlyPay}'.");
+            DisposeStreams();
+
+            return recordsFound;
+        }
+
+        /// <summary>
+        /// Finds record by gender.
+        /// </summary>
+        /// <param name="gender">Person's gender.</param>
+        /// <returns>ReadonlyCollection of file records found.</returns>
+        public IEnumerable<FileCabinetRecord> FindByGender(char gender)
+        {
+            IEnumerable<FileCabinetRecord> recordsFound;
+
+            CreateStreams();
+
+            try
+            {
+                logger.WriteLine(GetNowDateTime() + $"Calling FindByMonthlyPay() with key = '{gender}'.");
+                recordsFound = this.service.FindByGender(gender);
+            }
+            catch (ArgumentNullException message)
+            {
+                logger.WriteLine(GetNowDateTime() + message);
+                DisposeStreams();
+                Console.WriteLine(message);
+                return new List<FileCabinetRecord>();
+            }
+            catch (ArgumentException message)
+            {
+                logger.WriteLine(GetNowDateTime() + message);
+                DisposeStreams();
+                Console.WriteLine(message);
+                return new List<FileCabinetRecord>();
+            }
+
+            if (recordsFound is null)
+            {
+                logger.WriteLine(GetNowDateTime() + $"FindByGender() found no match with key = '{gender}' and returned null.");
+                DisposeStreams();
+                return recordsFound;
+            }
+
+            logger.WriteLine(GetNowDateTime() + $"FindByGender() returned IRecordIterator which match key = '{gender}'.");
             DisposeStreams();
 
             return recordsFound;
@@ -387,10 +519,10 @@ namespace FileCabinetApp
         }
 
         /// <summary>
-        /// Gets last record's id.
+        /// Gets new record's id.
         /// </summary>
-        /// <returns>Last record's id.</returns>
-        public int GetMaxId()
+        /// <returns>LaNewst record's id.</returns>
+        public int GetNewId()
         {
             int maxId = 0;
 
@@ -398,8 +530,8 @@ namespace FileCabinetApp
 
             try
             {
-                logger.WriteLine(GetNowDateTime() + $"Calling GetMaxId().");
-                maxId = this.service.GetMaxId();
+                logger.WriteLine(GetNowDateTime() + $"Calling GetNewId().");
+                maxId = this.service.GetNewId();
             }
             catch (ArgumentNullException message)
             {
@@ -416,7 +548,7 @@ namespace FileCabinetApp
                 return maxId;
             }
 
-            logger.WriteLine(GetNowDateTime() + $"GetMaxId() returned id = '{maxId}'.");
+            logger.WriteLine(GetNowDateTime() + $"GetNewId() returned id = '{maxId}'.");
             DisposeStreams();
 
             return maxId;
@@ -519,6 +651,37 @@ namespace FileCabinetApp
             logger.WriteLine(GetNowDateTime() + $"RecordExists() returned '{exists}'.");
             DisposeStreams();
             return exists;
+        }
+
+        /// <summary>
+        /// Clears cache.
+        /// </summary>
+        public void ClearCache()
+        {
+            CreateStreams();
+
+            try
+            {
+                logger.WriteLine(GetNowDateTime() + $"Calling ClearCache().");
+                this.service.ClearCache();
+            }
+            catch (ArgumentNullException message)
+            {
+                logger.WriteLine(GetNowDateTime() + message);
+                DisposeStreams();
+                Console.WriteLine(message);
+                return;
+            }
+            catch (ArgumentException message)
+            {
+                logger.WriteLine(GetNowDateTime() + message);
+                DisposeStreams();
+                Console.WriteLine(message);
+                return;
+            }
+
+            logger.WriteLine(GetNowDateTime() + $"ClearCache() cleared cache.");
+            DisposeStreams();
         }
 
         private static void CreateStreams()

@@ -51,7 +51,9 @@ namespace FileCabinetApp.CommandHandlers
 
         private void Insert(string parameters)
         {
-            string[] args = parameters.Split(new string[] { "value", "(", ")" }, StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+            this.fileCabinetService.ClearCache();
+
+            string[] args = parameters.Split(new string[] { "values", "(", ")" }, StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
 
             if (args.Length != 2)
             {
@@ -80,16 +82,63 @@ namespace FileCabinetApp.CommandHandlers
                     return;
                 }
 
-                record.FirstName = recordFieldValues[GetIndex(recordFieldNames, nameof(record.FirstName))];
-                record.LastName = recordFieldValues[GetIndex(recordFieldNames, nameof(record.LastName))];
-                record.DateOfBirth = DateTime.Parse(recordFieldValues[GetIndex(recordFieldNames, nameof(record.DateOfBirth))], CultureInfo.InvariantCulture);
-                record.JobExperience = short.Parse(recordFieldValues[GetIndex(recordFieldNames, nameof(record.JobExperience))], CultureInfo.InvariantCulture);
-                record.MonthlyPay = decimal.Parse(recordFieldValues[GetIndex(recordFieldNames, nameof(record.MonthlyPay))], CultureInfo.InvariantCulture);
-                record.Gender = char.Parse(recordFieldValues[GetIndex(recordFieldNames, nameof(record.Gender))]);
+                if (Array.FindIndex(recordFieldNames, i => i.Equals(nameof(record.FirstName), StringComparison.InvariantCultureIgnoreCase)) == -1)
+                {
+                    record.FirstName = string.Empty;
+                }
+                else
+                {
+                    record.FirstName = recordFieldValues[GetIndex(recordFieldNames, nameof(record.FirstName))];
+                }
+
+                if (Array.FindIndex(recordFieldNames, i => i.Equals(nameof(record.LastName), StringComparison.InvariantCultureIgnoreCase)) == -1)
+                {
+                    record.LastName = string.Empty;
+                }
+                else
+                {
+                    record.LastName = recordFieldValues[GetIndex(recordFieldNames, nameof(record.LastName))];
+                }
+
+                if (Array.FindIndex(recordFieldNames, i => i.Equals(nameof(record.DateOfBirth), StringComparison.InvariantCultureIgnoreCase)) == -1)
+                {
+                    record.DateOfBirth = default(DateTime);
+                }
+                else
+                {
+                    record.DateOfBirth = DateTime.Parse(recordFieldValues[GetIndex(recordFieldNames, nameof(record.DateOfBirth))], CultureInfo.InvariantCulture);
+                }
+
+                if (Array.FindIndex(recordFieldNames, i => i.Equals(nameof(record.JobExperience), StringComparison.InvariantCultureIgnoreCase)) == -1)
+                {
+                    record.JobExperience = default(short);
+                }
+                else
+                {
+                    record.JobExperience = short.Parse(recordFieldValues[GetIndex(recordFieldNames, nameof(record.JobExperience))], CultureInfo.InvariantCulture);
+                }
+
+                if (Array.FindIndex(recordFieldNames, i => i.Equals(nameof(record.MonthlyPay), StringComparison.InvariantCultureIgnoreCase)) == -1)
+                {
+                    record.MonthlyPay = default(decimal);
+                }
+                else
+                {
+                    record.MonthlyPay = decimal.Parse(recordFieldValues[GetIndex(recordFieldNames, nameof(record.MonthlyPay))], CultureInfo.InvariantCulture);
+                }
+
+                if (Array.FindIndex(recordFieldNames, i => i.Equals(nameof(record.Gender), StringComparison.InvariantCultureIgnoreCase)) == -1)
+                {
+                    record.Gender = default(char);
+                }
+                else
+                {
+                    record.Gender = char.Parse(recordFieldValues[GetIndex(recordFieldNames, nameof(record.Gender))]);
+                }
             }
             catch (IndexOutOfRangeException)
             {
-                Console.WriteLine("One or more filed names are incorrect or absent.");
+                Console.WriteLine("One or more field names are incorrect or absent.");
                 return;
             }
             catch (FormatException)

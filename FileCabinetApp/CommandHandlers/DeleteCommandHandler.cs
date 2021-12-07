@@ -43,6 +43,8 @@ namespace FileCabinetApp.CommandHandlers
 
         private void Delete(string parameters)
         {
+            this.fileCabinetService.ClearCache();
+
             string[] args;
             string field;
             string value;

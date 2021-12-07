@@ -53,7 +53,7 @@ namespace FileCabinetApp.CommandHandlers
 
             FileCabinetRecord record = new FileCabinetRecord();
             Program.InputRecordProperties(record);
-            record.Id = this.fileCabinetService.GetMaxId() + 1;
+            record.Id = this.fileCabinetService.GetNewId();
             FileCabinetEventArgs recordArgs = new FileCabinetEventArgs(record);
             CreateRecordEvent(null, recordArgs);
             Console.WriteLine($"Record #{record.Id} is created.");

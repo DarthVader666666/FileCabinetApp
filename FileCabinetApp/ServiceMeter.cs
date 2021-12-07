@@ -116,12 +116,60 @@ namespace FileCabinetApp
         /// </summary>
         /// <param name="dateOfBirth">Person's dateOfBirth.</param>
         /// <returns>ReadonlyCollection of file records found.</returns>
-        public IEnumerable<FileCabinetRecord> FindByDateOfBirth(string dateOfBirth)
+        public IEnumerable<FileCabinetRecord> FindByDateOfBirth(DateTime dateOfBirth)
         {
             this.stopwatch.Start();
             var result = this.service.FindByDateOfBirth(dateOfBirth);
             this.stopwatch.Stop();
             Console.WriteLine($"FindDateOfBirth method execution duration is {this.stopwatch.ElapsedTicks} ticks");
+            this.stopwatch.Reset();
+
+            return result;
+        }
+
+        /// <summary>
+        /// Finds record by jobExperience.
+        /// </summary>
+        /// <param name="jobExperience">Person's jobExperience.</param>
+        /// <returns>ReadonlyCollection of file records found.</returns>
+        public IEnumerable<FileCabinetRecord> FindByJobExperience(short jobExperience)
+        {
+            this.stopwatch.Start();
+            var result = this.service.FindByJobExperience(jobExperience);
+            this.stopwatch.Stop();
+            Console.WriteLine($"FindByJobExperience method execution duration is {this.stopwatch.ElapsedTicks} ticks");
+            this.stopwatch.Reset();
+
+            return result;
+        }
+
+        /// <summary>
+        /// Finds record by monthlyPay.
+        /// </summary>
+        /// <param name="monthlyPay">Person's monthlyPay.</param>
+        /// <returns>ReadonlyCollection of file records found.</returns>
+        public IEnumerable<FileCabinetRecord> FindByMonthlyPay(decimal monthlyPay)
+        {
+            this.stopwatch.Start();
+            var result = this.service.FindByMonthlyPay(monthlyPay);
+            this.stopwatch.Stop();
+            Console.WriteLine($"FindByMonthlyPay method execution duration is {this.stopwatch.ElapsedTicks} ticks");
+            this.stopwatch.Reset();
+
+            return result;
+        }
+
+        /// <summary>
+        /// Finds record by gender.
+        /// </summary>
+        /// <param name="gender">Person's gender.</param>
+        /// <returns>ReadonlyCollection of file records found.</returns>
+        public IEnumerable<FileCabinetRecord> FindByGender(char gender)
+        {
+            this.stopwatch.Start();
+            var result = this.service.FindByMonthlyPay(gender);
+            this.stopwatch.Stop();
+            Console.WriteLine($"FindByGender method execution duration is {this.stopwatch.ElapsedTicks} ticks");
             this.stopwatch.Reset();
 
             return result;
@@ -156,15 +204,15 @@ namespace FileCabinetApp
         }
 
         /// <summary>
-        /// Gets last record's id.
+        /// Gets new record's id.
         /// </summary>
-        /// <returns>Last record's id.</returns>
-        public int GetMaxId()
+        /// <returns>New record's id.</returns>
+        public int GetNewId()
         {
             this.stopwatch.Start();
-            var result = this.service.GetMaxId();
+            var result = this.service.GetNewId();
             this.stopwatch.Stop();
-            Console.WriteLine($"GetMaxId method execution duration is {this.stopwatch.ElapsedTicks} ticks");
+            Console.WriteLine($"GetNewId method execution duration is {this.stopwatch.ElapsedTicks} ticks");
             this.stopwatch.Reset();
 
             return result;
@@ -211,6 +259,18 @@ namespace FileCabinetApp
             this.stopwatch.Reset();
 
             return exists;
+        }
+
+        /// <summary>
+        /// Clears cache.
+        /// </summary>
+        public void ClearCache()
+        {
+            this.stopwatch.Start();
+            this.service.ClearCache();
+            this.stopwatch.Stop();
+            Console.WriteLine($"CleareCache method execution duration is {this.stopwatch.ElapsedTicks} ticks");
+            this.stopwatch.Reset();
         }
     }
 }

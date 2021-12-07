@@ -69,16 +69,17 @@
             </summary>
             <param name="request">Provides command and parameters.</param>
         </member>
-        <member name="T:FileCabinetApp.CommandHandlers.DefaultRecordPrinter">
+        <member name="T:FileCabinetApp.CommandHandlers.CustomPrinter">
             <summary>
-            Defines default Print method.
+            Provides custom printer method.
             </summary>
         </member>
-        <member name="M:FileCabinetApp.CommandHandlers.DefaultRecordPrinter.Print(System.Collections.ObjectModel.ReadOnlyCollection{FileCabinetApp.FileCabinetRecord})">
+        <member name="M:FileCabinetApp.CommandHandlers.CustomPrinter.Print(System.Collections.ObjectModel.ReadOnlyCollection{FileCabinetApp.FileCabinetRecord},System.Collections.Generic.List{System.Reflection.PropertyInfo})">
             <summary>
-            Implements default Print method.
+            Prints records using specified criteria.
             </summary>
-            <param name="records">File records to be printed.</param>
+            <param name="records">Records to be printed.</param>
+            <param name="properties">Record's properties which fields to be printed.</param>
         </member>
         <member name="T:FileCabinetApp.CommandHandlers.DeleteCommandHandler">
             <summary>
@@ -131,28 +132,51 @@
             </summary>
             <param name="request">Provides command and parameters.</param>
         </member>
-        <member name="T:FileCabinetApp.CommandHandlers.FindCommandHandler">
+        <member name="T:FileCabinetApp.CommandHandlers.FileCabinetRecordComparer">
             <summary>
-            Handles find command.
+            Provides FileCabinetRecord comparison.
             </summary>
         </member>
-        <member name="F:FileCabinetApp.CommandHandlers.FindCommandHandler.printer">
+        <member name="M:FileCabinetApp.CommandHandlers.FileCabinetRecordComparer.Equals(FileCabinetApp.FileCabinetRecord,FileCabinetApp.FileCabinetRecord)">
             <summary>
-            Record printer to be used in FindCommandHandler.
+            Finds out if records Ids are equal.
+            </summary>
+            <param name="x">First record to check for equality.</param>
+            <param name="y">Second record to check for equality.</param>
+            <returns>bool.</returns>
+        </member>
+        <member name="M:FileCabinetApp.CommandHandlers.FileCabinetRecordComparer.GetHashCode(FileCabinetApp.FileCabinetRecord)">
+            <summary>
+            Gets Hash Code of the record.
+            </summary>
+            <param name="obj">FileCabinetRecord</param>
+            <returns>Record hash code.</returns>
+        </member>
+        <member name="T:FileCabinetApp.CommandHandlers.FileCabinetRecordListSort">
+            <summary>
+            Provides FIleCabinetRecord List Sort.
             </summary>
         </member>
-        <member name="M:FileCabinetApp.CommandHandlers.FindCommandHandler.#ctor(FileCabinetApp.IFileCabinetService,System.Action{System.Collections.ObjectModel.ReadOnlyCollection{FileCabinetApp.FileCabinetRecord}})">
+        <member name="M:FileCabinetApp.CommandHandlers.FileCabinetRecordListSort.Compare(System.Collections.Generic.List{FileCabinetApp.FileCabinetRecord},System.Collections.Generic.List{FileCabinetApp.FileCabinetRecord})">
             <summary>
-            Initializes a new instance of the <see cref="T:FileCabinetApp.CommandHandlers.FindCommandHandler"/> class.
+            Compares FileCabinetRecord lists.
             </summary>
-            <param name="service">FileCabinetService instance.</param>
-            <param name="defaultPrinter">Delegate which invokes Default Printer method.</param>
+            <param name="x">First FileCabinetRecord list.</param>
+            <param name="y">Second FileCabinetRecord list.</param>
+            <returns>int.</returns>
         </member>
-        <member name="M:FileCabinetApp.CommandHandlers.FindCommandHandler.Handle(FileCabinetApp.CommandHandlers.AddCommandRequest)">
+        <member name="T:FileCabinetApp.CommandHandlers.FileCabinetRecordSort">
             <summary>
-            Calls find method or next handler.
+            Provides FileCabinetRecord Sort.
             </summary>
-            <param name="request">Provides command and parameters.</param>
+        </member>
+        <member name="M:FileCabinetApp.CommandHandlers.FileCabinetRecordSort.Compare(FileCabinetApp.FileCabinetRecord,FileCabinetApp.FileCabinetRecord)">
+            <summary>
+            Sorts records by Id.
+            </summary>
+            <param name="x">First comparable record.</param>
+            <param name="y">Second comaparable record.</param>
+            <returns>int.</returns>
         </member>
         <member name="T:FileCabinetApp.CommandHandlers.HelpCommandHandler">
             <summary>
@@ -226,34 +250,12 @@
             Provides extention for Print records method.
             </summary>
         </member>
-        <member name="M:FileCabinetApp.CommandHandlers.IRecordPrinter.Print(System.Collections.ObjectModel.ReadOnlyCollection{FileCabinetApp.FileCabinetRecord})">
+        <member name="M:FileCabinetApp.CommandHandlers.IRecordPrinter.Print(System.Collections.ObjectModel.ReadOnlyCollection{FileCabinetApp.FileCabinetRecord},System.Collections.Generic.List{System.Reflection.PropertyInfo})">
             <summary>
             Defines Print records method.
             </summary>
             <param name="records">Records to be printed.</param>
-        </member>
-        <member name="T:FileCabinetApp.CommandHandlers.ListCommandHandler">
-            <summary>
-            Handles list command.
-            </summary>
-        </member>
-        <member name="F:FileCabinetApp.CommandHandlers.ListCommandHandler.printer">
-            <summary>
-            Record printer to be used in ListCommandHandler.
-            </summary>
-        </member>
-        <member name="M:FileCabinetApp.CommandHandlers.ListCommandHandler.#ctor(FileCabinetApp.IFileCabinetService,System.Action{System.Collections.ObjectModel.ReadOnlyCollection{FileCabinetApp.FileCabinetRecord}})">
-            <summary>
-            Initializes a new instance of the <see cref="T:FileCabinetApp.CommandHandlers.ListCommandHandler"/> class.
-            </summary>
-            <param name="service">FileCabinetService instance.</param>
-            <param name="defaultPrinter">Delegate which invokes Default Printer method.</param>
-        </member>
-        <member name="M:FileCabinetApp.CommandHandlers.ListCommandHandler.Handle(FileCabinetApp.CommandHandlers.AddCommandRequest)">
-            <summary>
-            Calls list method or next handler.
-            </summary>
-            <param name="request">Provides command and parameters.</param>
+            <param name="properties">Properties to be printed.</param>
         </member>
         <member name="T:FileCabinetApp.CommandHandlers.PurgeCommandHandler">
             <summary>
@@ -269,6 +271,29 @@
         <member name="M:FileCabinetApp.CommandHandlers.PurgeCommandHandler.Handle(FileCabinetApp.CommandHandlers.AddCommandRequest)">
             <summary>
             Calls purge method or next handler.
+            </summary>
+            <param name="request">Provides command and parameters.</param>
+        </member>
+        <member name="T:FileCabinetApp.CommandHandlers.SelectCommandHandler">
+            <summary>
+            Handles 'select' command.
+            </summary>
+        </member>
+        <member name="F:FileCabinetApp.CommandHandlers.SelectCommandHandler.printer">
+            <summary>
+            Record printer to be used in SelectCommandHandler.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.CommandHandlers.SelectCommandHandler.#ctor(FileCabinetApp.IFileCabinetService,FileCabinetApp.CommandHandlers.IRecordPrinter)">
+            <summary>
+            Initializes a new instance of the <see cref="T:FileCabinetApp.CommandHandlers.SelectCommandHandler"/> class.
+            </summary>
+            <param name="service">Service to be used in handler.</param>
+            <param name="printer">Printer to be used in printer.</param>
+        </member>
+        <member name="M:FileCabinetApp.CommandHandlers.SelectCommandHandler.Handle(FileCabinetApp.CommandHandlers.AddCommandRequest)">
+            <summary>
+            Calls list method or next handler.
             </summary>
             <param name="request">Provides command and parameters.</param>
         </member>
@@ -391,11 +416,11 @@
             </summary>
             <param name="filePath">Path to *.db file.</param>
         </member>
-        <member name="M:FileCabinetApp.FileCabinetFilesystemService.GetMaxId">
+        <member name="M:FileCabinetApp.FileCabinetFilesystemService.GetNewId">
             <summary>
-            Gets max record's id.
+            Gets new record's id.
             </summary>
-            <returns>Last record's id.</returns>
+            <returns>New record's id.</returns>
         </member>
         <member name="M:FileCabinetApp.FileCabinetFilesystemService.RecordExists(System.Int32)">
             <summary>
@@ -450,11 +475,32 @@
             <param name="lastName">Person's last name which record should be found with.</param>
             <returns>Records which fit search requirements.</returns>
         </member>
-        <member name="M:FileCabinetApp.FileCabinetFilesystemService.FindByDateOfBirth(System.String)">
+        <member name="M:FileCabinetApp.FileCabinetFilesystemService.FindByDateOfBirth(System.DateTime)">
             <summary>
             Gets iterator based on dateOfBirth key.
             </summary>
             <param name="dateOfBirth">Person's date of birth which record should be found with.</param>
+            <returns>Records which fit search requirements.</returns>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetFilesystemService.FindByJobExperience(System.Int16)">
+            <summary>
+            Finds records by jobExperience.
+            </summary>
+            <param name="jobExperience">Person's jobExperience.</param>
+            <returns>Records which fit search requirements.</returns>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetFilesystemService.FindByMonthlyPay(System.Decimal)">
+            <summary>
+            Finds records by monthlyPay.
+            </summary>
+            <param name="monthlyPay">Person's monthlyPay.</param>
+            <returns>Records which fit search requirements.</returns>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetFilesystemService.FindByGender(System.Char)">
+            <summary>
+            Finds records by gender.
+            </summary>
+            <param name="gender">Person's gender.</param>
             <returns>Records which fit search requirements.</returns>
         </member>
         <member name="M:FileCabinetApp.FileCabinetFilesystemService.Restore(FileCabinetApp.FileCabinetServiceSnapshot)">
@@ -474,6 +520,11 @@
             Purges *.db file.
             </summary>
         </member>
+        <member name="M:FileCabinetApp.FileCabinetFilesystemService.ClearCache">
+            <summary>
+            Clears FileService cache.
+            </summary>
+        </member>
         <member name="T:FileCabinetApp.FileCabinetMemoryService">
             <summary>
             Class contains methods which handle the user commands.
@@ -491,11 +542,11 @@
             </summary>
             <returns>Snapshot object.</returns>
         </member>
-        <member name="M:FileCabinetApp.FileCabinetMemoryService.GetMaxId">
+        <member name="M:FileCabinetApp.FileCabinetMemoryService.GetNewId">
             <summary>
-            Gets max record's id.
+            Gets new record's id.
             </summary>
-            <returns>Last record's id.</returns>
+            <returns>New record's id.</returns>
         </member>
         <member name="M:FileCabinetApp.FileCabinetMemoryService.RecordExists(System.Int32)">
             <summary>
@@ -544,11 +595,32 @@
             <param name="lastName">Person's last name which record should be found with.</param>
             <returns>Records which fit search requirements.</returns>
         </member>
-        <member name="M:FileCabinetApp.FileCabinetMemoryService.FindByDateOfBirth(System.String)">
+        <member name="M:FileCabinetApp.FileCabinetMemoryService.FindByDateOfBirth(System.DateTime)">
             <summary>
             Finds a records by dateOfBirth.
             </summary>
             <param name="dateOfBirth">Person's date of birth which record should be found with.</param>
+            <returns>Records which fit search requirements.</returns>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetMemoryService.FindByJobExperience(System.Int16)">
+            <summary>
+            Finds records by jobExperience.
+            </summary>
+            <param name="jobExperience">Person's jobExperience.</param>
+            <returns>Records which fit search requirements.</returns>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetMemoryService.FindByMonthlyPay(System.Decimal)">
+            <summary>
+            Finds records by monthlyPay.
+            </summary>
+            <param name="monthlyPay">Person's monthlyPay.</param>
+            <returns>Records which fit search requirements.</returns>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetMemoryService.FindByGender(System.Char)">
+            <summary>
+            Finds records by gender.
+            </summary>
+            <param name="gender">Person's gender.</param>
             <returns>Records which fit search requirements.</returns>
         </member>
         <member name="M:FileCabinetApp.FileCabinetMemoryService.Restore(FileCabinetApp.FileCabinetServiceSnapshot)">
@@ -566,6 +638,11 @@
         <member name="M:FileCabinetApp.FileCabinetMemoryService.PurgeFile">
             <summary>
             Does nothing.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetMemoryService.ClearCache">
+            <summary>
+            Clears FileService cache.
             </summary>
         </member>
         <member name="T:FileCabinetApp.FileCabinetRecord">
@@ -881,11 +958,32 @@
             <param name="lastName">Person's last name.</param>
             <returns>ReadonlyCollection of file records found.</returns>
         </member>
-        <member name="M:FileCabinetApp.IFileCabinetService.FindByDateOfBirth(System.String)">
+        <member name="M:FileCabinetApp.IFileCabinetService.FindByDateOfBirth(System.DateTime)">
             <summary>
             Finds record by dateOfBirth.
             </summary>
             <param name="dateOfBirth">Person's dateOfBirth.</param>
+            <returns>ReadonlyCollection of file records found.</returns>
+        </member>
+        <member name="M:FileCabinetApp.IFileCabinetService.FindByJobExperience(System.Int16)">
+            <summary>
+            Finds record by jobExperience.
+            </summary>
+            <param name="jobExperience">Person's jobExperience.</param>
+            <returns>ReadonlyCollection of file records found.</returns>
+        </member>
+        <member name="M:FileCabinetApp.IFileCabinetService.FindByMonthlyPay(System.Decimal)">
+            <summary>
+            Finds record by monthlyPay.
+            </summary>
+            <param name="monthlyPay">Person's monthlyPay.</param>
+            <returns>ReadonlyCollection of file records found.</returns>
+        </member>
+        <member name="M:FileCabinetApp.IFileCabinetService.FindByGender(System.Char)">
+            <summary>
+            Finds record by gender.
+            </summary>
+            <param name="gender">Person's gender.</param>
             <returns>ReadonlyCollection of file records found.</returns>
         </member>
         <member name="M:FileCabinetApp.IFileCabinetService.MakeSnapshot">
@@ -900,7 +998,7 @@
             </summary>
             <param name="snapshot">FileCabinetMemoryService snapshot.</param>
         </member>
-        <member name="M:FileCabinetApp.IFileCabinetService.GetMaxId">
+        <member name="M:FileCabinetApp.IFileCabinetService.GetNewId">
             <summary>
             Gets last record's id.
             </summary>
@@ -923,6 +1021,11 @@
             </summary>
             <param name="id">User input id.</param>
             <returns>true - record exists, false - record doesn't exist.</returns>
+        </member>
+        <member name="M:FileCabinetApp.IFileCabinetService.ClearCache">
+            <summary>
+            Clears cache.
+            </summary>
         </member>
         <member name="T:FileCabinetApp.IRecordIterator">
             <summary>
@@ -1003,12 +1106,6 @@
             </summary>
             <param name="record">File record instance.</param>
         </member>
-        <member name="M:FileCabinetApp.Program.Defaultprinter(System.Collections.ObjectModel.ReadOnlyCollection{FileCabinetApp.FileCabinetRecord})">
-            <summary>
-            Implements Default Print method.
-            </summary>
-            <param name="records">File records to be printed.</param>
-        </member>
         <member name="T:FileCabinetApp.RecordsFound">
             <summary>
             Provides class for records found enumeration.
@@ -1083,11 +1180,32 @@
             <param name="lastName">Person's last name.</param>
             <returns>ReadonlyCollection of file records found.</returns>
         </member>
-        <member name="M:FileCabinetApp.ServiceLogger.FindByDateOfBirth(System.String)">
+        <member name="M:FileCabinetApp.ServiceLogger.FindByDateOfBirth(System.DateTime)">
             <summary>
             Finds record by dateOfBirth.
             </summary>
             <param name="dateOfBirth">Person's dateOfBirth.</param>
+            <returns>ReadonlyCollection of file records found.</returns>
+        </member>
+        <member name="M:FileCabinetApp.ServiceLogger.FindByJobExperience(System.Int16)">
+            <summary>
+            Finds record by jobExperience.
+            </summary>
+            <param name="jobExperience">Person's jobExperience.</param>
+            <returns>ReadonlyCollection of file records found.</returns>
+        </member>
+        <member name="M:FileCabinetApp.ServiceLogger.FindByMonthlyPay(System.Decimal)">
+            <summary>
+            Finds record by monthlyPay.
+            </summary>
+            <param name="monthlyPay">Person's monthlyPay.</param>
+            <returns>ReadonlyCollection of file records found.</returns>
+        </member>
+        <member name="M:FileCabinetApp.ServiceLogger.FindByGender(System.Char)">
+            <summary>
+            Finds record by gender.
+            </summary>
+            <param name="gender">Person's gender.</param>
             <returns>ReadonlyCollection of file records found.</returns>
         </member>
         <member name="M:FileCabinetApp.ServiceLogger.MakeSnapshot">
@@ -1102,11 +1220,11 @@
             </summary>
             <param name="snapshot">FileCabinetMemoryService snapshot.</param>
         </member>
-        <member name="M:FileCabinetApp.ServiceLogger.GetMaxId">
+        <member name="M:FileCabinetApp.ServiceLogger.GetNewId">
             <summary>
-            Gets last record's id.
+            Gets new record's id.
             </summary>
-            <returns>Last record's id.</returns>
+            <returns>LaNewst record's id.</returns>
         </member>
         <member name="M:FileCabinetApp.ServiceLogger.DeleteRecord(System.Int32)">
             <summary>
@@ -1125,6 +1243,11 @@
             </summary>
             <param name="id">User input id.</param>
             <returns>true - record exists, false - record doesn't exist.</returns>
+        </member>
+        <member name="M:FileCabinetApp.ServiceLogger.ClearCache">
+            <summary>
+            Clears cache.
+            </summary>
         </member>
         <member name="T:FileCabinetApp.ServiceMeter">
             <summary>
@@ -1177,11 +1300,32 @@
             <param name="lastName">Person's last name.</param>
             <returns>ReadonlyCollection of file records found.</returns>
         </member>
-        <member name="M:FileCabinetApp.ServiceMeter.FindByDateOfBirth(System.String)">
+        <member name="M:FileCabinetApp.ServiceMeter.FindByDateOfBirth(System.DateTime)">
             <summary>
             Finds record by dateOfBirth.
             </summary>
             <param name="dateOfBirth">Person's dateOfBirth.</param>
+            <returns>ReadonlyCollection of file records found.</returns>
+        </member>
+        <member name="M:FileCabinetApp.ServiceMeter.FindByJobExperience(System.Int16)">
+            <summary>
+            Finds record by jobExperience.
+            </summary>
+            <param name="jobExperience">Person's jobExperience.</param>
+            <returns>ReadonlyCollection of file records found.</returns>
+        </member>
+        <member name="M:FileCabinetApp.ServiceMeter.FindByMonthlyPay(System.Decimal)">
+            <summary>
+            Finds record by monthlyPay.
+            </summary>
+            <param name="monthlyPay">Person's monthlyPay.</param>
+            <returns>ReadonlyCollection of file records found.</returns>
+        </member>
+        <member name="M:FileCabinetApp.ServiceMeter.FindByGender(System.Char)">
+            <summary>
+            Finds record by gender.
+            </summary>
+            <param name="gender">Person's gender.</param>
             <returns>ReadonlyCollection of file records found.</returns>
         </member>
         <member name="M:FileCabinetApp.ServiceMeter.MakeSnapshot">
@@ -1196,11 +1340,11 @@
             </summary>
             <param name="snapshot">FileCabinetMemoryService snapshot.</param>
         </member>
-        <member name="M:FileCabinetApp.ServiceMeter.GetMaxId">
+        <member name="M:FileCabinetApp.ServiceMeter.GetNewId">
             <summary>
-            Gets last record's id.
+            Gets new record's id.
             </summary>
-            <returns>Last record's id.</returns>
+            <returns>New record's id.</returns>
         </member>
         <member name="M:FileCabinetApp.ServiceMeter.DeleteRecord(System.Int32)">
             <summary>
@@ -1219,6 +1363,11 @@
             </summary>
             <param name="id">User input id.</param>
             <returns>true - record exists, false - record doesn't exist.</returns>
+        </member>
+        <member name="M:FileCabinetApp.ServiceMeter.ClearCache">
+            <summary>
+            Clears cache.
+            </summary>
         </member>
         <member name="T:FileCabinetApp.ValidationSettings.CustomSettings">
             <summary>

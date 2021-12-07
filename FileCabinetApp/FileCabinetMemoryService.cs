@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Globalization;
+using System.Linq;
 
 namespace FileCabinetApp
 {
@@ -14,6 +16,16 @@ namespace FileCabinetApp
         private readonly Dictionary<string, List<FileCabinetRecord>> firstNameDictionary = new Dictionary<string, List<FileCabinetRecord>>();
         private readonly Dictionary<string, List<FileCabinetRecord>> lastNameDictionary = new Dictionary<string, List<FileCabinetRecord>>();
         private readonly Dictionary<string, List<FileCabinetRecord>> dateOfBirthDictionary = new Dictionary<string, List<FileCabinetRecord>>();
+        private readonly Dictionary<string, List<FileCabinetRecord>> jobExperienceDictionary = new Dictionary<string, List<FileCabinetRecord>>();
+        private readonly Dictionary<string, List<FileCabinetRecord>> monthlyPayDictionary = new Dictionary<string, List<FileCabinetRecord>>();
+        private readonly Dictionary<string, List<FileCabinetRecord>> genderDictionary = new Dictionary<string, List<FileCabinetRecord>>();
+
+        private readonly Dictionary<string, List<FileCabinetRecord>> firstNameCache = new Dictionary<string, List<FileCabinetRecord>>();
+        private readonly Dictionary<string, List<FileCabinetRecord>> lastNameCache = new Dictionary<string, List<FileCabinetRecord>>();
+        private readonly Dictionary<string, List<FileCabinetRecord>> dateOfBirthCache = new Dictionary<string, List<FileCabinetRecord>>();
+        private readonly Dictionary<string, List<FileCabinetRecord>> jobExperienceCache = new Dictionary<string, List<FileCabinetRecord>>();
+        private readonly Dictionary<string, List<FileCabinetRecord>> monthlyPayCache = new Dictionary<string, List<FileCabinetRecord>>();
+        private readonly Dictionary<string, List<FileCabinetRecord>> genderCache = new Dictionary<string, List<FileCabinetRecord>>();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="FileCabinetMemoryService"/> class.
@@ -34,24 +46,24 @@ namespace FileCabinetApp
         }
 
         /// <summary>
-        /// Gets max record's id.
+        /// Gets new record's id.
         /// </summary>
-        /// <returns>Last record's id.</returns>
-        public int GetMaxId()
+        /// <returns>New record's id.</returns>
+        public int GetNewId()
         {
-            if (this.list.Count == 0)
+            IEnumerable<int> ids = from record in this.list select record.Id;
+            ids.ToList().Sort();
+            int id = 1;
+
+            for (; id <= ids.Count(); id++)
             {
-                return 0;
+                if (!ids.Contains(id))
+                {
+                    return id;
+                }
             }
 
-            int maxId = this.list[0].Id;
-
-            foreach (var record in this.list)
-            {
-                maxId = record.Id > maxId ? record.Id : maxId;
-            }
-
-            return maxId;
+            return id;
         }
 
         /// <summary>
@@ -86,11 +98,7 @@ namespace FileCabinetApp
             FileCabinetRecord record = (FileCabinetRecord)this.validator.ValidateParameters(e);
             this.list.Add(record);
 
-            var dateOfBirthKey = $"{record.DateOfBirth.Year}-{record.DateOfBirth.Month}-{record.DateOfBirth.Day}";
-
-            this.AddRecordToFirstNameDictionary(record, record.FirstName);
-            this.AddRecordToLastNameDictionary(record, record.LastName);
-            this.AddRecordToDateOfBirthDictionary(record, dateOfBirthKey);
+            this.UpdateDictionaries();
         }
 
         /// <summary>
@@ -141,11 +149,6 @@ namespace FileCabinetApp
             }
 
             var oldRecord = Array.Find(this.list.ToArray(), i => i.Id == record.Id);
-            var dateOfBirthKey = $"{oldRecord.DateOfBirth.Year}-{oldRecord.DateOfBirth.Month}-{oldRecord.DateOfBirth.Day}";
-
-            this.RemoveRecordFromFirstNameDictionary(oldRecord.Id, oldRecord.FirstName);
-            this.RemoveRecordFromLastNameDictionary(oldRecord.Id, oldRecord.LastName);
-            this.RemoveRecordFromDateOfBirthDictionary(oldRecord.Id, dateOfBirthKey);
 
             oldRecord.FirstName = record.FirstName;
             oldRecord.LastName = record.LastName;
@@ -154,11 +157,7 @@ namespace FileCabinetApp
             oldRecord.MonthlyPay = record.MonthlyPay;
             oldRecord.Gender = record.Gender;
 
-            dateOfBirthKey = $"{record.DateOfBirth.Year}-{record.DateOfBirth.Month}-{record.DateOfBirth.Day}";
-
-            this.AddRecordToFirstNameDictionary(record, record.FirstName);
-            this.AddRecordToLastNameDictionary(record, record.LastName);
-            this.AddRecordToDateOfBirthDictionary(record, dateOfBirthKey);
+            this.UpdateDictionaries();
 
             Console.WriteLine($"Record #{record.Id} is updated.");
         }
@@ -170,9 +169,25 @@ namespace FileCabinetApp
         /// <returns>Records which fit search requirements.</returns>
         public IEnumerable<FileCabinetRecord> FindByFirstName(string firstName)
         {
-            if (!(firstName is null) && this.firstNameDictionary.ContainsKey(firstName.ToUpperInvariant()))
+            if (firstName is null)
             {
-                return new RecordsFound(new MemoryIterator(this.firstNameDictionary[firstName.ToUpperInvariant()]));
+                Console.WriteLine("Find method didn't get a key.");
+                return new List<FileCabinetRecord>();
+            }
+
+            if (this.firstNameCache.ContainsKey(firstName.ToUpperInvariant()))
+            {
+                return this.firstNameCache[firstName.ToUpperInvariant()];
+            }
+
+            if (this.firstNameDictionary.ContainsKey(firstName.ToUpperInvariant()))
+            {
+                if (!this.firstNameCache.ContainsKey(firstName.ToUpperInvariant()))
+                {
+                    this.firstNameCache.Add(firstName.ToUpperInvariant(), new RecordsFound(new MemoryIterator(this.firstNameDictionary[firstName.ToUpperInvariant()])).ToList());
+                }
+
+                return this.firstNameCache[firstName.ToUpperInvariant()];
             }
             else
             {
@@ -189,9 +204,25 @@ namespace FileCabinetApp
         /// <returns>Records which fit search requirements.</returns>
         public IEnumerable<FileCabinetRecord> FindByLastName(string lastName)
         {
-            if (!(lastName is null) && this.lastNameDictionary.ContainsKey(lastName.ToUpperInvariant()))
+            if (lastName is null)
             {
-                return new RecordsFound(new MemoryIterator(this.lastNameDictionary[lastName.ToUpperInvariant()]));
+                Console.WriteLine("Find method didn't get a key.");
+                return new List<FileCabinetRecord>();
+            }
+
+            if (this.lastNameCache.ContainsKey(lastName.ToUpperInvariant()))
+            {
+                return this.lastNameCache[lastName.ToUpperInvariant()];
+            }
+
+            if (this.lastNameDictionary.ContainsKey(lastName.ToUpperInvariant()))
+            {
+                if (!this.lastNameCache.ContainsKey(lastName.ToUpperInvariant()))
+                {
+                    this.lastNameCache.Add(lastName.ToUpperInvariant(), new RecordsFound(new MemoryIterator(this.lastNameDictionary[lastName.ToUpperInvariant()])).ToList());
+                }
+
+                return this.lastNameCache[lastName.ToUpperInvariant()];
             }
             else
             {
@@ -206,11 +237,116 @@ namespace FileCabinetApp
         /// </summary>
         /// <param name="dateOfBirth">Person's date of birth which record should be found with.</param>
         /// <returns>Records which fit search requirements.</returns>
-        public IEnumerable<FileCabinetRecord> FindByDateOfBirth(string dateOfBirth)
+        public IEnumerable<FileCabinetRecord> FindByDateOfBirth(DateTime dateOfBirth)
         {
-            if (!(dateOfBirth is null) && this.dateOfBirthDictionary.ContainsKey(dateOfBirth))
+            string dateOfBirthKey = $"{dateOfBirth.Year}-{dateOfBirth.Month}-{dateOfBirth.Day}";
+
+            if (this.dateOfBirthCache.ContainsKey(dateOfBirthKey))
             {
-                return new RecordsFound(new MemoryIterator(this.dateOfBirthDictionary[dateOfBirth]));
+                return this.dateOfBirthCache[dateOfBirthKey];
+            }
+
+            if (this.dateOfBirthDictionary.ContainsKey(dateOfBirthKey))
+            {
+                if (!this.dateOfBirthCache.ContainsKey(dateOfBirthKey))
+                {
+                    this.dateOfBirthCache.Add(dateOfBirthKey, new RecordsFound(new MemoryIterator(this.dateOfBirthDictionary[dateOfBirthKey])).ToList());
+                }
+
+                return this.dateOfBirthCache[dateOfBirthKey];
+            }
+            else
+            {
+                Console.WriteLine("! No matches found");
+            }
+
+            return new List<FileCabinetRecord>();
+        }
+
+        /// <summary>
+        /// Finds records by jobExperience.
+        /// </summary>
+        /// <param name="jobExperience">Person's jobExperience.</param>
+        /// <returns>Records which fit search requirements.</returns>
+        public IEnumerable<FileCabinetRecord> FindByJobExperience(short jobExperience)
+        {
+            string jobExperienceKey = jobExperience.ToString(CultureInfo.InvariantCulture);
+
+            if (this.jobExperienceCache.ContainsKey(jobExperienceKey))
+            {
+                return this.jobExperienceCache[jobExperienceKey];
+            }
+
+            if (this.jobExperienceDictionary.ContainsKey(jobExperienceKey))
+            {
+                if (!this.jobExperienceCache.ContainsKey(jobExperienceKey))
+                {
+                    this.jobExperienceCache.Add(jobExperienceKey, new RecordsFound(new MemoryIterator(this.jobExperienceDictionary[jobExperienceKey])).ToList());
+                }
+
+                return this.jobExperienceCache[jobExperienceKey];
+            }
+            else
+            {
+                Console.WriteLine("! No matches found");
+            }
+
+            return new List<FileCabinetRecord>();
+        }
+
+        /// <summary>
+        /// Finds records by monthlyPay.
+        /// </summary>
+        /// <param name="monthlyPay">Person's monthlyPay.</param>
+        /// <returns>Records which fit search requirements.</returns>
+        public IEnumerable<FileCabinetRecord> FindByMonthlyPay(decimal monthlyPay)
+        {
+            string monthlyPayKey = monthlyPay.ToString(CultureInfo.InvariantCulture);
+
+            if (this.monthlyPayCache.ContainsKey(monthlyPayKey))
+            {
+                return this.monthlyPayCache[monthlyPayKey];
+            }
+
+            if (this.monthlyPayDictionary.ContainsKey(monthlyPayKey))
+            {
+                if (!this.monthlyPayCache.ContainsKey(monthlyPayKey))
+                {
+                    this.monthlyPayCache.Add(monthlyPayKey, new RecordsFound(new MemoryIterator(this.monthlyPayDictionary[monthlyPayKey])).ToList());
+                }
+
+                return this.monthlyPayCache[monthlyPayKey];
+            }
+            else
+            {
+                Console.WriteLine("! No matches found");
+            }
+
+            return new List<FileCabinetRecord>();
+        }
+
+        /// <summary>
+        /// Finds records by gender.
+        /// </summary>
+        /// <param name="gender">Person's gender.</param>
+        /// <returns>Records which fit search requirements.</returns>
+        public IEnumerable<FileCabinetRecord> FindByGender(char gender)
+        {
+            string genderKey = gender.ToString(CultureInfo.InvariantCulture);
+
+            if (this.genderCache.ContainsKey(genderKey))
+            {
+                return this.genderCache[genderKey];
+            }
+
+            if (this.genderDictionary.ContainsKey(genderKey))
+            {
+                if (!this.genderCache.ContainsKey(genderKey))
+                {
+                    this.genderCache.Add(genderKey, new RecordsFound(new MemoryIterator(this.genderDictionary[genderKey])).ToList());
+                }
+
+                return this.genderCache[genderKey];
             }
             else
             {
@@ -231,8 +367,6 @@ namespace FileCabinetApp
                 throw new ArgumentNullException($"{snapshot} is null.");
             }
 
-            this.GetRecords();
-
             int index = -1;
 
             foreach (FileCabinetRecord record in snapshot.Records)
@@ -249,7 +383,7 @@ namespace FileCabinetApp
                 }
             }
 
-            this.FillAllDictionaries();
+            this.UpdateDictionaries();
         }
 
         /// <summary>
@@ -268,21 +402,7 @@ namespace FileCabinetApp
             }
 
             this.list.Remove(record);
-
-            foreach (KeyValuePair<string, List<FileCabinetRecord>> pair in this.firstNameDictionary)
-            {
-                pair.Value.Remove(record);
-            }
-
-            foreach (KeyValuePair<string, List<FileCabinetRecord>> pair in this.lastNameDictionary)
-            {
-                pair.Value.Remove(record);
-            }
-
-            foreach (KeyValuePair<string, List<FileCabinetRecord>> pair in this.dateOfBirthDictionary)
-            {
-                pair.Value.Remove(record);
-            }
+            this.UpdateDictionaries();
         }
 
         /// <summary>
@@ -293,24 +413,46 @@ namespace FileCabinetApp
             // Method intentionally left empty.
         }
 
-        private void FillAllDictionaries()
+        /// <summary>
+        /// Clears FileService cache.
+        /// </summary>
+        public void ClearCache()
         {
-            string dateOfBirthKey;
+            this.firstNameCache.Clear();
+            this.lastNameCache.Clear();
+            this.dateOfBirthCache.Clear();
+            this.jobExperienceCache.Clear();
+            this.monthlyPayCache.Clear();
+            this.genderCache.Clear();
+        }
+
+        private void UpdateDictionaries()
+        {
             this.firstNameDictionary.Clear();
             this.lastNameDictionary.Clear();
             this.dateOfBirthDictionary.Clear();
+            this.jobExperienceDictionary.Clear();
+            this.monthlyPayDictionary.Clear();
+            this.genderDictionary.Clear();
 
             foreach (FileCabinetRecord record in this.list)
             {
                 this.AddRecordToFirstNameDictionary(record, record.FirstName);
                 this.AddRecordToLastNameDictionary(record, record.LastName);
-                dateOfBirthKey = $"{record.DateOfBirth.Year}-{record.DateOfBirth.Month}-{record.DateOfBirth.Day}";
-                this.AddRecordToDateOfBirthDictionary(record, dateOfBirthKey);
+                this.AddRecordToDateOfBirthDictionary(record, record.DateOfBirth);
+                this.AddRecordToJobExperienceDictionary(record, record.JobExperience);
+                this.AddRecordToMonthlyPayDictionary(record, record.MonthlyPay);
+                this.AddRecordToGenderDictionary(record, record.Gender);
             }
         }
 
         private void AddRecordToFirstNameDictionary(FileCabinetRecord record, string firstNameKey)
         {
+            if (record is null)
+            {
+                throw new ArgumentNullException(nameof(record), "Record is null");
+            }
+
             if (firstNameKey is null)
             {
                 throw new ArgumentNullException(nameof(firstNameKey), "Dictionary key is null");
@@ -331,6 +473,11 @@ namespace FileCabinetApp
 
         private void AddRecordToLastNameDictionary(FileCabinetRecord record, string lastNameKey)
         {
+            if (record is null)
+            {
+                throw new ArgumentNullException(nameof(record), "Record is null");
+            }
+
             if (lastNameKey is null)
             {
                 throw new ArgumentNullException(nameof(lastNameKey), "Dictionary key is null");
@@ -349,17 +496,19 @@ namespace FileCabinetApp
             this.lastNameDictionary[lastNameKey.ToUpperInvariant()].Add(record);
         }
 
-        private void AddRecordToDateOfBirthDictionary(FileCabinetRecord record, string dateOfBirthKey)
+        private void AddRecordToDateOfBirthDictionary(FileCabinetRecord record, DateTime dateOfBirth)
         {
-            if (dateOfBirthKey is null)
+            if (record is null)
             {
-                throw new ArgumentNullException(nameof(dateOfBirthKey), "Dictionary key is null");
+                throw new ArgumentNullException(nameof(record), "Record is null");
             }
 
-            if (dateOfBirthKey.Length == 0)
+            if (dateOfBirth.Equals(default(DateTime)))
             {
-                throw new ArgumentException("The method gets no key!");
+                throw new ArgumentException("Dictionary key is invalid");
             }
+
+            string dateOfBirthKey = $"{dateOfBirth.Year}-{dateOfBirth.Month}-{dateOfBirth.Day}";
 
             if (!this.dateOfBirthDictionary.ContainsKey(dateOfBirthKey.ToUpperInvariant()))
             {
@@ -369,64 +518,55 @@ namespace FileCabinetApp
             this.dateOfBirthDictionary[dateOfBirthKey.ToUpperInvariant()].Add(record);
         }
 
-        private void RemoveRecordFromFirstNameDictionary(int id, string firstNameKey)
+        private void AddRecordToJobExperienceDictionary(FileCabinetRecord record, short jobExperience)
         {
-            if (firstNameKey is null)
+            if (record is null)
             {
-                throw new ArgumentNullException(nameof(firstNameKey), "Dictionary key is null");
+                throw new ArgumentNullException(nameof(record), "Record is null");
             }
 
-            if (firstNameKey.Length == 0)
+            string jobExperienceKey = jobExperience.ToString(CultureInfo.InvariantCulture);
+
+            if (!this.jobExperienceDictionary.ContainsKey(jobExperienceKey))
             {
-                throw new ArgumentException("The method gets no key!");
+                this.jobExperienceDictionary.Add(jobExperienceKey, new List<FileCabinetRecord>());
             }
 
-            FileCabinetRecord recordToRemove = this.firstNameDictionary[firstNameKey.ToUpperInvariant()].Find(i => i.Id == id);
-
-            if (!(recordToRemove is null))
-            {
-                this.firstNameDictionary[firstNameKey.ToUpperInvariant()].Remove(recordToRemove);
-            }
+            this.jobExperienceDictionary[jobExperienceKey].Add(record);
         }
 
-        private void RemoveRecordFromLastNameDictionary(int id, string lastNameKey)
+        private void AddRecordToMonthlyPayDictionary(FileCabinetRecord record, decimal monthlyPay)
         {
-            if (lastNameKey is null)
+            if (record is null)
             {
-                throw new ArgumentNullException(nameof(lastNameKey), "Dictionary key is null");
+                throw new ArgumentNullException(nameof(record), "Record is null");
             }
 
-            if (lastNameKey.Length == 0)
+            string monthlyPayKey = monthlyPay.ToString(CultureInfo.InvariantCulture);
+
+            if (!this.monthlyPayDictionary.ContainsKey(monthlyPayKey))
             {
-                throw new ArgumentException("The method gets no key!");
+                this.monthlyPayDictionary.Add(monthlyPayKey, new List<FileCabinetRecord>());
             }
 
-            FileCabinetRecord recordToRemove = this.lastNameDictionary[lastNameKey.ToUpperInvariant()].Find(i => i.Id == id);
-
-            if (!(recordToRemove is null))
-            {
-                this.lastNameDictionary[lastNameKey.ToUpperInvariant()].Remove(recordToRemove);
-            }
+            this.monthlyPayDictionary[monthlyPayKey].Add(record);
         }
 
-        private void RemoveRecordFromDateOfBirthDictionary(int id, string dateOfBirthKey)
+        private void AddRecordToGenderDictionary(FileCabinetRecord record, char gender)
         {
-            if (dateOfBirthKey is null)
+            if (record is null)
             {
-                throw new ArgumentNullException(nameof(dateOfBirthKey), "Dictionary key is null");
+                throw new ArgumentNullException(nameof(record), "Record is null");
             }
 
-            if (dateOfBirthKey.Length == 0)
+            string genderKey = gender.ToString(CultureInfo.InvariantCulture);
+
+            if (!this.genderDictionary.ContainsKey(genderKey))
             {
-                throw new ArgumentException("The method gets no key!");
+                this.genderDictionary.Add(genderKey, new List<FileCabinetRecord>());
             }
 
-            FileCabinetRecord recordToRemove = this.dateOfBirthDictionary[dateOfBirthKey.ToUpperInvariant()].Find(i => i.Id == id);
-
-            if (!(recordToRemove is null))
-            {
-                this.dateOfBirthDictionary[dateOfBirthKey.ToUpperInvariant()].Remove(recordToRemove);
-            }
+            this.genderDictionary[genderKey].Add(record);
         }
     }
 }

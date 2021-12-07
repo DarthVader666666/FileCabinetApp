@@ -54,7 +54,28 @@ namespace FileCabinetApp
         /// </summary>
         /// <param name="dateOfBirth">Person's dateOfBirth.</param>
         /// <returns>ReadonlyCollection of file records found.</returns>
-        IEnumerable<FileCabinetRecord> FindByDateOfBirth(string dateOfBirth);
+        IEnumerable<FileCabinetRecord> FindByDateOfBirth(DateTime dateOfBirth);
+
+        /// <summary>
+        /// Finds record by jobExperience.
+        /// </summary>
+        /// <param name="jobExperience">Person's jobExperience.</param>
+        /// <returns>ReadonlyCollection of file records found.</returns>
+        IEnumerable<FileCabinetRecord> FindByJobExperience(short jobExperience);
+
+        /// <summary>
+        /// Finds record by monthlyPay.
+        /// </summary>
+        /// <param name="monthlyPay">Person's monthlyPay.</param>
+        /// <returns>ReadonlyCollection of file records found.</returns>
+        IEnumerable<FileCabinetRecord> FindByMonthlyPay(decimal monthlyPay);
+
+        /// <summary>
+        /// Finds record by gender.
+        /// </summary>
+        /// <param name="gender">Person's gender.</param>
+        /// <returns>ReadonlyCollection of file records found.</returns>
+        IEnumerable<FileCabinetRecord> FindByGender(char gender);
 
         /// <summary>
         /// Makes snapshot of FileCabinetService list of records.
@@ -72,7 +93,7 @@ namespace FileCabinetApp
         /// Gets last record's id.
         /// </summary>
         /// <returns>Last record's id.</returns>
-        int GetMaxId();
+        int GetNewId();
 
         /// <summary>
         /// Removes specified record from FileCabinetService data storage.
@@ -91,5 +112,10 @@ namespace FileCabinetApp
         /// <param name="id">User input id.</param>
         /// <returns>true - record exists, false - record doesn't exist.</returns>
         bool RecordExists(int id);
+
+        /// <summary>
+        /// Clears cache.
+        /// </summary>
+        void ClearCache();
     }
 }

@@ -107,15 +107,26 @@ namespace FileCabinetApp.CommandHandlers
         private static List<Tuple<PropertyInfo, string>> GetCriteriaList(PropertyInfo[] properties, string[] fields, string[] values)
         {
             List<Tuple<PropertyInfo, string>> criteria = new List<Tuple<PropertyInfo, string>>();
+            bool flag;
 
-            foreach (PropertyInfo info in properties)
+            foreach (string field in fields)
             {
-                foreach (string field in fields)
+                flag = false;
+
+                foreach (PropertyInfo info in properties)
                 {
                     if (field.Equals(info.Name, StringComparison.InvariantCultureIgnoreCase))
                     {
                         criteria.Add(new Tuple<PropertyInfo, string>(info, values[Array.IndexOf(fields, field)]));
+                        flag = true;
+                        break;
                     }
+                }
+
+                if (!flag)
+                {
+                    Console.WriteLine($"'{field}' is not a field of FileCabinetRecord.");
+                    return new List<Tuple<PropertyInfo, string>>();
                 }
             }
 
@@ -131,14 +142,24 @@ namespace FileCabinetApp.CommandHandlers
 
         private void Update(string parameters)
         {
-            string[] args;
+            this.fileCabinetService.ClearCache();
+
+            string[] args = Array.Empty<string>();
             string[] setFields;
             string[] setValues;
             string[] whereFields;
             string[] whereValues;
 
-            args = parameters.Split("set", StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
-            args = args[0].Split("where", StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+            try
+            {
+                args = parameters.Split("set", StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+                args = args[0].Split("where", StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+            }
+            catch (ArgumentOutOfRangeException)
+            {
+                Console.WriteLine("'set' or 'where' parameters wrong or absent.");
+                return;
+            }
 
             GetStrings(args[0], out setFields, out setValues);
             GetStrings(args[1], out whereFields, out whereValues);
@@ -146,6 +167,13 @@ namespace FileCabinetApp.CommandHandlers
             PropertyInfo[] listOfProperties = typeof(FileCabinetRecord).GetProperties();
 
             List<Tuple<PropertyInfo, string>> whereCriteria = GetCriteriaList(listOfProperties, whereFields, whereValues);
+            List<Tuple<PropertyInfo, string>> setCriteria = GetCriteriaList(listOfProperties, setFields, setValues);
+
+            if (!(whereCriteria.Any() && setCriteria.Any()))
+            {
+                Console.WriteLine("Wrong or absent update parameters.");
+                return;
+            }
 
             List<int> ids = this.GetAndMatchedFieldIds(whereCriteria);
 
@@ -163,7 +191,6 @@ namespace FileCabinetApp.CommandHandlers
                 recordsToUpdate.Add(Array.Find(allRecords.ToArray(), i => i.Id.Equals(id)));
             }
 
-            List<Tuple<PropertyInfo, string>> setCriteria = GetCriteriaList(listOfProperties, setFields, setValues);
             List<FileCabinetRecord> updatedRecords = GetUpdatedRecords(recordsToUpdate, listOfProperties, setCriteria);
             List<FileCabinetEventArgs> updatedArguments = new List<FileCabinetEventArgs>();
 
