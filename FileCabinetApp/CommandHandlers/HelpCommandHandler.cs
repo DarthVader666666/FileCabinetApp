@@ -15,7 +15,7 @@ namespace FileCabinetApp.CommandHandlers
         {
             new string[] { "help", "prints the help screen", "The 'help' command prints the help screen." },
             new string[] { "exit", "exits the application", "The 'exit' command exits the application." },
-            new string[] { "list", "prints record list" },
+            new string[] { "select", "prints record list (use parameters to print separate columns. Ex.: select firstname, lastname)" },
             new string[] { "create", "creates new record" },
             new string[] { "export", "exports records into chosen file and format (csv or xml). Ex: export csv D:\\file.csv" },
             new string[] { "find", "finds records by specified parameter. Ex: find firstname \"Vadim\"" },
