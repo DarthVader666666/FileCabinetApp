@@ -1,0 +1,422 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="FileCabinetApp.CommandHandlers.AddCommandRequest" Collapsed="true">
+    <Position X="7.25" Y="0.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAIAAAAAAAAA=</HashCode>
+      <FileName>CommandHandlers\AddCommandRequest.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FileCabinetApp.CommandHandlers.CommandHandlerBase" Collapsed="true">
+    <Position X="11.75" Y="0.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAgAAIAAAQAAAAEAAA=</HashCode>
+      <FileName>CommandHandlers\CommandHandlerBase.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="FileCabinetApp.CommandHandlers.CreateCommandHandler" Collapsed="true">
+    <Position X="2.75" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAEIAAAAAAAAAAIA=</HashCode>
+      <FileName>CommandHandlers\CreateCommandHandler.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FileCabinetApp.CommandHandlers.CustomPrinter" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="14.75" Y="9" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAQAAAAAAAAAAAAAAAAAAAAAAIAAAAAAAAAAEAAA=</HashCode>
+      <FileName>CommandHandlers\CustomPrinter.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="FileCabinetApp.CommandHandlers.DeleteCommandHandler" Collapsed="true">
+    <Position X="9.5" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAEAAgIAAAAAAAAAAAA=</HashCode>
+      <FileName>CommandHandlers\DeleteCommandHandler.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FileCabinetApp.CommandHandlers.ExitCommandHandler" Collapsed="true">
+    <Position X="16" Y="2" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAIAAAAAAAAAAAAAAAAAAAAAAAIAIAAAAAAAAAA=</HashCode>
+      <FileName>CommandHandlers\ExitCommandHandler.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FileCabinetApp.CommandHandlers.ExportCommandHandler" Collapsed="true">
+    <Position X="16.25" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAABAAAAAAAAAIAAAAAAAAABAA=</HashCode>
+      <FileName>CommandHandlers\ExportCommandHandler.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FileCabinetApp.CommandHandlers.FileCabinetRecordComparer" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="8.75" Y="9.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAgAAAAAAAAAAAAIAAAAAAAAAAAAA=</HashCode>
+      <FileName>CommandHandlers\FileCabinetRecordComparer.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="FileCabinetApp.CommandHandlers.FileCabinetRecordListSort" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="8.75" Y="8.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAA=</HashCode>
+      <FileName>CommandHandlers\FileCabinetRecordListSort.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="FileCabinetApp.CommandHandlers.FileCabinetRecordSort" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="11.25" Y="5.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAA=</HashCode>
+      <FileName>CommandHandlers\FileCabinetRecordSort.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="FileCabinetApp.CommandHandlers.HelpCommandHandler" Collapsed="true">
+    <Position X="13.75" Y="2" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAhAAAAAEAAAIAAAAAAAAAAQIAAAAAAAAAAAA=</HashCode>
+      <FileName>CommandHandlers\HelpCommandHandler.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FileCabinetApp.CommandHandlers.ImportCommandHandler" Collapsed="true">
+    <Position X="11.75" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAIAAAAAAAAAAAAAIAAAAAAAAAAAA=</HashCode>
+      <FileName>CommandHandlers\ImportCommandHandler.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FileCabinetApp.CommandHandlers.InsertCommandHandler" Collapsed="true">
+    <Position X="14" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAEAAAAAAAAAQAAAAAAAAAAAAAAIAAAAAAAAAAIA=</HashCode>
+      <FileName>CommandHandlers\InsertCommandHandler.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FileCabinetApp.CommandHandlers.PurgeCommandHandler" Collapsed="true">
+    <Position X="18.5" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAgAAIAAAAAAAAAAAA=</HashCode>
+      <FileName>CommandHandlers\PurgeCommandHandler.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FileCabinetApp.CommandHandlers.SelectCommandHandler" Collapsed="true">
+    <Position X="0.5" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AgAAAQBAAAAAAAAAIAAAAAAAAAAAAAIAAAAAQAAACAE=</HashCode>
+      <FileName>CommandHandlers\SelectCommandHandler.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FileCabinetApp.CommandHandlers.ServiceCommandHandlerBase" Collapsed="true">
+    <Position X="9.5" Y="2" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAEAAAAAAAAAA=</HashCode>
+      <FileName>CommandHandlers\ServiceCommandHandlerBase.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FileCabinetApp.CommandHandlers.StatCommandHandler" Collapsed="true">
+    <Position X="5" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAIAAAAAAAA=</HashCode>
+      <FileName>CommandHandlers\StatCommandHandler.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FileCabinetApp.CommandHandlers.UpdateCommandHandler" Collapsed="true">
+    <Position X="7.25" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQEAABIAAAAAAAAAAAAAAAAAAAAAgIAgAAAAAAACAA=</HashCode>
+      <FileName>CommandHandlers\UpdateCommandHandler.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FileCabinetApp.ValidationSettings.CustomSettings" Collapsed="true">
+    <Position X="13.75" Y="11.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAEAAAAAAAACAAAAAAAAAAAAQAAAAAAAAAAAAYAg=</HashCode>
+      <FileName>ValidationSettings\CustomSettings.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FileCabinetApp.ValidationSettings.DateOfBirthSettings" Collapsed="true">
+    <Position X="18.5" Y="6.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AgAAAAAAAAAAAAAAAAAAAAAAAAAIAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>ValidationSettings\DateOfBirthSettings.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FileCabinetApp.ValidationSettings.DefaultSettings" Collapsed="true">
+    <Position X="15.75" Y="11.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAEAAAAAAAACAAAAAAAAAAAAQAAAAAAAAAAAAYAg=</HashCode>
+      <FileName>ValidationSettings\DefaultSettings.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FileCabinetApp.ValidationSettings.FirstNameSettings" Collapsed="true">
+    <Position X="18.5" Y="5.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAABAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>ValidationSettings\FirstNameSettings.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FileCabinetApp.ValidationSettings.GenderSettings" Collapsed="true">
+    <Position X="18.5" Y="9" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>BAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAA=</HashCode>
+      <FileName>ValidationSettings\GenderSettings.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FileCabinetApp.ValidationSettings.JobExperienceSettings" Collapsed="true">
+    <Position X="18.5" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAABAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>ValidationSettings\JobExperienceSettings.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FileCabinetApp.ValidationSettings.LastNameSettings" Collapsed="true">
+    <Position X="18.5" Y="6" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAABAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>ValidationSettings\LastNameSettings.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FileCabinetApp.ValidationSettings.MonthlyPaySettings" Collapsed="true">
+    <Position X="18.5" Y="8.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAABAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>ValidationSettings\MonthlyPaySettings.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FileCabinetApp.Validators.CompositeValidator" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="2.5" Y="7.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAAA=</HashCode>
+      <FileName>Validators\CompositeValidator.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="FileCabinetApp.Validators.ValidatorBuilder" Collapsed="true">
+    <Position X="14.75" Y="10.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAEAAAAAAAAAAEAEAAAAAAAMAAAAAAAAACoAAAAEgAA=</HashCode>
+      <FileName>Validators\ValidatorBuilder.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FileCabinetApp.DateOfBirthValidator" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="0.5" Y="7.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAIAAAAAAAAAAAAAAAgAAAAAAAAAAAAAAIAAAAA=</HashCode>
+      <FileName>Validators\DateOfBirthValidator.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="FileCabinetApp.FirstNameValidator" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="0.5" Y="6.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAEAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAIAAAAA=</HashCode>
+      <FileName>Validators\FirstNameValidator.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="FileCabinetApp.GenderValidator" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="0.5" Y="10" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIQAAAA=</HashCode>
+      <FileName>Validators\GenderValidator.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="FileCabinetApp.JobExperienceValidator" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="0.5" Y="8.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAEAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAIAAAAA=</HashCode>
+      <FileName>Validators\JobExperienceValidator.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="FileCabinetApp.LastNameValidator" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="0.5" Y="7" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAEAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAIAAAAA=</HashCode>
+      <FileName>Validators\LastNameValidator.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.238" Collapsed="true" />
+  </Class>
+  <Class Name="FileCabinetApp.MonthlyPayValidator" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="0.5" Y="9.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAEAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAIAAAAA=</HashCode>
+      <FileName>Validators\MonthlyPayValidator.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="FileCabinetApp.FileCabinetEventArgs" Collapsed="true">
+    <Position X="5.75" Y="8.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAEAAAAAAAACAAAAAAAAAAAAQAAAAAAAAAAAAYAg=</HashCode>
+      <FileName>FileCabinetEventArgs.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FileCabinetApp.FileCabinetFilesystemService" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="6.75" Y="6.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>QQCQRgATAIBMAmCACAAiEAAEBAAAViALIZBACZABgAA=</HashCode>
+      <FileName>FileCabinetFilesystemService.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="FileCabinetApp.FileCabinetMemoryService" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="4.75" Y="6.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>QACgZkABC4hUAkSQAAACBAAMBAAAAiABIBAACJIAIAA=</HashCode>
+      <FileName>FileCabinetMemoryService.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="FileCabinetApp.FileCabinetRecord" Collapsed="true">
+    <Position X="5.75" Y="7.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAEAAAAAAAACEAAAAAAAAAAAQAAAAAAAAAAAAYAg=</HashCode>
+      <FileName>FileCabinetRecord.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FileCabinetApp.FileCabinetRecordCsvReader" Collapsed="true">
+    <Position X="11.25" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAEAAAQAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>FileCabinetRecordCsvReader.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FileCabinetApp.FileCabinetRecordCsvWriter" Collapsed="true">
+    <Position X="11.25" Y="8.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEEAAA=</HashCode>
+      <FileName>FileCabinetRecordCsvWriter.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FileCabinetApp.FileCabinetRecordXmlReader" Collapsed="true">
+    <Position X="11.25" Y="6" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAACAAAAAAAAA=</HashCode>
+      <FileName>FileCabinetRecordXmlReader.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FileCabinetApp.FileCabinetRecordXmlWriter" Collapsed="true">
+    <Position X="11.25" Y="9" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAA=</HashCode>
+      <FileName>FileCabinetRecordXmlWriter.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FileCabinetApp.FileCabinetServiceSnapshot" Collapsed="true">
+    <Position X="11.25" Y="9.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>IAAAAAAAAAAAAAAAAAAAAAIAAAAAAAAQAAAAACAAARA=</HashCode>
+      <FileName>FileCabinetServiceSnapshot.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FileCabinetApp.FileCabinetXmlSerializebleData" Collapsed="true">
+    <Position X="11.25" Y="10.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>IAAAAAAAAAAAAABAAAAAAAABAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>FileCabinetXmlSerializebleData.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FileCabinetApp.FileCabinetXmlSerializebleRecord" Collapsed="true">
+    <Position X="11.25" Y="6.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAAAAAAACAAAAAAAQAAAAQAAAAAAAAAAAAYAA=</HashCode>
+      <FileName>FileCabinetXmlSerializebleRecord.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FileCabinetApp.FilesystemIterator" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="15.75" Y="6" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAQAAADAAAAAAAAAAAAMAAEABAAQEIIAYAAAQABAAA=</HashCode>
+      <FileName>FilesystemIterator.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="FileCabinetApp.MemoryIterator" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="13.75" Y="6" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAgAAAAAAAAAAAAAAAAAAABAAAAIAAAAAAAABAAA=</HashCode>
+      <FileName>MemoryIterator.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="FileCabinetApp.NameClass" Collapsed="true">
+    <Position X="11.25" Y="11.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAACAAAAAAA=</HashCode>
+      <FileName>NameClass.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FileCabinetApp.Program" Collapsed="true">
+    <Position X="4.75" Y="0.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACEkiAgIACUABAEAAAECAAUQAAAAAEEQAABgABAAA=</HashCode>
+      <FileName>Program.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FileCabinetApp.RecordsFound" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="14.75" Y="6.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAgABAAAAAAAAAAAAAAAAAEAAAAAAAAAAA=</HashCode>
+      <FileName>RecordsFound.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="FileCabinetApp.ServiceLogger" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="8.75" Y="6.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>QACABAABAIBEAMACAAACCAAEAAAgAiABIFABCBAAAAA=</HashCode>
+      <FileName>ServiceLogger.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="FileCabinetApp.ServiceMeter" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="8.75" Y="7.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>QACABAABAIBEAEAAAAACAAAEIAAAAiABIFAACBAAAAA=</HashCode>
+      <FileName>ServiceMeter.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Interface Name="FileCabinetApp.CommandHandlers.ICommandHandler" Collapsed="true">
+    <Position X="13.5" Y="0.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAgAAIAAAAAAAAAAAA=</HashCode>
+      <FileName>CommandHandlers\ICommandHandler.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="FileCabinetApp.CommandHandlers.IRecordPrinter" Collapsed="true">
+    <Position X="14.75" Y="8.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAA=</HashCode>
+      <FileName>CommandHandlers\IRecordPrinter.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="FileCabinetApp.IRecordValidator" Collapsed="true">
+    <Position X="0.5" Y="5.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAAA=</HashCode>
+      <FileName>Validators\IRecordValidator.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="FileCabinetApp.IFileCabinetService" Collapsed="true">
+    <Position X="6.75" Y="5.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>QACABAABAIBEAEAAAAACAAAEAAAAAiABIBAACBAAAAA=</HashCode>
+      <FileName>IFileCabinetService.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="FileCabinetApp.IRecordIterator" Collapsed="true">
+    <Position X="14.75" Y="5.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAABAAAAIAAAAAAAAAAAA=</HashCode>
+      <FileName>IRecordIterator.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>
